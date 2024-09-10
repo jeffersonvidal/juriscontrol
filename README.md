@@ -1,66 +1,224 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# JurisControl - Sistema de Controle Jurídico
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<p>Sistema de gestão para escritórios advocatícios.</p>
 
-## About Laravel
+## Projeto
+* Repositório: https://github.com/jeffersonvidal/juriscontrol.git
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Paleta de cores Identidade Visual
+* Marrom: #50301E
+* Dourado: #C8A472
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requisitos
+* PHP 8.2 ou superior
+* Composer
+* NodeJS
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Como rodar o projeto baixado
+Duplicar o arquivo ".env.example" e renomear para ".env".<br>
 
-## Learning Laravel
+Instalar as dependências do PHP
+```
+composer install
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Instalar as dependências do NodeJS
+```
+npm install
+```
+Instalar Boostrap com Vite
+```
+npm i --save bootstrap @popperjs/core
+```
+Executar Bibliotecas NodeJS
+```
+npm run dev
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Instalar Ícones FontAwesome
+```
+npm i --save @fortawesome/fontawesome-free
+```
+Gerar chave
+```
+php artisan key:generate
+```
+Executar as migrations
+```
+php artisan migrate
+```
+Executar as seeds
+```
+php artisan db:seed
+```
+Inciar o projeto criado com Laravel
+```
+php artisan serve
+```
+Acessar conteúdo padrão do Laravel
+```
+http://localhost:8000
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```
+```
 
-## Laravel Sponsors
+```
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+```
 
-### Premium Partners
+```
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```
+```
 
-## Contributing
+## Passos para criar o projeto
+Criar Seed
+```
+php artisan make:seeder NomeSeeder
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```
+php artisan make:seeder ClientSeeder
+```
+Executar as Seeds
+```
+php artisan db:seed
+```
+Criar Request (para validação de form - em public function authorize() deixe como true)
+```
+php artisan make:request ClientRequest
+```
+Criar componente de mensagens (alert = nome do component)
+```
+php artisan make:component alert --view
+```
+Instalar dependência para fazer auditoria
+```
+composer require owen-it/laravel-auditing
+```
+Publicar a configuração e as migrations para auditoria
+```
+php artisan vendor:publish --provider "OwenIt\Auditing\AuditingServiceProvider" --tag="config"
+```
+Criar tabela audits no BD atavés de migration
+```
+php artisan vendor:publish --provider "OwenIt\Auditing\AuditingServiceProvider" --tag="migrations"
+```
+Caso não funcione a implementação de auditoria, limpe o cache
+```
+php artisan config:clear
+```
+Acrescentar linha em todas as Models que serão auditadas
+```
+use \OwenIt\Auditing\Auditable as AuditingAuditable;
+use OwenIt\Auditing\Contracts\Auditable;
 
-## Code of Conduct
+Modelo:
+class Client extends Model implements Auditable
+{
+    use HasFactory, AuditingAuditable;
+```
+SweetAlert2
+```
+npm install sweetalert2
+```
+Select2
+```
+npm install select2
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+JQuery
+```
+npm install jquery
+```
 
-## Security Vulnerabilities
+```
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+## Módulos
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+[]-  Gestão Adminsitrativa
+    []-  Usuários
+    []-  Etiquetas
+    []-  Tarefas
+    []-  Empresas
+    []-  Gamificação
+[]-  Gestão de Clientes
+    []-  Clientes
+    []-  Processos e Casos
+    []-  Consultivos
+[]-  Gestão Financeira
+    []-  Caixa
+    []-  Contas a Pagar
+    []-  Contas a Receber
+[]-  Gestão de RH
+    []-  Funcionários
+    []-  Cargas Horárias
+    []-  Treinamentos
+[]-  CRM
+    []-  Aniversariantes
+    []-  Campanhas
+    []-  Email Mkt
+
+## APIs Externas
+
+-[] - IBGE (Localidades)
+    -[] - https://servicodados.ibge.gov.br/api/docs/localidades#api-_
+    -[] - https://servicodados.ibge.gov.br/api/v1/localidades/estados/{UF}/mesorregioes
+-[] - CORREIOS (CPF)
+    -[] -  https://cws.correios.com.br/dashboard/pesquisa
+    -[] -  https://api.correios.com.br/token/v3/api-docs
+    -[] -  
+    -[] -  
+    -[] -  
+-[] - 
+
+## Modelagem do BD
+
+[x]- customers (clientes)
+    id, company_id, name, email, phone, created_at, updated_at, birthday
+
+[x]- customer_addresses (enderços de clientes)
+    id, customer_id, address, zipcode, neighborhood, city, uf, rg, rg_expedidor, cpf, created_at, updated_at
+
+[]- companies (empresas)
+    id, userId(responsavel), name, email, cnpj, created_at, updated_at 
+
+[x]- users_profiles (perfis de usuários)
+    id, name, created_at, updated_at
+
+[]- compamnies_addresses (endereços de empresas)
+    id, company_id, address, zipcode, neighborhood, city, phone, created_at, updated_at 
+
+[x]-  users (usuários)
+    id, name, email, company_id, cpf, user_profile_id, password, created_at, updated_at
+
+[]-  customer_law_suits (processos do cliente)
+    id, law_suit_id, customer_id, customer_situacao(reclamante, requerente), opposite_party_name, opposite_situacao(reclamado, requerido), company_id
+
+[]-  law_suits (processos)
+    id, customer_folder_id, process_number, companie_id, title, label_id, instancia, numero_instancia, juizo, vara, foro, acao, link do tribunal, objeto, valor_causa, data_valor_distribuido, valor_condenacao, observacoes, user_employee_id (responsaveis), acesso(publico, privado, equipe) created_at, updated_at
+
+[]- cases
+    id, title, status, amount_charged, amount_paid, form_of_payment, label_id, description, author_user_id, company_id, responsible_employee_id
+
+[x]-  tasks (tarefas)
+    id, description, priority, label_id, end_date, law_suit_case_id, owner_user_id, company_id, employees_id, created_at, updated_at
+
+[x]-  labels (etiquetas)
+    id, name, hexa_color, company_id, created_at, updated_at
+    
+[]- Events
+    id, title, start_date, start_time, end_date, end_time, all_day, alert_number, alert_unit (min, hr, dia), responsible_user_id, company_id, 
+    
+[]-  
+[]-  
+[]-  
+
+
+## Ferramentas
+
+[]-  Calculadora Horas Extras
+[]-  
