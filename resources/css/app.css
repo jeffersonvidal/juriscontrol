@@ -1,0 +1,14 @@
+/**Importar style admin */
+@import 'styles_admin.css';
+
+/**Importar style sbadmin */
+@import 'styles_sbadmin.css';
+
+/**Importar style datatables */
+@import 'style_datatables.min.css';
+
+/**Importar style FontAwesome */
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+/**Importar style Select2 */
+/*@import 'select2/dist/css/select2.min.css';*/
