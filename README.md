@@ -164,6 +164,11 @@ JQuery
 npm install jquery
 ```
 
+InputMask (para criar máscaras personalizadas em campos de formulários)
+```
+npm install 
+```
+
 ## Módulos do Sistema
 
 []-  Gestão Adminsitrativa

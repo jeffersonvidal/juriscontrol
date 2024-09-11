@@ -1,12 +1,21 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /** Rota url padrão/raiz */
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+/**Rota de login */
+Route::get('/', [LoginController::class, 'index'])->name('login.index'); //Carrega form de login na url raiz
+Route::post('/login', [LoginController::class, 'loginProcess'])->name('login.process'); //faz processamento dos dados inseridos no form de login e redireciona para dashboard
+
+/**Rota raiz do painel de controle do sistema */
+Route::get('/index-dashboard', [DashboardController::class,'index'])->name('dashboard.index');
 
 /**Rota de usuários */
 Route::get('/index-user', [UserController::class, 'index'])->name('users.index'); //Listar todos os registros da tabela
