@@ -10,17 +10,19 @@
 * Dourado: #C8A472
 
 ## Requisitos
+* Laravel 11 ou superior
 * PHP 8.2 ou superior
 * Composer
 * NodeJS
 
 ## Como rodar o projeto baixado
+
 Duplicar o arquivo ".env.example" e renomear para ".env".<br>
 
 Instalar as dependências do PHP
 ```
 composer install
-
+```
 Instalar as dependências do NodeJS
 ```
 npm install
@@ -32,22 +34,14 @@ npm i --save bootstrap @popperjs/core
 Executar Bibliotecas NodeJS
 ```
 npm run dev
-
+```
 Instalar Ícones FontAwesome
 ```
 npm i --save @fortawesome/fontawesome-free
 ```
-Gerar chave
+Gerar chave artisan do projeto
 ```
 php artisan key:generate
-```
-Executar as migrations
-```
-php artisan migrate
-```
-Executar as seeds
-```
-php artisan db:seed
 ```
 Inciar o projeto criado com Laravel
 ```
@@ -58,42 +52,65 @@ Acessar conteúdo padrão do Laravel
 http://localhost:8000
 ```
 
+## Estrutura e criação de arquivos
+
+Para cada módulo do projeto é necessário criar os mesmos aquivos abaixo, mudando apenas os nomes, colocando o referente a cada módulo.
+
+* Migration
+* Controller
+* Model
+* Request
+* Seed
+* Adicionar a seed criada no arquivo DatabaseSeeder.php
+* Route
+* Views (para o CRUD)
+
+## Criando arquivos
+
+Criar Migration
 ```
+php artisan make:
 ```
 
+Criar Controller
 ```
-```
-
-```
-```
-
-```
+php artisan make:controller UserController
 ```
 
+Criar Model
 ```
+php artisan make:model User -m
 ```
 
-## Passos para criar o projeto
+Criar Request (para validação de form - em public function authorize() deixe como true)
+```
+php artisan make:request UserRequest
+```
+
 Criar Seed
 ```
-php artisan make:seeder NomeSeeder
+php artisan make:seeder UserSeeder
 ```
 
+Adicionar a seed criada no arquivo DatabaseSeeder.php
+
+Executar as migrations para criar tabelas no banco de dados
 ```
-php artisan make:seeder ClientSeeder
+php artisan migrate
 ```
-Executar as Seeds
+Executar as seeds
 ```
 php artisan db:seed
 ```
-Criar Request (para validação de form - em public function authorize() deixe como true)
-```
-php artisan make:request ClientRequest
-```
+## Criar componentes
+
 Criar componente de mensagens (alert = nome do component)
 ```
 php artisan make:component alert --view
 ```
+
+## Instalar dependências para fazer auditoria do sistema
+
 Instalar dependência para fazer auditoria
 ```
 composer require owen-it/laravel-auditing
@@ -120,13 +137,22 @@ class Client extends Model implements Auditable
 {
     use HasFactory, AuditingAuditable;
 ```
+
+## Mensagens de alertas em modal
+
 SweetAlert2
 ```
 npm install sweetalert2
 ```
+
+## Campo select com busca
+
 Select2
 ```
 npm install select2
+```
+
+## Bibliotecas dependentes
 
 JQuery
 ```
@@ -137,7 +163,7 @@ npm install jquery
 ```
 
 
-## Módulos
+## Módulos do Sistema
 
 []-  Gestão Adminsitrativa
     []-  Usuários
@@ -177,22 +203,22 @@ npm install jquery
 
 ## Modelagem do BD
 
-[x]- customers (clientes)
+[]- customers (clientes)
     id, company_id, name, email, phone, created_at, updated_at, birthday
 
-[x]- customer_addresses (enderços de clientes)
+[]- customer_addresses (enderços de clientes)
     id, customer_id, address, zipcode, neighborhood, city, uf, rg, rg_expedidor, cpf, created_at, updated_at
 
 []- companies (empresas)
     id, userId(responsavel), name, email, cnpj, created_at, updated_at 
 
-[x]- users_profiles (perfis de usuários)
+[]- users_profiles (perfis de usuários)
     id, name, created_at, updated_at
 
 []- compamnies_addresses (endereços de empresas)
     id, company_id, address, zipcode, neighborhood, city, phone, created_at, updated_at 
 
-[x]-  users (usuários)
+[]-  users (usuários)
     id, name, email, company_id, cpf, user_profile_id, password, created_at, updated_at
 
 []-  customer_law_suits (processos do cliente)
@@ -204,10 +230,10 @@ npm install jquery
 []- cases
     id, title, status, amount_charged, amount_paid, form_of_payment, label_id, description, author_user_id, company_id, responsible_employee_id
 
-[x]-  tasks (tarefas)
+[]-  tasks (tarefas)
     id, description, priority, label_id, end_date, law_suit_case_id, owner_user_id, company_id, employees_id, created_at, updated_at
 
-[x]-  labels (etiquetas)
+[]-  labels (etiquetas)
     id, name, hexa_color, company_id, created_at, updated_at
     
 []- Events
