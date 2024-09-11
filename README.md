@@ -69,7 +69,7 @@ Para cada módulo do projeto é necessário criar os mesmos aquivos abaixo, muda
 
 Criar Migration
 ```
-php artisan make:
+php artisan make:migration create_users_table
 ```
 
 Criar Controller
