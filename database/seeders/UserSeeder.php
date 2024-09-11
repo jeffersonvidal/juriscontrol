@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     {
         if(! User::where("id","1")->first()){
             User::create([
-                'name' => 'Mévio Pereira',
+                'name' => fake()->name(),
                 'company_id' => '1',
                 'email' => 'adm@adm.com',
                 'password' => Hash::make('123456', ['rounds' => 12]),
@@ -24,6 +24,19 @@ class UserSeeder extends Seeder
                 'phone' => '(61) 98765-4321',
                 'cpf' => '654.789.321-94',
                 'birthday' => '1983-11-21',
+            ]);
+        }
+
+        if(! User::where("id","2")->first()){
+            User::create([
+                'name' => fake()->name(),
+                'company_id' => '2',
+                'email' => 'email@email.com',
+                'password' => Hash::make('123456', ['rounds' => 12]),
+                'user_profile_id' => '4',
+                'phone' => '(61) 98765-4321',
+                'cpf' => '321.456.897-27',
+                'birthday' => '2000-08-17',
             ]);
         }
     }

@@ -92,6 +92,11 @@ Criar Seed
 php artisan make:seeder UserSeeder
 ```
 
+Criar View
+```
+php artisan make:view users/index
+```
+
 Adicionar a seed criada no arquivo DatabaseSeeder.php
 
 Executar as migrations para criar tabelas no banco de dados
