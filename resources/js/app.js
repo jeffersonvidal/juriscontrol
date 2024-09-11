@@ -11,6 +11,20 @@ import './scripts_sbadmin';
 import './simple-datatables.min';
 import './datatables-simple-demo';
 
+/**Importar JQuery */
+import jQuery from 'jquery';
+window.$ = jQuery;
+
+/**Users CRUD */
+
+
+
+
+
+
+
+
+
 /**Axios */
 import axios from 'axios';
 window.axios = axios;
