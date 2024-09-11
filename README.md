@@ -1,6 +1,6 @@
 # JurisControl - Sistema de Controle Jurídico
 
-<p>Sistema de gestão para escritórios advocatícios.</p>
+<p>Sistema ERP de Gestão e Controle Jurídico para Escritórios Advocatícios.</p>
 
 ## Projeto
 * Repositório: https://github.com/jeffersonvidal/juriscontrol.git
@@ -98,7 +98,7 @@ Executar as migrations para criar tabelas no banco de dados
 ```
 php artisan migrate
 ```
-Executar as seeds
+Executar as seeds para popular o bando de daods
 ```
 php artisan db:seed
 ```
@@ -158,10 +158,6 @@ JQuery
 ```
 npm install jquery
 ```
-
-```
-```
-
 
 ## Módulos do Sistema
 
