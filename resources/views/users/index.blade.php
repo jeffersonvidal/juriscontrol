@@ -74,9 +74,9 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="addUserForm" class="row g-3">
+      <form id="addUserForm" name="addUserForm" class="row g-3">
                 @csrf
-                @method('POST')
+                <!-- @method('POST') -->
 
                 
                 <div class="col-md-12">
@@ -87,11 +87,13 @@
                 <div class="col-md-6">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}">
+                    <span id="email_error" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-6">
                     <label for="cpf" class="form-label">CPF</label>
                     <input type="text" class="form-control" id="cpf" name="cpf" placeholder="999.999.999-99" value="{{ old('cpf') }}">
+                    <span id="cpf_error" class="text-danger"></span>
                 </div>
             
                 <div class="col-md-6">
@@ -142,65 +144,26 @@
 
 </div><!--fim container-fluid-->
 
-@push('scripts')
-
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
     /**Add in database - store */
     $(document).ready(function(){
-    $('#addUserForm').submit(function(){
-        e.preventDefault(); /**prvine envio em branco ao clicar no botão enviar */
-        let formData = $(this).serialize();
-        $.ajax({
-            url: "{{ route('users.store') }}",
-            data: formData,
-            contentType:false,
-            processData:false,
-            beforeSend:function(){
-                $('.addBtn').prop('disabled', true);
-            },
-            complete:function(){
-                $('.addBtn').prop('disabled', false);
-            },
-            success:function(data){
-                if(data.success == true){
-                    printSuccessMsg(data.msg);
-                }else if(data.success == false){
-                    printErrorMsg(data.msg);
-                }else{
-                    printValidationErrorMsg(data.msg);
+        $('form[name="addUserForm"]').submit(function(event){
+            event.preventDefault(); //não atualiza a página ao enviar os dados
+
+            $.ajax({
+                url: "{{ route('users.store') }}",
+                type: "post",
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(response){
+                    console.log(response);
                 }
-            }
-        });
-        return false;
-
-        /**Alertas das mensagens de erro */
-        function printValidationErrorMsg(msg){
-            $.each(msg, function(field_name, error){
-                //console.log(field_name,error);
-                $(document).find('#'+field_name+'_error').text(error);
             });
-        }
-
-        function printErrorMsg(msg){
-            $('#alert-danger').html('');
-            $('#alert-danger').css('display','block');
-            $('#alert-danger').append('`+msg+`');
-        }
-
-        function printSuccessMsg(msg){
-            $('#alert-success').html('');
-            $('#alert-success').css('display','block');
-            $('#alert-success').append('`+msg+`');
-
-            /**Se der tudo certo, reseta o formulário */
-            document.getElementById('addUserForm').reset();
-        }
+        });
     });
-    });
+    
 </script>
 
-@endpush
-
-
 @endsection
-    
+   

@@ -8,6 +8,7 @@ use App\Models\User;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
+use Validator;
 
 class UserController extends Controller
 {
@@ -35,33 +36,35 @@ class UserController extends Controller
         //Validar o formulário
         $request->validated();
 
-        //garantir que salve nas duas tabelas do banco de dados
-        DB::beginTransaction();
+            //garantir que salve nas duas tabelas do banco de dados
+            DB::beginTransaction();
 
-        /**
-         *  'name', 'email', 'password', 'company_id', 'user_profile_id', 'phone', 'cpf', 'birthday'
-         */
+            /**
+             *  'name', 'email', 'password', 'company_id', 'user_profile_id', 'phone', 'cpf', 'birthday'
+             */
 
-        try {
-            $addUser = new User;
-            $addUser->name = $request->name;
-            $addUser->email = $request->email;
-            $addUser->password = $request->password;
-            $addUser->company_id = $request->company_id;
-            $addUser->user_profile_id = $request->user_profile_id;
-            $addUser->phone = $request->phone;
-            $addUser->cpf = $request->cpf;
-            $addUser->birthday = $request->birthday;
-            $addUser->save();
-            //comita depois de tudo ter sido salvo
-            DB::commit();
-            return response()->json(['success' => false, 'msg' => 'Usuário cadastrado com sucesso!']);
-        } catch (Exception $e) {
-            //Desfazer a transação caso não consiga cadastrar com sucesso no BD
-            DB::rollBack();
-
-            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
-        }
+            try {
+                $userData = new User;
+                $userData->name = $request->name;
+                $userData->email = $request->email;
+                $userData->password = $request->password;
+                $userData->company_id = $request->company_id;
+                $userData->user_profile_id = $request->user_profile_id;
+                $userData->phone = $request->phone;
+                $userData->cpf = $request->cpf;
+                $userData->birthday = $request->birthday;
+                //$userData->save();
+                //comita depois de tudo ter sido salvo
+                DB::commit();
+                //return response()->json(['success' => true, 'msg' => 'Usuário cadastrado com sucesso!']);
+                return response()->json(['success' => true, 'msg' => $userData]);
+            } catch (Exception $e) {
+                //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+                DB::rollBack();
+                //Retorna mensagem de erro ao cadastrar registro no BD
+                return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+            }
+        
         
     }
 

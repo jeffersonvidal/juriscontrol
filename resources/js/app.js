@@ -12,15 +12,8 @@ import './simple-datatables.min';
 import './datatables-simple-demo';
 
 /**Importar JQuery */
-import jQuery from 'jquery';
-window.$ = jQuery;
-
-/**Users CRUD */
-
-
-
-
-
+// import jQuery from 'jquery';
+// window.$ = jQuery;
 
 
 
