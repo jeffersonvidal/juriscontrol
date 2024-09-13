@@ -195,15 +195,15 @@
             }
             //Exibe mensagem de erro do sistema
             function printErrorMsg(msg){
-                $('#allert-danger').html('');
-                $('#allert-danger').css('display','block');
-                $('#allert-danger').append(''+msg+'');
+                $('#alert-danger').html('');
+                $('#alert-danger').css('display','block');
+                $('#alert-danger').append(''+msg+'');
             }
             //Mostra mensagem de sucesso
             function printSuccessMsg(msg){
-                $('#allert-success').html('');
-                $('#allert-success').css('display','block');
-                $('#allert-success').append(''+msg+'');
+                $('#alert-success').html('');
+                $('#alert-success').css('display','block');
+                $('#alert-success').append(''+msg+'');
             }
         });
     });
