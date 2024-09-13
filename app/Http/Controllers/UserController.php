@@ -53,11 +53,11 @@ class UserController extends Controller
                 $userData->phone = $request->phone;
                 $userData->cpf = $request->cpf;
                 $userData->birthday = $request->birthday;
-                //$userData->save();
+                $userData->save();
                 //comita depois de tudo ter sido salvo
                 DB::commit();
                 //return response()->json(['success' => true, 'msg' => 'Usuário cadastrado com sucesso!']);
-                return response()->json(['success' => true, 'msg' => $userData]);
+                return response()->json(['success' => true, 'msg' => 'Usuário cadastrado com sucesso!']);
             } catch (Exception $e) {
                 //Desfazer a transação caso não consiga cadastrar com sucesso no BD
                 DB::rollBack();

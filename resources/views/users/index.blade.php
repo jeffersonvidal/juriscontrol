@@ -156,8 +156,21 @@
                 type: "post",
                 data: $(this).serialize(),
                 dataType: 'json',
+                beforeSend:function(){
+                    $('.addBtn').prop('disabled', true);
+                },
+                complete:function(){
+                    $('.addBtn').prop('disabled', false);
+                },
+                // success: function(response){
+                //     console.log(response);
+                // }
                 success: function(response){
-                    console.log(response);
+                    $('#addModal').hide();
+                    location.reload();
+                    if(response.success == true){
+                        console.log(response);
+                    }
                 }
             });
         });
