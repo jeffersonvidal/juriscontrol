@@ -15,7 +15,7 @@
         <div class="col-md-12">
 
                 <!-- visão geral do sistema -->
-                <div class="card mb-4">
+                <div class="card mb-4 shadow-sm border-light">
                     <div class="card-header hstack gap-2">
                         <i class="fa-solid fa-gavel"></i> <span>VISÃO GERAL - JURÍDICO</span>
                     </div>
