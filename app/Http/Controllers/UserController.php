@@ -14,7 +14,8 @@ class UserController extends Controller
 {
     /**Listar registros da tabela do banco de dados */
     public function index(){
-        $allUsers = User::all();
+        $allUsers = User::where('company_id', auth()->user()->company_id)
+        ->orderBy('id', 'DESC')->get();
         /**carrega view para mostrar todos os registros */
         return view('users.index', 
             compact('allUsers')
@@ -34,7 +35,20 @@ class UserController extends Controller
     /**Salvar registro no banco de dados */
     public function store(UserRequest $request){
         //Validar o formulário
-        $request->validated();
+        $validator = Validator::make($request->all(),[
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required',
+            'company_id' => 'required',
+            'user_profile_id' => 'required',
+            'phone' => 'required',
+            'cpf' => 'required',
+            'birthday' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json(['msg' => $validator->errors()->toArray()]);
+        }else{
 
             //garantir que salve nas duas tabelas do banco de dados
             DB::beginTransaction();
@@ -64,6 +78,7 @@ class UserController extends Controller
                 //Retorna mensagem de erro ao cadastrar registro no BD
                 return response()->json(['success' => false, 'msg' => $e->getMessage()]);
             }
+        }
         
         
     }

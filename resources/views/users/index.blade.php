@@ -45,12 +45,12 @@
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->cpf }}</td>
-                                <td>{{ $user->birthday }}</td>
+                                <td>{{ \Carbon\Carbon::parse($user->birthday)->format('d/m/Y') }}</td>
                                 <td>
-                                <span class="d-flex flex-row justify-content-center">
-                                    <a href="" class="text-decoration-none btn btn-sm" title="Alterar Registro"><i class="fa-solid fa-pencil"></i></a>
-                                    <a href="" class="text-decoration-none btn btn-sm text-danger" title="Excluir Registro"><i class="fa-solid fa-trash"></i></a>
-                                </span>
+                                    <span class="d-flex flex-row justify-content-center">
+                                        <a href="" class="text-decoration-none btn btn-sm" title="Alterar Registro"><i class="fa-solid fa-pencil"></i></a>
+                                        <a href="" class="text-decoration-none btn btn-sm text-danger" title="Excluir Registro"><i class="fa-solid fa-trash"></i></a>
+                                    </span>
                                 </td>
                             </tr>
                         @endforeach
@@ -166,13 +166,45 @@
                 //     console.log(response);
                 // }
                 success: function(response){
-                    $('#addModal').hide();
-                    location.reload();
                     if(response.success == true){
-                        console.log(response);
+                        $('#addModal').hide();
+                        printSuccessMsg(response.msg);
+
+                        let reloadInterval = 1000; //page reload delay
+                        //Function reload page
+                        function reloadPage(){
+                            location.reload(true); //passa tru para forçar o recarregamento da página
+                        }
+
+                        //Especifica o tempo para recarregar página
+                        let intervalId =setInterval(reloadPage, reloadInterval);
+                    }else if(response.success == false){
+                        printErrorMsg(response.msg);
+                    }else{
+                        printValidationErrorMsg(response.msg);
                     }
                 }
             });
+
+            /**Mensagens do sistema */
+            //Exibe mensagens abaixo dos campos obrigatórios, validação de campos
+            function printValidationErrorMsg(msg){
+                $.each(msg, function(field_name, error){
+                    $(document).find('#'+field_name+'_error').text(error);
+                });
+            }
+            //Exibe mensagem de erro do sistema
+            function printErrorMsg(msg){
+                $('#allert-danger').html('');
+                $('#allert-danger').css('display','block');
+                $('#allert-danger').append(''+msg+'');
+            }
+            //Mostra mensagem de sucesso
+            function printSuccessMsg(msg){
+                $('#allert-success').html('');
+                $('#allert-success').css('display','block');
+                $('#allert-success').append(''+msg+'');
+            }
         });
     });
     
