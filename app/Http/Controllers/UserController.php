@@ -94,7 +94,25 @@ class UserController extends Controller
     }
 
     /**Excluir registro do banco de dados */
-    public function destroy(){
-        return view('users.destroy');
+    public function destroy(User $user){
+        try {
+            //garantir que salve nas duas tabelas do banco de dados
+            DB::beginTransaction();
+
+            //$deleteUser = User::where('id', $user)->delete();
+            $deleteUser = User::where('id', $user->id)
+            ->where('company_id', auth()->user()->company_id)->delete();
+
+            //comita depois de tudo ter sido salvo
+            DB::commit();
+
+            return response()->json(['success' => true, 'msg' => 'Registro excluído com sucesso!']);
+        } catch (Exception $e) {
+            //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+            DB::rollBack();
+
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
+        
     }
 }
