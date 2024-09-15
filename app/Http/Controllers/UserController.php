@@ -8,6 +8,7 @@ use App\Models\User;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Validator;
 
 class UserController extends Controller
@@ -53,10 +54,6 @@ class UserController extends Controller
             //garantir que salve nas duas tabelas do banco de dados
             DB::beginTransaction();
 
-            /**
-             *  'name', 'email', 'password', 'company_id', 'user_profile_id', 'phone', 'cpf', 'birthday'
-             */
-
             try {
                 $userData = new User;
                 $userData->name = $request->name;
@@ -70,11 +67,19 @@ class UserController extends Controller
                 $userData->save();
                 //comita depois de tudo ter sido salvo
                 DB::commit();
+
+                //Salvar log
+                Log::info('Usuário, cadastrou o registro.', ['userLogged_id' => auth()->user()->id, 'userUpdated_id'=> $user->id, 'user_name' => $user->name]);
+
                 //return response()->json(['success' => true, 'msg' => 'Usuário cadastrado com sucesso!']);
                 return response()->json(['success' => true, 'msg' => 'Usuário cadastrado com sucesso!']);
             } catch (Exception $e) {
                 //Desfazer a transação caso não consiga cadastrar com sucesso no BD
                 DB::rollBack();
+
+                //Salvar log
+                Log::notice('Erro ao cadastrar registro.', ['userLogged_id'=> auth()->user()->id, 'error' => $e->getMessage()]);
+
                 //Retorna mensagem de erro ao cadastrar registro no BD
                 return response()->json(['success' => false, 'msg' => $e->getMessage()]);
             }
@@ -108,10 +113,6 @@ class UserController extends Controller
             //garantir que salve nas duas tabelas do banco de dados
             DB::beginTransaction();
 
-            /**
-             *  'name', 'email', 'password', 'company_id', 'user_profile_id', 'phone', 'cpf', 'birthday'
-             */
-
             try {
                 $editUser = User::where('id', $user->id)->update([
                     'name' => $request->name,
@@ -124,11 +125,19 @@ class UserController extends Controller
                 ]);
                 //comita depois de tudo ter sido salvo
                 DB::commit();
+
+                //Salvar log
+                Log::info('Usuário, alterou o registro.', ['userLogged_id' => auth()->user()->id, 'userUpdated_id'=> $user->id, 'user_name' => $user->name]);
+
                 //return response()->json(['success' => true, 'msg' => 'Usuário cadastrado com sucesso!']);
-                return response()->json(['success' => true, 'msg' => $request . 'Usuário alterado com sucesso!']);
+                return response()->json(['success' => true, 'msg' => 'Usuário alterado com sucesso!']);
             } catch (Exception $e) {
                 //Desfazer a transação caso não consiga cadastrar com sucesso no BD
                 DB::rollBack();
+
+                //Salvar log
+                Log::notice('Erro ao alterar registro.', ['userLogged_id'=> auth()->user()->id, 'error' => $e->getMessage()]);
+
                 //Retorna mensagem de erro ao cadastrar registro no BD
                 return response()->json(['success' => false, 'msg' => $e->getMessage()]);
             }
@@ -148,10 +157,16 @@ class UserController extends Controller
             //comita depois de tudo ter sido salvo
             DB::commit();
 
+            //Salvar log
+            Log::info('Usuário, excluiu o registro.', ['userLogged_id' => auth()->user()->id, 'userUpdated_id'=> $user->id, 'user_name' => $user->name]);
+
             return response()->json(['success' => true, 'msg' => 'Registro excluído com sucesso!']);
         } catch (Exception $e) {
             //Desfazer a transação caso não consiga cadastrar com sucesso no BD
             DB::rollBack();
+
+            //Salvar log
+            Log::notice('Erro ao excluir registro.', ['userLogged_id'=> auth()->user()->id, 'error' => $e->getMessage()]);
 
             return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         }
