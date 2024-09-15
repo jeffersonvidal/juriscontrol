@@ -339,7 +339,7 @@
 
                 $.ajax({
                     url: url,
-                    //type: "get",
+                    type: "get",
                     data: $(this).serialize(),
                     dataType: 'json',
                     contentType: false,
