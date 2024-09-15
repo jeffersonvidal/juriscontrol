@@ -254,3 +254,16 @@ npm install
 
 []-  Calculadora Horas Extras
 []-  
+
+
+Teste para fazer contratos dinamicamente fazendo replace de variáveis por valores vindos do BD
+
+```
+@php
+    $texto = "Estou apenasmente testando isso aqui com o nome [[nome]], email [[email]] e telefone [[telefone]]";
+    $variaveis = array('[[nome]]','[[email]]','[[telefone]]');
+    $valores = array('Jeff', 'dabaea@gmail.com','(61) 98765-4321');
+    $teste = str_replace($variaveis, $valores, $texto);
+    echo $teste;
+@endphp
+```
