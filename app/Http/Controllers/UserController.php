@@ -89,8 +89,50 @@ class UserController extends Controller
     }
 
     /**Atualiza registro no banco de dados */
-    public function update(){
-        dd('cadastrar no banco de dados');
+    public function update(Request $request, User $user){
+        //Validar o formulário
+        $validator = Validator::make($request->all(),[
+            'name' => 'required',
+            'email' => 'required|email',
+            'company_id' => 'required',
+            'user_profile_id' => 'required',
+            'phone' => 'required',
+            'cpf' => 'required',
+            'birthday' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json(['msg' => $validator->errors()->toArray()]);
+        }else{
+
+            //garantir que salve nas duas tabelas do banco de dados
+            DB::beginTransaction();
+
+            /**
+             *  'name', 'email', 'password', 'company_id', 'user_profile_id', 'phone', 'cpf', 'birthday'
+             */
+
+            try {
+                $editUser = User::where('id', $user->id)->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'company_id' => $request->company_id,
+                    'user_profile_id' => $request->user_profile_id,
+                    'phone' => $request->phone,
+                    'cpf' => $request->cpf,
+                    'birthday' => $request->birthday,
+                ]);
+                //comita depois de tudo ter sido salvo
+                DB::commit();
+                //return response()->json(['success' => true, 'msg' => 'Usuário cadastrado com sucesso!']);
+                return response()->json(['success' => true, 'msg' => $request . 'Usuário alterado com sucesso!']);
+            } catch (Exception $e) {
+                //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+                DB::rollBack();
+                //Retorna mensagem de erro ao cadastrar registro no BD
+                return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+            }
+        }
     }
 
     /**Excluir registro do banco de dados */
