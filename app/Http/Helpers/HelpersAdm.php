@@ -3,7 +3,7 @@
 class HelpersAdm{
 
   /**Remove caracteres de campos (CPF, CEP, Data, etc) */
-  public function clearField($param){
+  private function clearField($param){
     if(empty($param)){
         return '';
     }
@@ -16,7 +16,7 @@ class HelpersAdm{
       return $this->clearField($value);
   }
 
-  /**Converte string to Double - para valores monetários */
+  /**Converte string to Double - para valores monetários Ex: 1.234,56 => 1234.56*/
   public function convertStringToDouble($param){
     if(empty($param)){
         return null;

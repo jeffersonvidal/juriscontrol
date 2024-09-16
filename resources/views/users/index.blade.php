@@ -9,7 +9,7 @@
 
         <ol class="breadcrumb mb-3 mt-3 ms-auto">
             <li class="breadcrumb-item">
-                <a class="text-decoration-none" href="" title="Dashboard">Dashboard</a>
+                <a class="text-decoration-none" href="{{ route('dashboard.index') }}" title="Dashboard">Dashboard</a>
             </li>
             <li class="breadcrumb-item active">Usuários</li>
         </ol>
@@ -269,14 +269,7 @@
                         $('#addModal').hide();
                         printSuccessMsg(response.msg);
 
-                        let reloadInterval = 200; //page reload delay
-                        //Function reload page
-                        function reloadPage(){
-                            location.reload(true); //passa tru para forçar o recarregamento da página
-                        }
-
-                        //Especifica o tempo para recarregar página
-                        let intervalId =setInterval(reloadPage, reloadInterval);
+                        location.reload();
                     }else if(response.success == false){
                         printErrorMsg(response.msg);
                     }else{
@@ -357,14 +350,6 @@
                             printSuccessMsg(response.msg);
                             location.reload();
 
-                            // let reloadInterval = 200; //page reload delay
-                            // //Function reload page
-                            // function reloadPage(){
-                            //     location.reload(true); //passa tru para forçar o recarregamento da página
-                            // }
-
-                            //Especifica o tempo para recarregar página
-                            //let intervalId =setInterval(reloadPage, reloadInterval);
                         }else if(response.success == false){
                             printErrorMsg(response.msg);
                         }else{
@@ -432,15 +417,7 @@
                             $('#deleteModal').hide();
                             printSuccessMsg(response.msg);
 
-                            //window.location.reload();
-
-                            let reloadInterval = 200; //page reload delay
-                            //Function reload page
-                            function reloadPage(){
-                                location.reload(true); //passa tru para forçar o recarregamento da página
-                            }
-
-                            let intervalId = setInterval(reloadPage, reloadInterval);
+                            location.reload();
                             
                         }else{
                             printErrorMsg(respsonse.msg);

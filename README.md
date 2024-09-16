@@ -5,6 +5,13 @@
 ## Projeto
 * Repositório: https://github.com/jeffersonvidal/juriscontrol.git
 
+### Sistemas que inspiram recursos
+* EasyJur
+* AdvBox
+* easyvog
+* Astrea
+* Promad
+
 ## Paleta de cores Identidade Visual
 * Marrom: #50301E
 * Dourado: #C8A472

@@ -68,18 +68,17 @@ class UserController extends Controller
                 $userData->password = $request->password;
                 $userData->company_id = $request->company_id;
                 $userData->user_profile_id = $request->user_profile_id;
-                $userData->phone = $userData->limpaPhone($request->phone);
-                $userData->cpf = $userData->limpaCPF($request->cpf);
-                $userData->teste = $this->helperAdm->convertStringToDouble('7.321.256,32');
+                $userData->phone = $this->helperAdm->limpaCampo($request->phone);
+                $userData->cpf = $this->helperAdm->limpaCampo($request->cpf);
                 $userData->birthday = $request->birthday;
-                //$userData->save();
+                $userData->save();
 
-                dd($userData);
+                //dd($userData);
                 //comita depois de tudo ter sido salvo
                 DB::commit();
 
                 //Salvar log
-                Log::info('Usuário, cadastrou o registro.', ['userLogged_id' => auth()->user()->id, 'userUpdated_id'=> $user->id, 'user_name' => $user->name]);
+                Log::info('Usuário, cadastrou o registro.', ['userLogged_id' => auth()->user()->id, 'userUpdated_id'=> $userData->id, 'user_name' => $userData->name]);
 
                 //return response()->json(['success' => true, 'msg' => 'Usuário cadastrado com sucesso!']);
                 return response()->json(['success' => true, 'msg' => 'Usuário cadastrado com sucesso!']);
