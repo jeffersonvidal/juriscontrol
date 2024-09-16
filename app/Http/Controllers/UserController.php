@@ -70,7 +70,7 @@ class UserController extends Controller
                 $userData->user_profile_id = $request->user_profile_id;
                 $userData->phone = $userData->limpaPhone($request->phone);
                 $userData->cpf = $userData->limpaCPF($request->cpf);
-                $userData->teste = $this->helperAdm->limpaCampo($userData->cpf, $request->cpf);
+                $userData->teste = $this->helperAdm->convertStringToDouble('7.321.256,32');
                 $userData->birthday = $request->birthday;
                 //$userData->save();
 
