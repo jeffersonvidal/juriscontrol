@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LabelController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -23,12 +24,22 @@ Route::group(['middleware' => 'auth'], function(){
   /**Rota raiz do painel de controle do sistema */
   Route::get('/index-dashboard', [DashboardController::class,'index'])->name('dashboard.index');
 
-  /**Rota de usuários */
+  /**Rotas de usuários */
   Route::get('/index-user', [UserController::class, 'index'])->name('users.index'); //Listar todos os registros da tabela
   Route::get('/show-user/{user}', [UserController::class, 'show'])->name('users.show'); //Mostra detalhe de um registro
   Route::post('/store-user', [UserController::class, 'store'])->name('users.store'); //Salva novo registro no BD
   Route::get('/update-user/{user}', [UserController::class, 'update'])->name('users.update'); //Atualiza um registro no BD
   Route::get('/update-user-password/{user}', [UserController::class, 'updatePassword'])->name('users.update-password'); //Atualiza um registro no BD
   Route::get('/destroy-user/{user}', [UserController::class, 'destroy'])->name('users.destroy'); //Exclui um registro no BD
+
+  /**Rotas de labels */
+  Route::get('/index-label', [LabelController::class, 'index'])->name('labels.index'); //Listar todos os registros da tabela
+  Route::get('/show-label/{label}', [LabelController::class, 'show'])->name('labels.show'); //Mostra detalhe de um registro
+  Route::get('/create-label', [LabelController::class, 'create'])->name('labels.create'); //Carrega form para novo cadastro
+  Route::get('/store-label', [LabelController::class, 'store'])->name('labels.store'); //Salva novo registro no BD
+  Route::get('/edit-label/{label}', [LabelController::class, 'edit'])->name('labels.edit'); //Carrega form para atualizar um registro
+  Route::get('/update-label/{label}', [LabelController::class, 'update'])->name('labels.update'); //Atualiza um registro no BD
+  Route::get('/destroy-label/{label}', [LabelController::class, 'destroy'])->name('labels.destroy'); //Exclui um registro no BD
+
 
 }); //fim da restrição de acesso para quem não está logado no sistema

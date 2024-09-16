@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('labels', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('hexa_color_bg');
+            $table->string('hexa_color_font');
+            $table->string('company_id');
             $table->timestamps();
         });
     }

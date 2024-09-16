@@ -11,6 +11,7 @@
 * easyvog
 * Astrea
 * Promad
+* MaisJuridico
 
 ## Paleta de cores Identidade Visual
 * Marrom: #50301E
