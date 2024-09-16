@@ -80,18 +80,18 @@
                     <label for="name" class="form-label">Nome</label>
                     <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <label for="hexa_color_bg" class="form-label">Cor de Fundo</label>
                     <input type="color" class="form-control" id="hexa_color_bg" name="hexa_color_bg" value="{{ old('hexa_color_bg') }}">
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <label for="hexa_color_font" class="form-label">Cor do Texto</label>
                     <input type="color" class="form-control" id="hexa_color_font" name="hexa_color_font" value="{{ old('hexa_color_font') }}">
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-12">
                     <label for="hexa_color_font" class="form-label">Resultado</label>
-                    <br><span id="resultado" class="badge rounded-pill" style="background-color: #000; color:#0f2"></span>
+                    <br><span id="resultado" class="badge rounded-pill"></span>
                 </div>
                 
                 <div class="col-md-12">
@@ -216,16 +216,33 @@
     $(document).ready(function(){
 
         /**Mostra exemplo em tempo real */
-        let inputName = document.querySelector('#name').value;
+        let inputName = document.querySelector('#name');
         let inputBgColor = document.querySelector('#hexa_color_bg');
         let inputFontColor = document.querySelector('#hexa_color_font');
         let spanResultado = document.querySelector('#resultado');
-        let textoDigitado = inputName.value;
+        let textoDigitado;
+        spanResultado.style.color = 'black';
+        spanResultado.style.backgroundColor = inputBgColor.value;
+        spanResultado.style.color = inputFontColor.value;
 
+        /**Manda para o span tudo que for digitado no campo name */
         inputName.onkeyup = function(){
-            //spanResultado.innerHTML = inputName.value;
-            spanResultado.innerHTML = textoDigitado;
+            textoDigitado = inputName.value;
+            spanResultado.textContent = textoDigitado;
+            //console.log(textoDigitado);
         }
+
+        /**Pega a cor de fundo escolhida e aplica no span */
+        inputBgColor.onchange = function(){
+            spanResultado.style.backgroundColor = inputBgColor.value;
+        }
+
+        /**Pega a cor da fonte escolhida e aplica no span */
+        inputFontColor.onchange = function(){
+            spanResultado.style.color = inputFontColor.value;
+        }
+
+        
 
         /** Create */
         $('form[name="addUserForm"]').submit(function(event){
