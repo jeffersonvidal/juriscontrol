@@ -27,7 +27,7 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="" title="Ver Perfil">Perfil</a></li>
                     <li><hr class="dropdown-divider" /></li>
-                    <li><a class="dropdown-item" href="" title="Sair do Sistema">Sair</a></li>
+                    <li><a class="dropdown-item" href="{{ route('login.destroy') }}" title="Sair do Sistema">Sair</a></li>
                 </ul>
             </li>
         </ul>

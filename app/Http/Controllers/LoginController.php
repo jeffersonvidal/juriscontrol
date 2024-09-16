@@ -32,4 +32,13 @@ class LoginController extends Controller
         /**Se estiver tudo correto redireciona para dashboard */
         return redirect()->route('dashboard.index');
     }
+
+    /**Logout - Encerra sessão do usuário no sistema */
+    public function destroy(){
+        /**Encerra sessão no sistema */
+        Auth::logout();
+
+        /**Redireciona para tela de login */
+        return redirect()->route('login.index')->with('success', 'Deslogado com sucesso!');
+    }
 }
