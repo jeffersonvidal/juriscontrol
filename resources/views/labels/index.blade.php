@@ -80,16 +80,16 @@
                     <label for="name" class="form-label">Nome</label>
                     <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label for="hexa_color_bg" class="form-label">Cor de Fundo</label>
                     <input type="color" class="form-control" id="hexa_color_bg" name="hexa_color_bg" value="{{ old('hexa_color_bg') }}">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label for="hexa_color_font" class="form-label">Cor do Texto</label>
                     <input type="color" class="form-control" id="hexa_color_font" name="hexa_color_font" value="{{ old('hexa_color_font') }}">
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <label for="hexa_color_font" class="form-label">Resultado</label>
                     <br><span id="resultado" class="badge rounded-pill"></span>
                 </div>
