@@ -15,7 +15,30 @@ import './datatables-simple-demo';
 // import jQuery from 'jquery';
 // window.$ = jQuery;
 
+//Inputmask
+import Inputmask from 'inputmask';
 
+//Criando máscara
+document.addEventListener("DOMContentLoaded", function(){
+  /**Máscara para telefone */
+  var foneMask = new Inputmask("(99) 99999-9999");
+  if(document.querySelector('#phone')){
+    foneMask.mask(document.querySelector('#phone'));
+  }
+
+  /**Máscara para cep */
+  var cepMask = new Inputmask("99999-999");
+  if(document.querySelector('#zipcode')){
+    cepMask.mask(document.querySelector('#zipcode'));
+  }
+
+  /**Máscara para cpf */
+  var cpfMask = new Inputmask("999.999.999-99");
+  if(document.querySelector('#cpf')){
+    cpfMask.mask(document.querySelector('#cpf'));
+  }
+  
+});
 
 
 /**Axios */

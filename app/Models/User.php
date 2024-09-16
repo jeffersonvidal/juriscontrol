@@ -47,4 +47,38 @@ class User extends Authenticatable implements Auditable
             'password' => 'hashed',
         ];
     }
+    /**Remove caracteres de campos (CPF, CEP, Data, etc) */
+    public function clearField($param){
+        if(empty($param)){
+            return '';
+        }
+
+        return str_replace(['.','-','(',')','/',' '], '', $param);
+    }
+
+    /**Limpa CPF */
+    public function limpaCPF($value){
+        return $this->attributes['cpf'] = $this->clearField($value);
+    }
+
+    /**Limpa CEP */
+    public function limpaCEP($value){
+        return $this->attributes['zipcode'] = $this->clearField($value);
+    }
+
+    /**Limpa Phone */
+    public function limpaPhone($value){
+        return $this->attributes['phone'] = $this->clearField($value);
+    }
+
+    /**Converte string to Double - para valores monetários */
+    public function convertStringToDouble($param){
+        if(empty($param)){
+            return null;
+        }
+
+        return str_replace(',', '.', str_replace('.', '', $param));
+    }
+
+
 }

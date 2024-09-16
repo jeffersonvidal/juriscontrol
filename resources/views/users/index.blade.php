@@ -105,7 +105,7 @@
 
                 <div class="col-md-6">
                     <label for="phone" class="form-label">Telefone</label>
-                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="999.999.999-99" value="{{ old('phone') }}">
+                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="(99) 99999-9999" value="{{ old('phone') }}">
                 </div>
             
                 <div class="col-md-6">

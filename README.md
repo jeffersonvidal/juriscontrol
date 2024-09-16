@@ -166,7 +166,7 @@ npm install jquery
 
 InputMask (para criar máscaras personalizadas em campos de formulários)
 ```
-npm install 
+npm install inputmask
 ```
 
 ## Módulos do Sistema

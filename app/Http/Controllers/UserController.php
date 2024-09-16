@@ -11,8 +11,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Validator;
 
+
 class UserController extends Controller
 {
+    private $helperAdm;
+
+    public function __construct(\HelpersAdm $helpersAdm){
+        $this->helperAdm = $helpersAdm;
+    }
+
     /**Listar registros da tabela do banco de dados */
     public function index(){
         $allUsers = User::where('company_id', auth()->user()->company_id)
@@ -61,10 +68,13 @@ class UserController extends Controller
                 $userData->password = $request->password;
                 $userData->company_id = $request->company_id;
                 $userData->user_profile_id = $request->user_profile_id;
-                $userData->phone = $request->phone;
-                $userData->cpf = $request->cpf;
+                $userData->phone = $userData->limpaPhone($request->phone);
+                $userData->cpf = $userData->limpaCPF($request->cpf);
+                $userData->teste = $this->helperAdm->limpaCampo($userData->cpf, $request->cpf);
                 $userData->birthday = $request->birthday;
-                $userData->save();
+                //$userData->save();
+
+                dd($userData);
                 //comita depois de tudo ter sido salvo
                 DB::commit();
 
