@@ -54,7 +54,7 @@
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{{ route('users.index') }}" title="Gestão de Usuários do Sistema">Usuários</a>
                                     <a class="nav-link" href="{{ route('labels.index') }}" title="Gestão de Etiquestas do Sistema">Etiquetas</a>
-                                    <a class="nav-link" href="" title="Gestão de Tarefas">Tarefas</a>
+                                    <a class="nav-link" href="{{ route('tasks.index') }}" title="Gestão de Tarefas">Tarefas</a>
                                     <a class="nav-link" href="" title="Gestão de Eventos">Eventos</a>
                                     <a class="nav-link" href="" title="Gestão de Escritórios Externos / Parceiros">Escritórios Externos</a>
                                     <a class="nav-link" href="" title="Gestão de Gamificação de Usuários do Sistema">Gamificação</a>

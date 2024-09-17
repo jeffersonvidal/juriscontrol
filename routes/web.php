@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,15 @@ Route::group(['middleware' => 'auth'], function(){
   Route::get('/edit-label/{label}', [LabelController::class, 'edit'])->name('labels.edit'); //Carrega form para atualizar um registro
   Route::get('/update-label/{label}', [LabelController::class, 'update'])->name('labels.update'); //Atualiza um registro no BD
   Route::get('/destroy-label/{label}', [LabelController::class, 'destroy'])->name('labels.destroy'); //Exclui um registro no BD
+
+  /**Rotas de tasks */
+  Route::get('/index-task', [TaskController::class, 'index'])->name('tasks.index'); //Listar todos os registros da tabela
+  Route::get('/show-task/{task}', [TaskController::class, 'show'])->name('tasks.show'); //Mostra detalhe de um registro
+  Route::get('/create-task', [TaskController::class, 'create'])->name('tasks.create'); //Carrega form para novo cadastro
+  Route::get('/store-task', [TaskController::class, 'store'])->name('tasks.store'); //Salva novo registro no BD
+  Route::get('/edit-task/{task}', [TaskController::class, 'edit'])->name('tasks.edit'); //Carrega form para atualizar um registro
+  Route::get('/update-task/{task}', [TaskController::class, 'update'])->name('tasks.update'); //Atualiza um registro no BD
+  Route::get('/destroy-task/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy'); //Exclui um registro no BD
 
 
 }); //fim da restrição de acesso para quem não está logado no sistema

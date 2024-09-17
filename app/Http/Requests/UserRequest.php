@@ -22,7 +22,28 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required',
+            //'email' => 'required|email|unique:users,email' . ($userId ? $userId->id : null),
+            'email' => 'required|email|unique:users,email',
+            'email' => 'required',
+            'cpf' => 'required',
+            'password' => 'required_if:password,!=,null|min:6',
+            'company_id' => 'required',
+            'user_profile_id' => 'required',
         ];
+    }
+
+    public function messages(): array{
+        return [
+            'name.required' => 'Campo Nome é obrigatório!',
+            'email.required' => 'Campo Email é obrigatório!',
+            'email.email' => 'Informe um email válido',
+            'email.unique' => 'Email já cadastrado',
+            'cpf.required' => 'Campo CPF é obrigatório!',
+            'password.required_if' => 'Campo Senha é obrigatório!',
+            'password.min' => 'Senha deve ter no mínimo 6 caracteres',
+            'company_id.required' => 'Campo Empresa é obrigatório!',
+            'user_profile_id.required' => 'Campo Perfil é obrigatório!',
+        ] ;
     }
 }

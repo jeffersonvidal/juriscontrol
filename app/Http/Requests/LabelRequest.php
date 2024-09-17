@@ -11,7 +11,7 @@ class LabelRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -19,10 +19,24 @@ class LabelRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
+        //$userId = $this->route('user');
+        /**required|unique:posts|max:255 */
         return [
-            //
+            'name' => 'required',
+            'hexa_color_bg' => 'required',
+            'hexa_color_font' => 'required',
+            'company_id' => 'required',
         ];
+    }
+
+    public function messages(): array{
+        return [
+            'name.required' => 'Campo Nome é obrigatório!',
+            'hexa_color_bg.required' => 'Campo Cor de Fundo é obrigatório!',
+            'hexa_color_font.required' => 'Campo Cor da Fonte é obrigatório!',
+            'company_id.required' => 'Campo Escritório é obrigatório!',
+        ] ;
     }
 }
