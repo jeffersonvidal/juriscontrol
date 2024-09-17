@@ -19,10 +19,10 @@ class UserSeeder extends Seeder
                 'name' => fake()->name(),
                 'company_id' => '1',
                 'email' => 'adm@adm.com',
-                'password' => Hash::make('123456', ['rounds' => 12]),
+                'password' => Hash::make('123', ['rounds' => 12]),
                 'user_profile_id' => '4',
-                'phone' => '(61) 98765-4321',
-                'cpf' => '654.789.321-94',
+                'phone' => '61987654321',
+                'cpf' => '65478932194',
                 'birthday' => '1983-11-21',
             ]);
         }
@@ -32,10 +32,10 @@ class UserSeeder extends Seeder
                 'name' => fake()->name(),
                 'company_id' => '2',
                 'email' => 'email@email.com',
-                'password' => Hash::make('123456', ['rounds' => 12]),
+                'password' => Hash::make('123', ['rounds' => 12]),
                 'user_profile_id' => '4',
-                'phone' => '(61) 98765-4321',
-                'cpf' => '321.456.897-27',
+                'phone' => '61987654321',
+                'cpf' => '32145689727',
                 'birthday' => '2000-08-17',
             ]);
         }

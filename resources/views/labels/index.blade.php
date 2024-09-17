@@ -44,7 +44,7 @@
                             <td>Nome da empresa</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
-                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $label->id }}" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa-solid fa-pencil"></i></button>
+                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $label->id }}" data-name="{{ $label->name }}" data-hexa_color_bg="{{ $label->hexa_color_bg }}" data-hexa_color_font="{{ $label->hexa_color_font }}" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa-solid fa-pencil"></i></button>
                                         <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $label->id }}" data-name="{{ $label->name }}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i></button>
 
                                     </span>
@@ -71,7 +71,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="addUserForm" name="addUserForm" class="row g-3">
+      <form id="addForm" name="addForm" class="row g-3">
                 @csrf
                 <!-- @method('POST') -->
 
@@ -102,7 +102,7 @@
       </div><!--fim modal-body-->
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-        <button type="submit" class="btn btn-primary addBtn">Cadastrar <i class="fa-solid fa-paper-plane"></i></button>
+        <button type="submit" class="btn btn-primary addButton">Cadastrar <i class="fa-solid fa-paper-plane"></i></button>
       </div><!--fim modal-footer-->
       </form><!--finalizando form aqui para garantir pegar a ação do botão de salvar-->
     </div>
@@ -114,11 +114,11 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Alterar Usuário</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Alterar Etiqueta</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="editUserForm" name="editUserForm" class="row g-3">
+      <form id="editForm" name="editForm" class="row g-3">
                 @csrf
                 <!-- @method('POST') -->
 
@@ -126,51 +126,24 @@
                 <div class="col-md-12">
                     <label for="name" class="form-label">Nome</label>
                     <input type="text" class="form-control" id="edit_name" name="name" value="{{ old('name') }}">
-                    <span id="name_error" class="text-danger"></span>
                 </div>
-                
-
-                <div class="col-md-4">
-                    <label for="cpf" class="form-label">CPF</label>
-                    <input type="text" class="form-control" id="edit_cpf" name="cpf" placeholder="999.999.999-99" value="{{ old('cpf') }}">
-                    <span id="cpf_error" class="text-danger"></span>
-                </div>            
-
-                <div class="col-md-4">
-                    <label for="phone" class="form-label">Telefone</label>
-                    <input type="tel" class="form-control" id="edit_phone" name="phone" placeholder="(99) 99999-9999" value="{{ old('phone') }}">
-                    <span id="phone_error" class="text-danger"></span>
+                <div class="col-md-3">
+                    <label for="hexa_color_bg" class="form-label">Cor de Fundo</label>
+                    <input type="color" class="form-control" id="edit_hexa_color_bg" name="hexa_color_bg" value="{{ old('hexa_color_bg') }}">
                 </div>
-            
-                <div class="col-md-4">
-                    <label for="birthday" class="form-label">Data de Nascimento</label>
-                    <input type="date" class="form-control" id="edit_birthday" name="birthday" value="{{ old('birthday') }}">
-                    <span id="birthday_error" class="text-danger"></span>
+                <div class="col-md-3">
+                    <label for="hexa_color_font" class="form-label">Cor do Texto</label>
+                    <input type="color" class="form-control" id="edit_hexa_color_font" name="hexa_color_font" value="{{ old('hexa_color_font') }}">
                 </div>
 
                 <div class="col-md-6">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="edit_email" name="email" value="{{ old('email') }}">
-                    <span id="email_error" class="text-danger"></span>
-                </div>
-                
-                
-                <div class="col-md-6">
-                    <label for="user_profile_id" class="form-label">Perfil do Usuário</label>
-                    <select id="edit_user_profile_id" name="user_profile_id" class="form-select">
-                        <option>Informe o Perfil do Usuário</option>
-                        <option value="1">Estagiário</option>
-                        <option value="2">Advogado</option>
-                        <option value="3">Financeiro</option>
-                        <option value="4">Adminsitrador</option>
-                        <option value="5">Escritório Externo</option>
-                    </select>
-                    <span id="user_profile_id_error" class="text-danger"></span>
+                    <label for="hexa_color_font" class="form-label">Resultado</label>
+                    <br><span id="edit_resultado" class="badge rounded-pill"></span>
                 </div>
                 
                 <div class="col-md-12">
-                    <input type="hidden" class="form-control" id="edit_company_id" name="company_id">            
-                    <input type="hidden" class="form-control" id="edit_user_id" name="id">            
+                    <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="edit_label_id" name="id">                 
                 </div>
                 
             
@@ -194,7 +167,7 @@
       </div>
       <div class="modal-body">
       
-        <h3>Você deseja realmente excluir o registro <span class="user_name"></span>?</h3>
+        <h3>Você deseja realmente excluir o registro <span class="registro_name"></span>?</h3>
                 
             
       </div><!--fim modal-body-->
@@ -221,9 +194,9 @@
         let inputFontColor = document.querySelector('#hexa_color_font');
         let spanResultado = document.querySelector('#resultado');
         let textoDigitado;
-        spanResultado.style.color = 'black';
         spanResultado.style.backgroundColor = inputBgColor.value;
-        spanResultado.style.color = inputFontColor.value;
+        spanResultado.style.color = 'white';
+        //spanResultado.style.color = inputFontColor.value;
 
         /**Manda para o span tudo que for digitado no campo name */
         inputName.onkeyup = function(){
@@ -245,19 +218,19 @@
         
 
         /** Create */
-        $('form[name="addUserForm"]').submit(function(event){
+        $('form[name="addForm"]').submit(function(event){
             event.preventDefault(); //não atualiza a página ao enviar os dados
 
             $.ajax({
-                //url: "{{ route('users.store') }}",
+                url: "{{ route('labels.store') }}",
                 type: "get",
                 data: $(this).serialize(),
                 dataType: 'json',
                 beforeSend:function(){
-                    $('.addBtn').prop('disabled', true);
+                    $('.addButton').prop('disabled', true);
                 },
                 complete:function(){
-                    $('.addBtn').prop('disabled', false);
+                    $('.addButton').prop('disabled', false);
                 },
                 // success: function(response){
                 //     console.log(response);
@@ -298,34 +271,54 @@
         });
 
         /** Update */
+        /**Mostra exemplo em tempo real */
+        let inputEditName = document.querySelector('#edit_name');
+        let inputEditBgColor = document.querySelector('#edit_hexa_color_bg');
+        let inputEditFontColor = document.querySelector('#edit_hexa_color_font');
+        let spanEditResultado = document.querySelector('#edit_resultado');
+        let textoEditDigitado;
+        spanEditResultado.style.backgroundColor = inputEditBgColor.value;
+        spanEditResultado.style.color = 'white';
+        //spanResultado.style.color = inputFontColor.value;
+
+        /**Manda para o span tudo que for digitado no campo name */
+        inputEditName.onkeyup = function(){
+            textoEditDigitado = inputEditName.value;
+            spanEditResultado.textContent = textoEditDigitado;
+            //console.log(textoDigitado);
+        }
+
+        /**Pega a cor de fundo escolhida e aplica no span */
+        inputEditBgColor.onchange = function(){
+            spanEditResultado.style.backgroundColor = inputEditBgColor.value;
+        }
+
+        /**Pega a cor da fonte escolhida e aplica no span */
+        inputEditFontColor.onchange = function(){
+            spanEditResultado.style.color = inputEditFontColor.value;
+        }
         //Botão editBtn que abre a modal para editar registro
         $('.editBtn').on('click', function(){
             //Pega os valores dos campos vindos do BD para alimentar o formulário
             let id = $(this).attr('data-id');
             let name = $(this).attr('data-name');
-            let email = $(this).attr('data-email');
+            let hexa_color_bg = $(this).attr('data-hexa_color_bg');
             let company_id = $(this).attr('data-company_id');
-            let user_profile_id = $(this).attr('data-user_profile_id');
-            let phone = $(this).attr('data-phone');
-            let cpf = $(this).attr('data-cpf');
-            let birthday = $(this).attr('data-birthday');
+            let hexa_color_font = $(this).attr('data-hexa_color_font');
             //let data_brasileira = user_birthday.split('-').reverse().join('/');
 
             //Mostra os valores vindos do BD no form da modal
-            $('#edit_user_id').val(id);
+            $('#edit_label_id').val(id);
             $('#edit_name').val(name);
-            $('#edit_email').val(email);
+            $('#edit_hexa_color_bg').val(hexa_color_bg);
+            $('#edit_hexa_color_font').val(hexa_color_font);
             $('#edit_company_id').val(company_id);
-            $('#edit_user_profile_id').val(user_profile_id);
-            $('#edit_phone').val(phone);
-            $('#edit_cpf').val(cpf);
-            $('#edit_birthday').val(birthday);
 
-            let url = "{{ route('users.update', 'user_id') }}";
-            url = url.replace('user_id', id);
+            let url = "{{ route('labels.update', 'id') }}";
+            url = url.replace('id', id);
 
             //Botão do formulário que envia requisição para salvar alterações do BD
-            $('form[name="editUserForm"]').submit(function(event){
+            $('form[name="editForm"]').submit(function(event){
                 event.preventDefault(); //não atualiza a página ao enviar os dados
 
                 $.ajax({
@@ -383,17 +376,17 @@
         /** Delete */
         //Botão de deletar que chama modal
         $('.deleteBtn').on('click', function(){
-            let user_id = $(this).attr('data-id'); //pega id do registro a ser deletado
-            let user_name = $(this).attr('data-name'); //pega name do registro a ser deletado
+            let registro_id = $(this).attr('data-id'); //pega id do registro a ser deletado
+            let registro_name = $(this).attr('data-name'); //pega name do registro a ser deletado
 
             //Passa o nome para modal
-            $('.user_name').html('');
-            $('.user_name').html(user_name);
+            $('.registro_name').html('');
+            $('.registro_name').html(registro_name);
             
             //Botão de confirmar deletar registro da modal
             $('.deleteModalButton').on('click', function(){
-                let url = "{{ route('users.destroy', 'user_id') }}";
-                url = url.replace('user_id', user_id);
+                let url = "{{ route('labels.destroy', 'id') }}";
+                url = url.replace('id', registro_id);
                 //console.log(url);
                 $.ajax({
                     url: url,
