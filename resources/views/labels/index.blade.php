@@ -20,13 +20,13 @@
             <span>Listar todos os registros</span>
 
             <span class="ms-auto">
-                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addModal"><i class="fa-solid fa-plus"></i> Cadastrar</button>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createLabelModal"><i class="fa-solid fa-plus"></i> Cadastrar</button>
             </span>
         </div><!--fim card-header-->
 
         <div class="card-body">
-            <span class="alert alert-success" id="alert-success" style="display:none;"></span>
-            <span class="alert alert-danger" id="alert-danger" style="display:none;"></span>
+            <x-alerts />
+
             <table id="datatablesSimple" class="table table-striped table-hover">
                 <thead>
                         <tr>
@@ -44,8 +44,12 @@
                             <td>Nome da empresa</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
-                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $label->id }}" data-name="{{ $label->name }}" data-hexa_color_bg="{{ $label->hexa_color_bg }}" data-hexa_color_font="{{ $label->hexa_color_font }}" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa-solid fa-pencil"></i></button>
-                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $label->id }}" data-name="{{ $label->name }}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i></button>
+                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $label->id }}" data-name="{{ $label->name }}" 
+                                            data-hexa_color_bg="{{ $label->hexa_color_bg }}" data-hexa_color_font="{{ $label->hexa_color_font }}" 
+                                            data-bs-toggle="modal" data-bs-target="#updateLabelModal"><i class="fa-solid fa-pencil"></i></button>
+                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $label->id }}" 
+                                            data-name="{{ $label->name }}" data-hexa_color_bg="{{ $label->hexa_color_bg }}" 
+                                            data-hexa_color_font="{{ $label->hexa_color_font }}" ><i class="fa-solid fa-trash"></i></button>
 
                                     </span>
                                 </td>
@@ -63,7 +67,7 @@
     </div><!--fim card -->
 
 <!-- addModal -->
-<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="createLabelModal" tabindex="-1" aria-labelledby="createLabelModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -71,9 +75,9 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="addForm" name="addForm" class="row g-3">
+
+      <form id="createLabelForm" class="row g-3">
                 @csrf
-                <!-- @method('POST') -->
 
                 
                 <div class="col-md-12">
@@ -110,7 +114,7 @@
 </div><!-- fim addModal -->
 
 <!-- editModal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateLabelModal" tabindex="-1" aria-labelledby="updateLabelModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -118,7 +122,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="editForm" name="editForm" class="row g-3">
+      <form id="updateLabelForm" class="row g-3">
                 @csrf
                 <!-- @method('POST') -->
 
@@ -157,29 +161,6 @@
   </div>
 </div><!-- fim editModal -->
 
-<!-- deleteModal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Deletar Usuário</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-      
-        <h3>Você deseja realmente excluir o registro <span class="registro_name"></span>?</h3>
-                
-            
-      </div><!--fim modal-body-->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-        <button type="submit" class="btn btn-danger deleteModalButton">Excluir <i class="fa-solid fa-trash"></i></button>
-      </div><!--fim modal-footer-->
-      
-    </div>
-  </div>
-</div><!-- fim deleteModal -->
-
 
 </div><!--fim container-fluid-->
 
@@ -187,7 +168,6 @@
 <script>
     /**Add in database - store */
     $(document).ready(function(){
-
         /**Mostra exemplo em tempo real */
         let inputName = document.querySelector('#name');
         let inputBgColor = document.querySelector('#hexa_color_bg');
@@ -196,7 +176,6 @@
         let textoDigitado;
         spanResultado.style.backgroundColor = inputBgColor.value;
         spanResultado.style.color = 'white';
-        //spanResultado.style.color = inputFontColor.value;
 
         /**Manda para o span tudo que for digitado no campo name */
         inputName.onkeyup = function(){
@@ -215,77 +194,46 @@
             spanResultado.style.color = inputFontColor.value;
         }
 
-        
-
-        /** Create */
-        $('form[name="addForm"]').submit(function(event){
-            event.preventDefault(); //não atualiza a página ao enviar os dados
-
+        /** Cadastrar registro funcionando com sucesso */
+        $('#createLabelForm').on('submit', function(e) {
+            e.preventDefault();
             $.ajax({
-                url: "{{ route('labels.store') }}",
-                type: "get",
+                url: '{{ route('labels.store') }}',
+                method: 'POST',
                 data: $(this).serialize(),
-                dataType: 'json',
-                beforeSend:function(){
-                    $('.addButton').prop('disabled', true);
+                success: function(response) {
+                    $('#createLabelModal').modal('hide');
+                    if(response){
+                        Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 2000); // 3000 milissegundos = 3 segundos
                 },
-                complete:function(){
-                    $('.addButton').prop('disabled', false);
-                },
-                // success: function(response){
-                //     console.log(response);
-                // }
-                success: function(response){
-                    if(response.success == true){
-                        $('#addModal').hide();
-                        printSuccessMsg(response.msg);
-
-                        location.reload();
-                    }else if(response.success == false){
-                        printErrorMsg(response.msg);
-                    }else{
-                        printValidationErrorMsg(response.msg);
+                error: function(response) {
+                    console.log(response.responseJSON);
+                    if(response.responseJSON){
+                        Swal.fire('Erro!', response.responseJSON.message, 'error');
                     }
                 }
             });
-
-            /**Mensagens do sistema */
-            //Exibe mensagens abaixo dos campos obrigatórios, validação de campos
-            function printValidationErrorMsg(msg){
-                $.each(msg, function(field_name, error){
-                    $(document).find('#'+field_name+'_error').text(error);
-                });
-            }
-            //Exibe mensagem de erro do sistema
-            function printErrorMsg(msg){
-                $('#alert-danger').html('');
-                $('#alert-danger').css('display','block');
-                $('#alert-danger').append(''+msg+'');
-            }
-            //Mostra mensagem de sucesso
-            function printSuccessMsg(msg){
-                $('#alert-success').html('');
-                $('#alert-success').css('display','block');
-                $('#alert-success').append(''+msg+'');
-            }
         });
 
-        /** Update */
-        /**Mostra exemplo em tempo real */
+        /**Atualiza registro no banco de dados*/
+        /**Mostra exemplo em tempo real no formulário*/
         let inputEditName = document.querySelector('#edit_name');
         let inputEditBgColor = document.querySelector('#edit_hexa_color_bg');
         let inputEditFontColor = document.querySelector('#edit_hexa_color_font');
         let spanEditResultado = document.querySelector('#edit_resultado');
         let textoEditDigitado;
         spanEditResultado.style.backgroundColor = inputEditBgColor.value;
-        spanEditResultado.style.color = 'white';
-        //spanResultado.style.color = inputFontColor.value;
+        spanEditResultado.style.color = inputEditFontColor.value;
+        spanEditResultado.textContent = inputEditName.val;
 
         /**Manda para o span tudo que for digitado no campo name */
         inputEditName.onkeyup = function(){
             textoEditDigitado = inputEditName.value;
             spanEditResultado.textContent = textoEditDigitado;
-            //console.log(textoDigitado);
         }
 
         /**Pega a cor de fundo escolhida e aplica no span */
@@ -297,141 +245,115 @@
         inputEditFontColor.onchange = function(){
             spanEditResultado.style.color = inputEditFontColor.value;
         }
-        //Botão editBtn que abre a modal para editar registro
-        $('.editBtn').on('click', function(){
-            //Pega os valores dos campos vindos do BD para alimentar o formulário
-            let id = $(this).attr('data-id');
-            let name = $(this).attr('data-name');
-            let hexa_color_bg = $(this).attr('data-hexa_color_bg');
-            let company_id = $(this).attr('data-company_id');
-            let hexa_color_font = $(this).attr('data-hexa_color_font');
-            //let data_brasileira = user_birthday.split('-').reverse().join('/');
 
-            //Mostra os valores vindos do BD no form da modal
-            $('#edit_label_id').val(id);
-            $('#edit_name').val(name);
-            $('#edit_hexa_color_bg').val(hexa_color_bg);
-            $('#edit_hexa_color_font').val(hexa_color_font);
-            $('#edit_company_id').val(company_id);
-
-            let url = "{{ route('labels.update', 'id') }}";
-            url = url.replace('id', id);
-
-            //Botão do formulário que envia requisição para salvar alterações do BD
-            $('form[name="editForm"]').submit(function(event){
-                event.preventDefault(); //não atualiza a página ao enviar os dados
-
-                $.ajax({
-                    url: url,
-                    type: "get",
-                    data: $(this).serialize(),
-                    dataType: 'json',
-                    contentType: false,
-                    processData: false,
-                    beforeSend:function(){
-                        $('.editButton').prop('disabled', true);
-                    },
-                    complete:function(){
-                        $('.editButton').prop('disabled', false);
-                    },
-                    success: function(response){   
-                        console.log(response.msg);
-                        if(response.success == true){
-                            $('#editModal').hide();
-                            printSuccessMsg(response.msg);
-                            location.reload();
-
-                        }else if(response.success == false){
-                            printErrorMsg(response.msg);
-                        }else{
-                            printValidationErrorMsg(response.msg);
+        /**Passa valores do registro para o formulário na modal de atualização */
+        $('button').on('click', function() {
+            /**Verifica se o botão tem a classe condicional para fazer algo */
+            if($(this).hasClass('editBtn')){
+                var dados = [
+                        { 
+                            id: $(this).attr('data-id'), 
+                            name: $(this).attr('data-name'), 
+                            hexa_color_bg: $(this).attr('data-hexa_color_bg'), 
+                            hexa_color_font: $(this).attr('data-hexa_color_font'), 
                         }
-                    }
-                });
+                    ];
+                    editLabel(dados);
+            }else if($(this).hasClass('deleteBtn')){
+                var dados = [
+                        { 
+                            id: $(this).attr('data-id'), 
+                            name: $(this).attr('data-name'), 
+                            hexa_color_bg: $(this).attr('data-hexa_color_bg'), 
+                            hexa_color_font: $(this).attr('data-hexa_color_font'), 
+                        }
+                    ];
+                    deleteLabel(dados);
+            }
+        });
+            
 
-                /**Mensagens do sistema */
-                //Exibe mensagens abaixo dos campos obrigatórios, validação de campos
-                function printValidationErrorMsg(msg){
-                    $.each(msg, function(field_name, error){
-                        $(document).find('#'+field_name+'_error').text(error);
+        /**Função que preenche os campos do formulário de atualização */
+        function editLabel(dados) {
+            let url = "{{ route('labels.show', 'id') }}";
+            url = url.replace('id', dados[0].id);
+            /**Preenche os campos do form de atualização*/
+            $.get(url, function() {
+                $('#edit_label_id').val(dados[0].id);
+                $('#edit_name').val(dados[0].name);
+                $('#edit_hexa_color_bg').val(dados[0].hexa_color_bg);
+                $('#edit_hexa_color_font').val(dados[0].hexa_color_font);
+                $('#updateLabelModal').modal('show');
+            });
+        }
+
+        /**Formulário de atualização de registro */
+        $('#updateLabelForm').on('submit', function(e) {
+            e.preventDefault();
+            var id = $('#edit_label_id').val();
+            $.ajax({
+                url: `/update-label/${id}`,
+                method: 'PUT',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#updateLabelModal').modal('hide');
+                    //$('#labelsTable').DataTable().ajax.reload();
+                    //Swal.fire('Success', 'Registro atualizado com sucesso', 'success');
+                    console.log(response);
+                    if(response){
+                        Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 2000); // 3000 milissegundos = 3 segundos
+                },
+                error: function(response) {
+                    //Swal.fire('Error', 'ERRO ao atualizar registro', 'error');
+                    console.log(response.responseJSON);
+                    if(response.responseJSON){
+                        Swal.fire('Erro!', response.responseJSON.message, 'error');
+                    }
+                }
+            });
+        });
+
+
+        /**Exibe pergunta se deseja realmente excluir o registro */
+        function deleteLabel(dados) {
+            Swal.fire({
+                title: 'Você tem certeza que deseja excluir esse registro?',
+                text: "Você não poderá reverter essa operação!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, excluir!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    });
+                    $.ajax({
+                        url: `/destroy-label/${dados[0].id}`,
+                        method: 'DELETE',
+                        success: function() {
+                            //$('#labelsTable').DataTable().ajax.reload();
+                            Swal.fire('Pronto!', 'Registro excluído.', 'success');
+                            setTimeout(function() {
+                                location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                            }, 2000); // 3000 milissegundos = 3 segundos
+                        },
+                        error: function() {
+                            Swal.fire('Erro!', 'ERRO ao excluir registro', 'error');
+                        }
                     });
                 }
-                //Exibe mensagem de erro do sistema
-                function printErrorMsg(msg){
-                    $('#alert-danger').html('');
-                    $('#alert-danger').css('display','block');
-                    $('#alert-danger').append(''+msg+'');
-                }
-                //Mostra mensagem de sucesso
-                function printSuccessMsg(msg){
-                    $('#alert-success').html('');
-                    $('#alert-success').css('display','block');
-                    $('#alert-success').append(''+msg+'');
-                }
             });
+        }
 
-            
-        });
-
-        /** Delete */
-        //Botão de deletar que chama modal
-        $('.deleteBtn').on('click', function(){
-            let registro_id = $(this).attr('data-id'); //pega id do registro a ser deletado
-            let registro_name = $(this).attr('data-name'); //pega name do registro a ser deletado
-
-            //Passa o nome para modal
-            $('.registro_name').html('');
-            $('.registro_name').html(registro_name);
-            
-            //Botão de confirmar deletar registro da modal
-            $('.deleteModalButton').on('click', function(){
-                let url = "{{ route('labels.destroy', 'id') }}";
-                url = url.replace('id', registro_id);
-                //console.log(url);
-                $.ajax({
-                    url: url,
-                    type: "get",
-                    data: $(this).serialize(),
-                    dataType: 'json',
-                    beforeSend:function(){
-                        $('.deleteModalButton').prop('disabled', true);
-                    },
-                    complete:function(){
-                        $('.deleteModalButton').prop('disabled', false);
-                    },
-                    // success: function(response){
-                    //     console.log(response);
-                    // }
-                    success: function(response){
-                        if(response.success == true){
-                            console.log(response.msg);
-                            $('#deleteModal').hide();
-                            printSuccessMsg(response.msg);
-
-                            location.reload();
-                            
-                        }else{
-                            printErrorMsg(respsonse.msg);
-                        }
-                        
-                    }
-                });
-
-                /**Mensagens do sistema */
-                //Exibe mensagem de erro do sistema
-                function printErrorMsg(msg){
-                    $('#alert-danger').html('');
-                    $('#alert-danger').css('display','block');
-                    $('#alert-danger').append(''+msg+'');
-                }
-                //Mostra mensagem de sucesso
-                function printSuccessMsg(msg){
-                    $('#alert-success').html('');
-                    $('#alert-success').css('display','block');
-                    $('#alert-success').append(''+msg+'');
-                }
-            });
-        });
         
     });
     

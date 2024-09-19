@@ -37,10 +37,10 @@ Route::group(['middleware' => 'auth'], function(){
   Route::get('/index-label', [LabelController::class, 'index'])->name('labels.index'); //Listar todos os registros da tabela
   Route::get('/show-label/{label}', [LabelController::class, 'show'])->name('labels.show'); //Mostra detalhe de um registro
   Route::get('/create-label', [LabelController::class, 'create'])->name('labels.create'); //Carrega form para novo cadastro
-  Route::get('/store-label', [LabelController::class, 'store'])->name('labels.store'); //Salva novo registro no BD
+  Route::post('/store-label', [LabelController::class, 'store'])->name('labels.store'); //Salva novo registro no BD
   Route::get('/edit-label/{label}', [LabelController::class, 'edit'])->name('labels.edit'); //Carrega form para atualizar um registro
-  Route::get('/update-label/{label}', [LabelController::class, 'update'])->name('labels.update'); //Atualiza um registro no BD
-  Route::get('/destroy-label/{label}', [LabelController::class, 'destroy'])->name('labels.destroy'); //Exclui um registro no BD
+  Route::put('/update-label/{label}', [LabelController::class, 'update'])->name('labels.update'); //Atualiza um registro no BD
+  Route::delete('/destroy-label/{label}', [LabelController::class, 'destroy'])->name('labels.destroy'); //Exclui um registro no BD
 
   /**Rotas de tasks */
   Route::get('/index-task', [TaskController::class, 'index'])->name('tasks.index'); //Listar todos os registros da tabela

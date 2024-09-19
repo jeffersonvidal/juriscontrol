@@ -11,9 +11,9 @@ import './scripts_sbadmin';
 import './simple-datatables.min';
 import './datatables-simple-demo';
 
-/**Importar JQuery */
-// import jQuery from 'jquery';
-// window.$ = jQuery;
+/**Importar SweetAlert2 */
+import Swal from 'sweetalert2';
+window.Swal = Swal;
 
 //Inputmask
 import Inputmask from 'inputmask';
