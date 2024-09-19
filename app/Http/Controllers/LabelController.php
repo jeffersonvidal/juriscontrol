@@ -8,7 +8,6 @@ use App\Models\Label;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use HelpersAdm;
-use Illuminate\Http\Request;
 
 
 class LabelController extends Controller
@@ -27,7 +26,7 @@ class LabelController extends Controller
     }
 
     /**Envia registros para popular tabela na index */
-    public function getall(): JsonResponse
+    public function getall()
     {
         $labels = Label::all();
         return response()->json($labels);
