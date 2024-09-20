@@ -13,6 +13,17 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
+            $table->integer('company_id');
+            $table->string('name');
+            $table->string('email')->unique(); //remover unique no SaaS
+            $table->string('phone');
+            $table->string('rg');
+            $table->string('rg_expedidor');
+            $table->string('cpf')->unique(); //remover unique no SaaS
+            $table->string('marital_status');
+            $table->string('nationality');
+            $table->string('profession');
+            $table->date('birthday');
             $table->timestamps();
         });
     }
