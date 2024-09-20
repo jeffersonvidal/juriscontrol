@@ -21,9 +21,16 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
+            CompanySeeder::class,
+            CompanyAddressSeeder::class,
             UserSeeder::class,
             LabelSeeder::class,
             TaskSeeder::class,
+            CustomerSeeder::class,
+            CustomerAddressSeeder::class,
+            InvoiceSeeder::class,
+            CourtCaseSeeder::class,
+            PaymentRecordSeeder::class
         ]);
     }
 }
