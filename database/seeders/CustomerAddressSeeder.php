@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\CompanyAddress;
+use App\Models\CustomerAddress;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,8 +13,8 @@ class CustomerAddressSeeder extends Seeder
      */
     public function run(): void
     {
-        if(! CompanyAddress::where("id","1")->first()){
-            CompanyAddress::create([
+        if(! CustomerAddress::where("id","1")->first()){
+            CustomerAddress::create([
                 'zipcode' => fake()->postcode(),
                 'street' => fake()->streetName(),
                 'num' => fake()->randomNumber(),
@@ -23,12 +23,12 @@ class CustomerAddressSeeder extends Seeder
                 'city' => fake()->city,
                 'state' => 'DF',
                 'company_id' => '1',
-                'customer_id' => '1',
+                'customer_id' => '2',
             ]);
         }
 
-        if(! CompanyAddress::where("id","2")->first()){
-            CompanyAddress::create([
+        if(! CustomerAddress::where("id","2")->first()){
+            CustomerAddress::create([
                 'zipcode' => fake()->postcode(),
                 'street' => fake()->streetName(),
                 'num' => fake()->randomNumber(),
@@ -37,7 +37,7 @@ class CustomerAddressSeeder extends Seeder
                 'city' => fake()->city,
                 'state' => 'DF',
                 'company_id' => '2',
-                'customer_id' => '2',
+                'customer_id' => '1',
             ]);
         }
     }
