@@ -2,19 +2,18 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-//Fazer auditoria dos registros
+/**Responsável pela auditoria do sistema */
 use \OwenIt\Auditing\Auditable as AuditingAuditable;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class User extends Authenticatable implements Auditable
 {
-    use HasFactory, Notifiable, SoftDeletes, AuditingAuditable;
+    use HasFactory, AuditingAuditable;
 
     /**
      * The attributes that are mass assignable.
@@ -46,6 +45,11 @@ class User extends Authenticatable implements Auditable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**Pega Perfil do Usuário */
+    public function getUserProfile($profile){
+        return UserProfile::where('id', $profile)->first();
     }
     
 }

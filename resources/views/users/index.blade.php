@@ -20,7 +20,7 @@
             <span>Listar todos os registros</span>
 
             <span class="ms-auto">
-                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addModal"><i class="fa-solid fa-plus"></i> Cadastrar</button>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="fa-solid fa-plus"></i> Cadastrar</button>
             </span>
         </div><!--fim card-header-->
 
@@ -33,6 +33,8 @@
                     <th scope="col">Nome</th>
                     <th scope="col">Email</th>
                     <th scope="col">CPF</th>
+                    <th scope="col">Telefone</th>
+                    <th scope="col">Perfil</th>
                     <th scope="col">Data Nasc.</th>
                     <th class="d-flex flex-row justify-content-center">Ações</th>
                     </tr>
@@ -44,13 +46,22 @@
                             <tr>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td>{{ $user->cpf }}</td>
+                                <td><span class="cpf">{{ $user->cpf }}</span></td>
+                                <td><span class="phone">{{ $user->phone }}</span></td>
+                                <td>{{ $user->user_profile_id }}</td>
                                 <td>{{ \Carbon\Carbon::parse($user->birthday)->format('d/m/Y') }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
-                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-email="{{ $user->email }}" data-user_profile_id="{{ $user->user_profile_id }}" data-company_id="{{ $user->company_id }}" data-phone="{{ $user->phone }}" data-cpf="{{ $user->cpf }}" data-birthday="{{ $user->birthday }}" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa-solid fa-pencil"></i></button>
-                                        <button class="text-decoration-none btn btn-sm passwordBtn" title="Alterar Senha" data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-bs-toggle="modal" data-bs-target="#passwordModal"><i class="fa-solid fa-key"></i></button>
-                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i></button>
+                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $user->id }}" 
+                                        data-name="{{ $user->name }}" data-email="{{ $user->email }}" data-user_profile_id="{{ $user->user_profile_id }}" 
+                                        data-company_id="{{ $user->company_id }}" data-phone="{{ $user->phone }}" data-cpf="{{ $user->cpf }}" 
+                                        data-birthday="{{ $user->birthday }}" data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
+                                        
+                                        <button class="text-decoration-none btn btn-sm passwordBtn" title="Alterar Senha" data-id="{{ $user->id }}" 
+                                        data-name="{{ $user->name }}" data-bs-toggle="modal" data-bs-target="#passwordModal"><i class="fa-solid fa-key"></i></button>
+
+                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" 
+                                        data-id="{{ $user->id }}" data-name="{{ $user->name }}" ><i class="fa-solid fa-trash"></i></button>
 
                                     </span>
                                 </td>
@@ -68,7 +79,7 @@
     </div><!--fim card -->
 
 <!-- addModal -->
-<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -76,7 +87,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="addUserForm" name="addUserForm" class="row g-3">
+      <form id="createForm" name="createForm" class="row g-3">
                 @csrf
                 <!-- @method('POST') -->
 
@@ -117,7 +128,7 @@
                 <div class="col-md-6">
                     <label for="user_profile_id" class="form-label">Perfil do Usuário</label>
                     <select id="user_profile_id" name="user_profile_id" class="form-select">
-                        <option>Informe o Perfil do Usuário</option>
+                        <option disabled>Informe o Perfil do Usuário</option>
                         <option value="1">Estagiário</option>
                         <option value="2">Advogado</option>
                         <option value="3">Financeiro</option>
@@ -142,7 +153,7 @@
 </div><!-- fim addModal -->
 
 <!-- editModal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -150,59 +161,52 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="editUserForm" name="editUserForm" class="row g-3">
+      <form id="updateForm" name="updateForm" class="row g-3">
                 @csrf
-                <!-- @method('POST') -->
 
                 
                 <div class="col-md-12">
                     <label for="name" class="form-label">Nome</label>
                     <input type="text" class="form-control" id="edit_name" name="name" value="{{ old('name') }}">
-                    <span id="name_error" class="text-danger"></span>
                 </div>
                 
 
                 <div class="col-md-4">
                     <label for="cpf" class="form-label">CPF</label>
                     <input type="text" class="form-control" id="edit_cpf" name="cpf" placeholder="999.999.999-99" value="{{ old('cpf') }}">
-                    <span id="cpf_error" class="text-danger"></span>
                 </div>            
 
                 <div class="col-md-4">
                     <label for="phone" class="form-label">Telefone</label>
                     <input type="tel" class="form-control" id="edit_phone" name="phone" placeholder="(99) 99999-9999" value="{{ old('phone') }}">
-                    <span id="phone_error" class="text-danger"></span>
                 </div>
             
                 <div class="col-md-4">
                     <label for="birthday" class="form-label">Data de Nascimento</label>
                     <input type="date" class="form-control" id="edit_birthday" name="birthday" value="{{ old('birthday') }}">
-                    <span id="birthday_error" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-6">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="edit_email" name="email" value="{{ old('email') }}">
-                    <span id="email_error" class="text-danger"></span>
                 </div>
                 
                 
                 <div class="col-md-6">
                     <label for="user_profile_id" class="form-label">Perfil do Usuário</label>
                     <select id="edit_user_profile_id" name="user_profile_id" class="form-select">
-                        <option>Informe o Perfil do Usuário</option>
+                        <option disabled>Informe o Perfil do Usuário</option>
                         <option value="1">Estagiário</option>
                         <option value="2">Advogado</option>
                         <option value="3">Financeiro</option>
                         <option value="4">Adminsitrador</option>
                         <option value="5">Escritório Externo</option>
                     </select>
-                    <span id="user_profile_id_error" class="text-danger"></span>
                 </div>
                 
                 <div class="col-md-12">
                     <input type="hidden" class="form-control" id="edit_company_id" name="company_id">            
-                    <input type="hidden" class="form-control" id="edit_user_id" name="id">            
+                    <input type="hidden" class="form-control" id="edit_id" name="id">            
                 </div>
                 
             
@@ -216,29 +220,6 @@
   </div>
 </div><!-- fim editModal -->
 
-<!-- deleteModal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Deletar Usuário</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-      
-        <h3>Você deseja realmente excluir o registro <span class="user_name"></span>?</h3>
-                
-            
-      </div><!--fim modal-body-->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-        <button type="submit" class="btn btn-danger deleteModalButton">Excluir <i class="fa-solid fa-trash"></i></button>
-      </div><!--fim modal-footer-->
-      
-    </div>
-  </div>
-</div><!-- fim deleteModal -->
-
 
 </div><!--fim container-fluid-->
 
@@ -246,34 +227,27 @@
 <script>
     /**Add in database - store */
     $(document).ready(function(){
-        /** Create */
-        $('form[name="addUserForm"]').submit(function(event){
+        /** Cadastra registro no banco de dadods */
+        $('form[name="createForm"]').submit(function(event){
             event.preventDefault(); //não atualiza a página ao enviar os dados
 
             $.ajax({
                 url: "{{ route('users.store') }}",
-                type: "post",
+                method: 'POST',
                 data: $(this).serialize(),
-                dataType: 'json',
-                beforeSend:function(){
-                    $('.addBtn').prop('disabled', true);
+                success: function(response) {
+                    $('#createModal').modal('hide');
+                    if(response){
+                        Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 2000); // 3000 milissegundos = 3 segundos
                 },
-                complete:function(){
-                    $('.addBtn').prop('disabled', false);
-                },
-                // success: function(response){
-                //     console.log(response);
-                // }
-                success: function(response){
-                    if(response.success == true){
-                        $('#addModal').hide();
-                        printSuccessMsg(response.msg);
-
-                        location.reload();
-                    }else if(response.success == false){
-                        printErrorMsg(response.msg);
-                    }else{
-                        printValidationErrorMsg(response.msg);
+                error: function(response) {
+                    console.log(response.responseJSON);
+                    if(response.responseJSON){
+                        Swal.fire('Erro!', response.responseJSON.message, 'error');
                     }
                 }
             });
@@ -299,148 +273,114 @@
             }
         });
 
-        /** Update */
-        //Botão editBtn que abre a modal para editar registro
-        $('.editBtn').on('click', function(){
-            //Pega os valores dos campos vindos do BD para alimentar o formulário
-            let id = $(this).attr('data-id');
-            let name = $(this).attr('data-name');
-            let email = $(this).attr('data-email');
-            let company_id = $(this).attr('data-company_id');
-            let user_profile_id = $(this).attr('data-user_profile_id');
-            let phone = $(this).attr('data-phone');
-            let cpf = $(this).attr('data-cpf');
-            let birthday = $(this).attr('data-birthday');
-            //let data_brasileira = user_birthday.split('-').reverse().join('/');
-
-            //Mostra os valores vindos do BD no form da modal
-            $('#edit_user_id').val(id);
-            $('#edit_name').val(name);
-            $('#edit_email').val(email);
-            $('#edit_company_id').val(company_id);
-            $('#edit_user_profile_id').val(user_profile_id);
-            $('#edit_phone').val(phone);
-            $('#edit_cpf').val(cpf);
-            $('#edit_birthday').val(birthday);
-
-            let url = "{{ route('users.update', 'user_id') }}";
-            url = url.replace('user_id', id);
-
-            //Botão do formulário que envia requisição para salvar alterações do BD
-            $('form[name="editUserForm"]').submit(function(event){
-                event.preventDefault(); //não atualiza a página ao enviar os dados
-
-                $.ajax({
-                    url: url,
-                    type: "get",
-                    data: $(this).serialize(),
-                    dataType: 'json',
-                    contentType: false,
-                    processData: false,
-                    beforeSend:function(){
-                        $('.editButton').prop('disabled', true);
-                    },
-                    complete:function(){
-                        $('.editButton').prop('disabled', false);
-                    },
-                    success: function(response){   
-                        console.log(response.msg);
-                        if(response.success == true){
-                            $('#editModal').hide();
-                            printSuccessMsg(response.msg);
-                            location.reload();
-
-                        }else if(response.success == false){
-                            printErrorMsg(response.msg);
-                        }else{
-                            printValidationErrorMsg(response.msg);
+        /**Atualiza registro no banco de dados*/
+        /**Passa valores do registro para o formulário na modal de atualização */
+        $('button').on('click', function() {
+            /**Verifica se o botão tem a classe condicional para fazer algo */
+            if($(this).hasClass('editBtn')){
+                var dados = [
+                        { 
+                            id: $(this).attr('data-id'), 
+                            name: $(this).attr('data-name'), 
+                            email: $(this).attr('data-email'), 
+                            cpf: $(this).attr('data-cpf'), 
+                            phone: $(this).attr('data-phone'), 
+                            birthday: $(this).attr('data-birthday'), 
+                            company_id: $(this).attr('data-company_id'), 
+                            user_profile_id: $(this).attr('data-user_profile_id'), 
                         }
-                    }
-                });
+                    ];
+                    editLabel(dados);
+            }else if($(this).hasClass('deleteBtn')){
+                var dados = [{ id: $(this).attr('data-id'), }];
+                    deleteLabel(dados);
+            }
+        });
 
-                /**Mensagens do sistema */
-                //Exibe mensagens abaixo dos campos obrigatórios, validação de campos
-                function printValidationErrorMsg(msg){
-                    $.each(msg, function(field_name, error){
-                        $(document).find('#'+field_name+'_error').text(error);
-                    });
-                }
-                //Exibe mensagem de erro do sistema
-                function printErrorMsg(msg){
-                    $('#alert-danger').html('');
-                    $('#alert-danger').css('display','block');
-                    $('#alert-danger').append(''+msg+'');
-                }
-                //Mostra mensagem de sucesso
-                function printSuccessMsg(msg){
-                    $('#alert-success').html('');
-                    $('#alert-success').css('display','block');
-                    $('#alert-success').append(''+msg+'');
+        /**Função que preenche os campos do formulário de atualização */
+        function editLabel(dados) {
+            let url = "{{ route('users.show', 'id') }}";
+            url = url.replace('id', dados[0].id);
+            /**Preenche os campos do form de atualização*/
+            $.get(url, function() {
+                $('#edit_id').val(dados[0].id);
+                $('#edit_name').val(dados[0].name);
+                $('#edit_email').val(dados[0].email);
+                $('#edit_cpf').val(dados[0].cpf);
+                $('#edit_phone').val(dados[0].phone);
+                $('#edit_birthday').val(dados[0].birthday);
+                $('#edit_company_id').val(dados[0].company_id);
+                $('#edit_user_profile_id').val(dados[0].user_profile_id);
+                $('#updateModal').modal('show');
+            });
+        }
+
+        /**Formulário de atualização de registro */
+        $('#updateForm').on('submit', function(e) {
+            e.preventDefault();
+            var id = $('#edit_id').val();
+            $.ajax({
+                url: `/update-user/${id}`,
+                method: 'PUT',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#updateModal').modal('hide');
+                    //$('#labelsTable').DataTable().ajax.reload();
+                    //Swal.fire('Success', 'Registro atualizado com sucesso', 'success');
+                    console.log(response);
+                    if(response){
+                        Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 2000); // 3000 milissegundos = 3 segundos
+                },
+                error: function(response) {
+                    //Swal.fire('Error', 'ERRO ao atualizar registro', 'error');
+                    console.log(response.responseJSON);
+                    if(response.responseJSON){
+                        Swal.fire('Erro!', response.responseJSON.message, 'error');
+                    }
                 }
             });
-
-            
         });
 
         /** Delete */
-        //Botão de deletar que chama modal
-        $('.deleteBtn').on('click', function(){
-            let user_id = $(this).attr('data-id'); //pega id do registro a ser deletado
-            let user_name = $(this).attr('data-name'); //pega name do registro a ser deletado
-
-            //Passa o nome para modal
-            $('.user_name').html('');
-            $('.user_name').html(user_name);
-            
-            //Botão de confirmar deletar registro da modal
-            $('.deleteModalButton').on('click', function(){
-                let url = "{{ route('users.destroy', 'user_id') }}";
-                url = url.replace('user_id', user_id);
-                //console.log(url);
-                $.ajax({
-                    url: url,
-                    type: "get",
-                    data: $(this).serialize(),
-                    dataType: 'json',
-                    beforeSend:function(){
-                        $('.deleteModalButton').prop('disabled', true);
-                    },
-                    complete:function(){
-                        $('.deleteModalButton').prop('disabled', false);
-                    },
-                    // success: function(response){
-                    //     console.log(response);
-                    // }
-                    success: function(response){
-                        if(response.success == true){
-                            console.log(response.msg);
-                            $('#deleteModal').hide();
-                            printSuccessMsg(response.msg);
-
-                            location.reload();
-                            
-                        }else{
-                            printErrorMsg(respsonse.msg);
+        /**Exibe pergunta se deseja realmente excluir o registro */
+        function deleteLabel(dados) {
+            Swal.fire({
+                title: 'Você tem certeza que deseja excluir esse registro?',
+                text: "Você não poderá reverter essa operação!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, excluir!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
                         }
-                        
-                    }
-                });
-
-                /**Mensagens do sistema */
-                //Exibe mensagem de erro do sistema
-                function printErrorMsg(msg){
-                    $('#alert-danger').html('');
-                    $('#alert-danger').css('display','block');
-                    $('#alert-danger').append(''+msg+'');
-                }
-                //Mostra mensagem de sucesso
-                function printSuccessMsg(msg){
-                    $('#alert-success').html('');
-                    $('#alert-success').css('display','block');
-                    $('#alert-success').append(''+msg+'');
+                    });
+                    $.ajax({
+                        url: `/destroy-user/${dados[0].id}`,
+                        method: 'DELETE',
+                        success: function() {
+                            //$('#labelsTable').DataTable().ajax.reload();
+                            Swal.fire('Pronto!', 'Registro excluído.', 'success');
+                            setTimeout(function() {
+                                location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                            }, 2000); // 3000 milissegundos = 3 segundos
+                        },
+                        error: function() {
+                            Swal.fire('Erro!', 'ERRO ao excluir registro', 'error');
+                        }
+                    });
                 }
             });
-        });
+        }
         
     });
     

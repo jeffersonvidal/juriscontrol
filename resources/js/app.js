@@ -18,12 +18,15 @@ window.Swal = Swal;
 //Inputmask
 import Inputmask from 'inputmask';
 
-//Criando máscara
+//Criando máscara em campos de formulário
 document.addEventListener("DOMContentLoaded", function(){
   /**Máscara para telefone */
   var foneMask = new Inputmask("(99) 99999-9999");
   if(document.querySelector('#phone')){
     foneMask.mask(document.querySelector('#phone'));
+  }
+  if(document.querySelector('.phone')){
+    foneMask.mask(document.querySelector('.phone'));
   }
 
   /**Máscara para cep */
@@ -36,6 +39,9 @@ document.addEventListener("DOMContentLoaded", function(){
   var cpfMask = new Inputmask("999.999.999-99");
   if(document.querySelector('#cpf')){
     cpfMask.mask(document.querySelector('#cpf'));
+  }
+  if(document.querySelector('.cpf')){
+    cpfMask.mask(document.querySelector('.cpf'));
   }
   
 });

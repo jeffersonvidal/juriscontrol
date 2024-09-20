@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
@@ -21,16 +22,25 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => 'required',
             //'email' => 'required|email|unique:users,email' . ($userId ? $userId->id : null),
             'email' => 'required|email|unique:users,email',
-            'email' => 'required',
             'cpf' => 'required',
             'password' => 'required_if:password,!=,null|min:6',
             'company_id' => 'required',
+            'phone' => 'required',
+            'birthday' => 'required',
             'user_profile_id' => 'required',
         ];
+
+        if($this->method() === 'PUT'){
+            $rules['email'] = [
+                Rule::unique('users')->ignore($this->id),
+            ];
+        }
+
+        return $rules;
     }
 
     public function messages(): array{
@@ -44,6 +54,9 @@ class UserRequest extends FormRequest
             'password.min' => 'Senha deve ter no mínimo 6 caracteres',
             'company_id.required' => 'Campo Empresa é obrigatório!',
             'user_profile_id.required' => 'Campo Perfil é obrigatório!',
+            'phone.required' => 'Campo Telefone é obrigatório!',
+            'birthday.required' => 'Campo Data de Nascimento é obrigatório!',
+            'user_profile_id.required' => 'Informe o perfil do usuário!',
         ] ;
     }
 }
