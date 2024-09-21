@@ -46,6 +46,10 @@ document.addEventListener("DOMContentLoaded", function(){
   
 });
 
+/**Via CEP */
+//import './viacep';
+
+
 
 /**Axios */
 import axios from 'axios';

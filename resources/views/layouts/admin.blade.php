@@ -70,7 +70,7 @@
                         </a>
                             <div class="collapse" id="collapseClients" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="" title="Gestão de Clientes">Clientes</a>
+                                    <a class="nav-link" href="{{ route('customers.index') }}" title="Gestão de Clientes">Clientes</a>
                                     <a class="nav-link" href="" title="Gestão de Casos e Processos">Processos</a>
                                     <a class="nav-link" href="" title="Gestão de Casos / Consultivos">Casos / Consultivos</a>
                                 </nav>

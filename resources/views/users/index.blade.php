@@ -7,7 +7,7 @@
     <div class="mb-1 hstack gap-2">
         <h2 class="mt-3">Usuários</h2>
 
-        <ol class="breadcrumb mb-3 mt-3 ms-auto">
+        <ol class="breadcrumb mt-3 ms-auto">
             <li class="breadcrumb-item">
                 <a class="text-decoration-none" href="{{ route('dashboard.index') }}" title="Dashboard">Dashboard</a>
             </li>

@@ -56,11 +56,8 @@
                             </tr>
                         @endforeach
                     @else
-                        <tr colspan="5">Nenhum registro encontrado</tr>
+                        <tr colspan="5" style="background-color: orange;">Nenhum registro encontrado</tr>
                     @endif
-                    
-
-                    
                 </tbody>
             </table>
         </div><!--fim card-body-->
@@ -80,25 +77,25 @@
                 @csrf
 
                 
-                <div class="col-md-12">
+                <div class="col-md-12 mb-3">
                     <label for="name" class="form-label">Nome</label>
                     <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-3">
                     <label for="hexa_color_bg" class="form-label">Cor de Fundo</label>
                     <input type="color" class="form-control" id="hexa_color_bg" name="hexa_color_bg" value="{{ old('hexa_color_bg') }}">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-3">
                     <label for="hexa_color_font" class="form-label">Cor do Texto</label>
                     <input type="color" class="form-control" id="hexa_color_font" name="hexa_color_font" value="{{ old('hexa_color_font') }}">
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 mb-3">
                     <label for="hexa_color_font" class="form-label">Resultado</label>
                     <br><span id="resultado" class="badge rounded-pill"></span>
                 </div>
                 
-                <div class="col-md-12">
+                <div class="col-md-12 mb-3">
                     <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
                 </div>
                 
@@ -127,25 +124,25 @@
                 <!-- @method('POST') -->
 
                 
-                <div class="col-md-12">
+                <div class="col-md-12 mb-3">
                     <label for="name" class="form-label">Nome</label>
                     <input type="text" class="form-control" id="edit_name" name="name" value="{{ old('name') }}">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-3">
                     <label for="hexa_color_bg" class="form-label">Cor de Fundo</label>
                     <input type="color" class="form-control" id="edit_hexa_color_bg" name="hexa_color_bg" value="{{ old('hexa_color_bg') }}">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-3">
                     <label for="hexa_color_font" class="form-label">Cor do Texto</label>
                     <input type="color" class="form-control" id="edit_hexa_color_font" name="hexa_color_font" value="{{ old('hexa_color_font') }}">
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 mb-3">
                     <label for="hexa_color_font" class="form-label">Resultado</label>
                     <br><span id="edit_resultado" class="badge rounded-pill"></span>
                 </div>
                 
-                <div class="col-md-12">
+                <div class="col-md-12 mb-3">
                     <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
                     <input type="hidden" class="form-control" id="edit_label_id" name="id">                 
                 </div>
@@ -321,13 +318,13 @@
         /**Exibe pergunta se deseja realmente excluir o registro */
         function deleteLabel(dados) {
             Swal.fire({
-                title: 'Você tem certeza que deseja excluir esse registro?',
-                text: "Você não poderá reverter essa operação!",
+                title: 'Deseja realmente excluir esse registro?',
+                text: "Não será possível reverter essa operação posteriormente!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Sim, excluir!'
+                confirmButtonText: 'Sim! Excluir!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     var csrfToken = $('meta[name="csrf-token"]').attr('content');

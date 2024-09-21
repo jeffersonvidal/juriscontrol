@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\LoginController;
@@ -33,7 +34,7 @@ Route::group(['middleware' => 'auth'], function(){
   Route::get('/update-user-password/{user}', [UserController::class, 'updatePassword'])->name('users.update-password'); //Atualiza um registro no BD
   Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name('users.destroy'); //Exclui um registro no BD
 
-  /**Rotas de labels */
+  /**Rotas de Etiquetas */
   Route::get('/index-label', [LabelController::class, 'index'])->name('labels.index'); //Listar todos os registros da tabela
   Route::get('/show-label/{label}', [LabelController::class, 'show'])->name('labels.show'); //Mostra detalhe de um registro
   Route::get('/create-label', [LabelController::class, 'create'])->name('labels.create'); //Carrega form para novo cadastro
@@ -42,7 +43,7 @@ Route::group(['middleware' => 'auth'], function(){
   Route::put('/update-label/{label}', [LabelController::class, 'update'])->name('labels.update'); //Atualiza um registro no BD
   Route::delete('/destroy-label/{label}', [LabelController::class, 'destroy'])->name('labels.destroy'); //Exclui um registro no BD
 
-  /**Rotas de tasks */
+  /**Rotas de Tarefas */
   Route::get('/index-task', [TaskController::class, 'index'])->name('tasks.index'); //Listar todos os registros da tabela
   Route::get('/show-task/{task}', [TaskController::class, 'show'])->name('tasks.show'); //Mostra detalhe de um registro
   Route::get('/create-task', [TaskController::class, 'create'])->name('tasks.create'); //Carrega form para novo cadastro
@@ -50,6 +51,13 @@ Route::group(['middleware' => 'auth'], function(){
   Route::get('/edit-task/{task}', [TaskController::class, 'edit'])->name('tasks.edit'); //Carrega form para atualizar um registro
   Route::get('/update-task/{task}', [TaskController::class, 'update'])->name('tasks.update'); //Atualiza um registro no BD
   Route::get('/destroy-task/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy'); //Exclui um registro no BD
+
+  /**Rotas de Clientes */
+  Route::get('/index-customer', [CustomerController::class, 'index'])->name('customers.index'); //Listar todos os registros da tabela
+  Route::get('/show-customer/{customer}', [CustomerController::class, 'show'])->name('customers.show'); //Mostra detalhe de um registro
+  Route::post('/store-customer', [CustomerController::class, 'store'])->name('customers.store'); //Salva novo registro no BD
+  Route::put('/update-customer/{customer}', [CustomerController::class, 'update'])->name('customers.update'); //Atualiza um registro no BD
+  Route::delete('/destroy-customer/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy'); //Exclui um registro no BD
 
 
 }); //fim da restrição de acesso para quem não está logado no sistema
