@@ -19,4 +19,9 @@ class Customer extends Model implements Auditable
     protected $fillable = ['company_id', 'name','email','phone','rg',
     'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday'];
 
+    //retorna o enderço do cliente relacionado
+    public function customerAddress($customer){
+        return CustomerAddress::where('customer_id', $customer)->get();
+    }
+
 }

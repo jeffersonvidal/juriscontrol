@@ -58,8 +58,12 @@
                                             <i class="fa-solid fa-book"></i></button>
                                         <button class="text-decoration-none btn btn-sm " title="Novo Endereço" data-id="{{ $customer->id }}" >
                                             <i class="fa-solid fa-earth-americas"></i></button>
-                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $customer->id }}" data-name="{{ $customer->name }}" 
-                                            data-hexa_color_bg="{{ $customer->hexa_color_bg }}" data-hexa_color_font="{{ $customer->hexa_color_font }}" 
+                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $customer->id }}" 
+                                            data-name="{{ $customer->name }}" data-email="{{ $customer->email }}" 
+                                            data-phone="{{ $customer->phone }}" data-rg="{{ $customer->rg }}" data-cpf="{{ $customer->cpf }}" 
+                                             data-id="{{ $customer->id }}" data-id="{{ $customer->id }}" data-id="{{ $customer->id }}"
+                                              data-id="{{ $customer->id }}" data-id="{{ $customer->id }}" data-id="{{ $customer->id }}"
+                                               data-id="{{ $customer->id }}"
                                             data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
                                         <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $customer->id }}" 
                                             data-name="{{ $customer->name }}" data-hexa_color_bg="{{ $customer->hexa_color_bg }}" 
@@ -313,6 +317,8 @@
                             name: $(this).attr('data-name'), 
                             email: $(this).attr('data-email'), 
                             phone: $(this).attr('data-phone'), 
+                            rg: $(this).attr('data-rg'), 
+                            cpf: $(this).attr('data-cpf'), 
                         }
                     ];
                     editLabel(dados);

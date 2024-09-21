@@ -18,4 +18,9 @@ class CustomerAddress extends Model implements Auditable
     //Quais colunas para serem cadastradas
     protected $fillable = ['zipcode','street', 'num','complement', 'neighborhood', 
     'city', 'state', 'company_id', 'customer_id'];
+
+    //Relacionamento muitos para um, com Client Table
+    public function customer(){
+        return $this->belongsTo(Customer::class);
+    }
 }
