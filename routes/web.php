@@ -20,6 +20,12 @@ Route::get('/', [LoginController::class, 'index'])->name('login.index'); //Carre
 Route::post('/login', [LoginController::class, 'loginProcess'])->name('login.process'); //faz processamento dos dados inseridos no form de login e redireciona para dashboard
 Route::get('/logout', [LoginController::class, 'destroy'])->name('login.destroy'); //faz processamento dos dados inseridos no form de login e redireciona para dashboard
 
+/**Formulário de cadastro de cliente - próprio cliente preenche os dados */
+/**Rotas de Clientes */
+Route::get('/create-customer-self/{company}', [CustomerController::class, 'createSelf'])->name('customers.create-self'); //Listar todos os registros da tabela
+Route::post('/store-customer-self/{company}', [CustomerController::class, 'storeSelf'])->name('customers.store-self'); //Salva novo registro no BD
+
+
 /**Rotas Privadas - Restringindo acesso às páginas do sistema para quem não estiver logado */
 Route::group(['middleware' => 'auth'], function(){
 

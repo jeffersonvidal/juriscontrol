@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerRequest;
+use App\Http\Requests\SelfCustomerRequest;
+use App\Models\Company;
 use App\Models\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\CustomerAddress;
@@ -155,5 +157,61 @@ class CustomerController extends Controller
         //$theCustomer = Customer::where('id',$customer)->delete();
         $customer->delete();
         return response()->json(null, 204);
+    }
+
+    /**Próprio cliente preenche os dados em formulário fora do sistema */
+    public function createSelf(){
+        //Carrega a view
+        return view('customers.selfCreate');
+    }
+
+    /**Salvar cadastro de cliente feito por ele mesmo */
+    public function storeSelf(SelfCustomerRequest $request, Company $company){
+        //Validar o formulário
+        $request->validated();
+
+        //garantir que salve nas duas tabelas do banco de dados
+        DB::beginTransaction();
+
+        try {
+            //Model da tabela - campos a serem salvos
+            $customer = new Customer();
+            $customer->name = $request->name;
+            $customer->company_id = $company->id;
+            $customer->email = $request->email;
+            $customer->phone = $this->helperAdm->limpaCampo($request->phone);
+            $customer->rg = $this->helperAdm->limpaCampo($request->rg);
+            $customer->rg_expedidor = $request->rg_expedidor;
+            $customer->cpf = $this->helperAdm->limpaCampo($request->cpf);
+            $customer->marital_status = $request->marital_status;
+            $customer->nationality = $request->nationality;
+            $customer->profession = $request->profession;
+            $customer->birthday = $request->birthday;
+            $customer->met_us = $request->met_us;
+            $customer->save();
+
+            $customerAddress = new CustomerAddress();
+            $customerAddress->zipcode = $this->helperAdm->limpaCampo($request->zipcode);
+            $customerAddress->street = $request->street;
+            $customerAddress->num = $request->num;
+            $customerAddress->complement = $request->complement;
+            $customerAddress->neighborhood = $request->neighborhood;
+            $customerAddress->city = $request->city;
+            $customerAddress->state = $request->state;
+            $customerAddress->company_id = $request->company_id;
+            $customer->address()->save($customerAddress);
+
+            //comita depois de tudo ter sido salvo
+            DB::commit();
+
+            //Redireciona para outra página após cadastrar com sucesso
+            return response()->json( ['success' => 'Registro cadastrado com sucesso!']);
+        } catch (Exception $e) {
+            //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+            DB::rollBack();
+
+            //Redireciona para outra página se der erro
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 }
