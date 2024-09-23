@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**Responsável pela auditoria do sistema */
+use Illuminate\Database\Eloquent\SoftDeletes;
 use \OwenIt\Auditing\Auditable as AuditingAuditable;
 use OwenIt\Auditing\Contracts\Auditable;
 class Customer extends Model implements Auditable
 {
-    use HasFactory, AuditingAuditable;
+    use HasFactory, SoftDeletes, AuditingAuditable;
 
     //Table name
     protected $table = 'customers';
@@ -18,6 +19,14 @@ class Customer extends Model implements Auditable
     //Quais colunas para serem cadastradas
     protected $fillable = ['company_id', 'name','email','phone','rg',
     'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday'];
+
+    /**Relacionamento com tabela endereço de cliente - customer_addresses */
+    public function customerAddr(){
+        /**
+         * return $this->hasOne(model da tabela relacionada - endereço do cliente::class, 'chave estrangeira da tabela de endereço', 'chave primária da tabela local');
+         */
+        return $this->hasMany(CustomerAddress::class, 'customer_id', 'id');
+    }
 
     //retorna o enderço do cliente relacionado
     public function customerAddress($customer){

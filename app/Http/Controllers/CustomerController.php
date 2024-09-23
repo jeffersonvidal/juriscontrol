@@ -27,7 +27,8 @@ class CustomerController extends Controller
     /**Envia registros para popular tabela na index */
     public function getall()
     {
-        $customers = Customer::all();
+        $customers = Customer::where('company_id', auth()->user()->company_id)
+        ->orderBy('id', 'DESC')->get();
         return response()->json($customers);
     }
 
@@ -47,13 +48,23 @@ class CustomerController extends Controller
         //garantir que salve nas duas tabelas do banco de dados
         DB::beginTransaction();
 
+    //     ['company_id', 'name','email','phone','rg',
+    // 'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday']
+
         try {
             //Model da tabela - campos a serem salvos
             $customer = Customer::create([
                 'name' => $request->name,
-                'hexa_color_bg' => $request->hexa_color_bg,
-                'hexa_color_font' => $request->hexa_color_font,
                 'company_id' => $request->company_id,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'rg' => $request->rg,
+                'rg_expedidor' => $request->rg_expedidor,
+                'cpf' => $request->cpf,
+                'marital_status' => $request->marital_status,
+                'nationality' => $request->nationality,
+                'profession' => $request->profession,
+                'birthday' => $request->birthday,
             ]);
 
             //comita depois de tudo ter sido salvo

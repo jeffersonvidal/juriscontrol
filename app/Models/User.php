@@ -13,7 +13,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class User extends Authenticatable implements Auditable
 {
-    use HasFactory, AuditingAuditable;
+    use HasFactory, SoftDeletes, AuditingAuditable;
 
     /**
      * The attributes that are mass assignable.

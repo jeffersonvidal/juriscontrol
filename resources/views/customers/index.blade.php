@@ -103,8 +103,9 @@
                             <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
                         </div>
                     </div>
+
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}">
                         </div>
@@ -117,18 +118,52 @@
                             <input type="text" class="form-control" id="rg" name="rg" value="{{ old('rg') }}">
                         </div>
                         <div class="col-md-2 mb-3">
+                            <label for="rg_expedidor" class="form-label">Expedidor do RG</label>
+                            <input type="text" class="form-control" id="rg_expedidor" name="rg_expedidor" value="{{ old('rg_expedidor') }}">
+                        </div>
+                        <div class="col-md-2 mb-3">
                             <label for="cpf" class="form-label">CPF</label>
                             <input type="text" class="form-control" id="cpf" name="cpf" value="{{ old('cpf') }}">
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="marital_status" class="form-label">Estado Civil</label>
+                            <select class="form-select" name="marital_status" id="marital_status">
+                                <option>Escolha um</option>
+                                <option value="solteiro(a)">Solteiro (a)</option>
+                                <option value="casado(a)">Casado (a)</option>
+                                <option value="divorciado(a)">Divorciado (a)</option>
+                                <option value="viúvo(a)">Viúvo (a)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="nationality" class="form-label">Nacionalidade</label>
+                            <select class="form-select" name="nationality" id="nationality">
+                                <option value="brasileiro(a)">Brasileiro (a)</option>
+                                <option value="estrangeiro(a)">Estrangeiro (a)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="profession" class="form-label">Profissão</label>
+                            <input type="text" class="form-control" id="profession" name="profession" value="{{ old('profession') }}">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="birthday" class="form-label">Nascimento</label>
+                            <input type="date" class="form-control" id="birthday" name="birthday" value="{{ old('birthday') }}">
+                        </div>
+                    </div>
                     
+                    <!-- ['company_id', 'name','email','phone','rg',
+    'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday']; -->
                 </fieldset>
                 
                 <fieldset>
                     <legend>Endereço</legend>
                     <div class="row">
                         <div class="col-md-2 mb-3">
-                            <label for="cep" class="form-label">CEP</label>
+                            <label for="cep" class="form-label">CEP (Apenas nº)</label>
                             <input onblur="pesquisacep(this.value);" type="text" class="form-control" id="cep" name="cep" placeholder="99999999" value="{{ old('cep') }}">
                         </div>
                         <div class="col-md-8 mb-3">
@@ -156,7 +191,7 @@
                         </div>
                         <div class="col-md-1 mb-3">
                             <label for="state" class="form-label">UF</label>
-                            <input type="text" class="form-control" id="stateUF" name="state" value="{{ old('state') }}">
+                            <input type="text" class="form-control" id="stateUF" name="state" max="2" value="{{ old('state') }}">
                         </div>
                     </div>
 
@@ -199,8 +234,9 @@
                             <input type="text" class="form-control" id="edit_name" name="name" value="{{ old('name') }}">
                         </div>
                     </div>
+
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="edit_email" name="email" value="{{ old('email') }}">
                         </div>
@@ -213,19 +249,53 @@
                             <input type="text" class="form-control" id="edit_rg" name="rg" value="{{ old('rg') }}">
                         </div>
                         <div class="col-md-2 mb-3">
+                            <label for="rg_expedidor" class="form-label">Expedidor do RG</label>
+                            <input type="text" class="form-control" id="edit_rg_expedidor" name="rg_expedidor" value="{{ old('rg_expedidor') }}">
+                        </div>
+                        <div class="col-md-2 mb-3">
                             <label for="cpf" class="form-label">CPF</label>
                             <input type="text" class="form-control" id="edit_cpf" name="cpf" value="{{ old('cpf') }}">
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="marital_status" class="form-label">Estado Civil</label>
+                            <select class="form-select" name="marital_status" id="edit_marital_status">
+                                <option>Escolha um</option>
+                                <option value="solteiro(a)">Solteiro (a)</option>
+                                <option value="casado(a)">Casado (a)</option>
+                                <option value="divorciado(a)">Divorciado (a)</option>
+                                <option value="viúvo(a)">Viúvo (a)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="nationality" class="form-label">Nacionalidade</label>
+                            <select class="form-select" name="nationality" id="edit_nationality">
+                                <option value="brasileiro(a)">Brasileiro (a)</option>
+                                <option value="estrangeiro(a)">Estrangeiro (a)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="profession" class="form-label">Profissão</label>
+                            <input type="text" class="form-control" id="edit_profession" name="profession" value="{{ old('profession') }}">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="birthday" class="form-label">Nascimento</label>
+                            <input type="date" class="form-control" id="edit_birthday" name="birthday" value="{{ old('birthday') }}">
+                        </div>
+                    </div>
                     
+                    <!-- ['company_id', 'name','email','phone','rg',
+    'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday']; -->
                 </fieldset>
                 
                 <fieldset>
                     <legend>Endereço</legend>
                     <div class="row">
                         <div class="col-md-2 mb-3">
-                            <label for="cep" class="form-label">CEP</label>
-                            <input onblur="pesquisacep(this.value);" type="text" class="form-control" id="cep" name="cep" placeholder="99999999" value="{{ old('cep') }}">
+                            <label for="cep" class="form-label">CEP (Apenas nº)</label>
+                            <input onblur="pesquisacep(this.value);" type="text" class="form-control" id="edit_cep" name="cep" placeholder="99999999" value="{{ old('cep') }}">
                         </div>
                         <div class="col-md-8 mb-3">
                             <label for="street" class="form-label">Rua</label>
@@ -252,7 +322,7 @@
                         </div>
                         <div class="col-md-1 mb-3">
                             <label for="state" class="form-label">UF</label>
-                            <input type="text" class="form-control" id="edit_state" name="state" value="{{ old('state') }}">
+                            <input type="text" class="form-control" id="edit_state" name="state" max="2" value="{{ old('state') }}">
                         </div>
                     </div>
 
@@ -310,6 +380,8 @@
         /**Passa valores do registro para o formulário na modal de atualização */
         $('button').on('click', function() {
             /**Verifica se o botão tem a classe condicional para fazer algo */
+            // ['company_id', 'name','email','phone','rg',
+            // 'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday'];
             if($(this).hasClass('editBtn')){
                 var dados = [
                         { 

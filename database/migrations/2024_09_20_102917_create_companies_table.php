@@ -22,6 +22,7 @@ return new class extends Migration
             //$table->foreignId('user_id')->constrained('users')->onDelete('cascade'); //relacionamento com tabela customers
             $table->integer('company_address_id');
             //$table->foreignId('company_address_id')->constrained('company-addresses')->onDelete('cascade'); //relacionamento com tabela customers
+            $table->softDeletes();
             $table->timestamps();
         });
     }
