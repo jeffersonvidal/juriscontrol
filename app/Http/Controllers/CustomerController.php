@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use App\Http\Controllers\Controller;
+use App\Models\CustomerAddress;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,8 +36,9 @@ class CustomerController extends Controller
     public function show(Customer $customer)
     {
         $theCustomer = Customer::where('id',$customer)->first();
+        $customerAddress = $customer->customerAddress()->get();
         //return response()->json($theCustomer);
-        return response()->json($theCustomer);
+        return response()->json(['customer' => $theCustomer, 'customerAddresses' => $customerAddress]);
     }
 
     /**Salva registro no banco de dados */
@@ -48,24 +50,38 @@ class CustomerController extends Controller
         //garantir que salve nas duas tabelas do banco de dados
         DB::beginTransaction();
 
-    //     ['company_id', 'name','email','phone','rg',
-    // 'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday']
-
         try {
             //Model da tabela - campos a serem salvos
-            $customer = Customer::create([
-                'name' => $request->name,
-                'company_id' => $request->company_id,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'rg' => $request->rg,
-                'rg_expedidor' => $request->rg_expedidor,
-                'cpf' => $request->cpf,
-                'marital_status' => $request->marital_status,
-                'nationality' => $request->nationality,
-                'profession' => $request->profession,
-                'birthday' => $request->birthday,
-            ]);
+            $customer = new Customer();
+            $customer->name = $request->name;
+            $customer->company_id = $request->company_id;
+            $customer->email = $request->email;
+            $customer->phone = $request->phone;
+            $customer->rg = $request->rg;
+            $customer->rg_expedidor = $request->rg_expedidor;
+            $customer->cpf = $request->cpf;
+            $customer->marital_status = $request->marital_status;
+            $customer->nationality = $request->nationality;
+            $customer->profession = $request->profession;
+            $customer->birthday = $request->birthday;
+            $customer->save();
+
+            $customerAddress = new CustomerAddress();
+            $customerAddress->zipcode = $request->zipcode;
+            $customerAddress->street = $request->street;
+            $customerAddress->num = $request->num;
+            $customerAddress->complement = $request->complement;
+            $customerAddress->neighborhood = $request->neighborhood;
+            $customerAddress->city = $request->city;
+            $customerAddress->state = $request->state;
+            $customerAddress->company_id = $request->company_id;
+            $customerAddress->customer_id = $customer->id;
+
+            $customer->address()->save($customerAddress);
+
+            //dd($customer, $customerAddress);
+
+            //dd($customer, $customer->customerAddr()->create($request->all()));
 
             //comita depois de tudo ter sido salvo
             DB::commit();

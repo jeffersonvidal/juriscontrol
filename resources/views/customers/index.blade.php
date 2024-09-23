@@ -60,10 +60,11 @@
                                             <i class="fa-solid fa-earth-americas"></i></button>
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $customer->id }}" 
                                             data-name="{{ $customer->name }}" data-email="{{ $customer->email }}" 
-                                            data-phone="{{ $customer->phone }}" data-rg="{{ $customer->rg }}" data-cpf="{{ $customer->cpf }}" 
-                                             data-id="{{ $customer->id }}" data-id="{{ $customer->id }}" data-id="{{ $customer->id }}"
-                                              data-id="{{ $customer->id }}" data-id="{{ $customer->id }}" data-id="{{ $customer->id }}"
-                                               data-id="{{ $customer->id }}"
+                                            data-phone="{{ $customer->phone }}" data-rg="{{ $customer->rg }}" data-rg_expedidor="{{ $customer->rg_expedidor }}" 
+                                            data-cpf="{{ $customer->cpf }}" data-marital_status="{{ $customer->marital_status }}" data-nationality="{{ $customer->nationality }}" 
+                                            data-birthday="{{ $customer->birthday }}" data-zipcode="{{ $customer->zipcode }}" data-street="{{ $customer->street }}"
+                                            data-num="{{ $customer->num }}" data-complement="{{ $customer->complement }}" data-neighborhood="{{ $customer->neighborhood }}"
+                                            data-city="{{ $customer->city }}" data-state="{{ $customer->state }}"
                                             data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
                                         <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $customer->id }}" 
                                             data-name="{{ $customer->name }}" data-hexa_color_bg="{{ $customer->hexa_color_bg }}" 
@@ -164,7 +165,7 @@
                     <div class="row">
                         <div class="col-md-2 mb-3">
                             <label for="cep" class="form-label">CEP (Apenas nº)</label>
-                            <input onblur="pesquisacep(this.value);" type="text" class="form-control" id="cep" name="cep" placeholder="99999999" value="{{ old('cep') }}">
+                            <input onblur="pesquisacep(this.value);" type="text" class="form-control" id="zipcode" name="zipcode" placeholder="99999999" value="{{ old('zipcode') }}">
                         </div>
                         <div class="col-md-8 mb-3">
                             <label for="street" class="form-label">Rua</label>
@@ -331,6 +332,7 @@
                 <div class="col-md-12">
                     <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
                     <input type="hidden" class="form-control" id="edit_id" name="id">                 
+                    <input type="text" class="form-control" id="edit_address_id" name="id" value="Id do endereço: ">                 
                 </div>
                 
             
@@ -390,7 +392,19 @@
                             email: $(this).attr('data-email'), 
                             phone: $(this).attr('data-phone'), 
                             rg: $(this).attr('data-rg'), 
+                            rg_expedidor: $(this).attr('data-rg_expedidor'), 
                             cpf: $(this).attr('data-cpf'), 
+                            marital_status: $(this).attr('data-marital_status'), 
+                            nationality: $(this).attr('data-nationality'), 
+                            profession: $(this).attr('data-profession'), 
+                            birthday: $(this).attr('data-birthday'), 
+                            zipcode: $(this).attr('data-zipcode'), 
+                            street: $(this).attr('data-street'), 
+                            num: $(this).attr('data-num'), 
+                            complement: $(this).attr('data-complement'), 
+                            neighborhood: $(this).attr('data-neighborhood'), 
+                            city: $(this).attr('data-city'), 
+                            state: $(this).attr('data-state'), 
                         }
                     ];
                     editLabel(dados);

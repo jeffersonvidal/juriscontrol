@@ -21,11 +21,11 @@ class Customer extends Model implements Auditable
     'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday'];
 
     /**Relacionamento com tabela endereço de cliente - customer_addresses */
-    public function customerAddr(){
+    public function address(){
         /**
          * return $this->hasOne(model da tabela relacionada - endereço do cliente::class, 'chave estrangeira da tabela de endereço', 'chave primária da tabela local');
          */
-        return $this->hasMany(CustomerAddress::class, 'customer_id', 'id');
+        return $this->hasMany(CustomerAddress::class);
     }
 
     //retorna o enderço do cliente relacionado
