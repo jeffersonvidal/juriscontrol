@@ -20,9 +20,10 @@ class CustomerController extends Controller
     public function index(){
         $customers = Customer::where('company_id', auth()->user()->company_id)
         ->orderBy('id', 'DESC')->get();
+        $customersAddr = CustomerAddress::where('company_id', auth()->user()->company_id)->get();
 
         //Carrega a view
-        return view('customers.index', ['customers' => $customers]);
+        return view('customers.index', ['customers' => $customers, 'customersAddr' => $customersAddr]);
     }
 
     /**Envia registros para popular tabela na index */
@@ -35,10 +36,13 @@ class CustomerController extends Controller
 
     public function show(Customer $customer)
     {
-        $theCustomer = Customer::where('id',$customer)->first();
-        $customerAddress = $customer->customerAddress()->get();
+        $customerAddress = CustomerAddress::with('customer')
+            ->where('customer_id', $customer->id)
+            ->orderBy('created_at')
+            ->get();
+
         //return response()->json($theCustomer);
-        return response()->json(['customer' => $theCustomer, 'customerAddresses' => $customerAddress]);
+        return response()->json([$customerAddress]);
     }
 
     /**Salva registro no banco de dados */
@@ -56,18 +60,19 @@ class CustomerController extends Controller
             $customer->name = $request->name;
             $customer->company_id = $request->company_id;
             $customer->email = $request->email;
-            $customer->phone = $request->phone;
-            $customer->rg = $request->rg;
+            $customer->phone = $this->helperAdm->limpaCampo($request->phone);
+            $customer->rg = $this->helperAdm->limpaCampo($request->rg);
             $customer->rg_expedidor = $request->rg_expedidor;
-            $customer->cpf = $request->cpf;
+            $customer->cpf = $this->helperAdm->limpaCampo($request->cpf);
             $customer->marital_status = $request->marital_status;
             $customer->nationality = $request->nationality;
             $customer->profession = $request->profession;
             $customer->birthday = $request->birthday;
+            $customer->met_us = $request->met_us;
             $customer->save();
 
             $customerAddress = new CustomerAddress();
-            $customerAddress->zipcode = $request->zipcode;
+            $customerAddress->zipcode = $this->helperAdm->limpaCampo($request->zipcode);
             $customerAddress->street = $request->street;
             $customerAddress->num = $request->num;
             $customerAddress->complement = $request->complement;
@@ -75,13 +80,8 @@ class CustomerController extends Controller
             $customerAddress->city = $request->city;
             $customerAddress->state = $request->state;
             $customerAddress->company_id = $request->company_id;
-            $customerAddress->customer_id = $customer->id;
-
+            //$customerAddress->customer_id = $customer->id;
             $customer->address()->save($customerAddress);
-
-            //dd($customer, $customerAddress);
-
-            //dd($customer, $customer->customerAddr()->create($request->all()));
 
             //comita depois de tudo ter sido salvo
             DB::commit();
@@ -107,7 +107,31 @@ class CustomerController extends Controller
         DB::beginTransaction();
 
         try {
-            $customer->update($request->validated());
+            $customer->name = $request->name;
+            $customer->company_id = $request->company_id;
+            $customer->email = $request->email;
+            $customer->phone = $this->helperAdm->limpaCampo($request->phone);
+            $customer->rg = $this->helperAdm->limpaCampo($request->rg);
+            $customer->rg_expedidor = $request->rg_expedidor;
+            $customer->cpf = $this->helperAdm->limpaCampo($request->cpf);
+            $customer->marital_status = $request->marital_status;
+            $customer->nationality = $request->nationality;
+            $customer->profession = $request->profession;
+            $customer->birthday = $request->birthday;
+            $customer->met_us = $request->met_us;
+            $customer->update();
+
+            $customerAddress = new CustomerAddress();
+            $customerAddress->zipcode = $this->helperAdm->limpaCampo($request->zipcode);
+            $customerAddress->street = $request->street;
+            $customerAddress->num = $request->num;
+            $customerAddress->complement = $request->complement;
+            $customerAddress->neighborhood = $request->neighborhood;
+            $customerAddress->city = $request->city;
+            $customerAddress->state = $request->state;
+            $customerAddress->company_id = $request->company_id;
+
+            $customer->customerAddress($customer->id)->update($request->all());
 
             //comita depois de tudo ter sido salvo
             DB::commit();

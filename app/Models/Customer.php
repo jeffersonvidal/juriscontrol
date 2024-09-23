@@ -18,7 +18,7 @@ class Customer extends Model implements Auditable
 
     //Quais colunas para serem cadastradas
     protected $fillable = ['company_id', 'name','email','phone','rg',
-    'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday'];
+    'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday', 'met_us'];
 
     /**Relacionamento com tabela endereço de cliente - customer_addresses */
     public function address(){
@@ -30,7 +30,7 @@ class Customer extends Model implements Auditable
 
     //retorna o enderço do cliente relacionado
     public function customerAddress($customer){
-        return CustomerAddress::where('customer_id', $customer)->get();
+        return CustomerAddress::where('customer_id', $customer)->first();
     }
 
 }

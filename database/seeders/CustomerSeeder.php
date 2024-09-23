@@ -27,13 +27,14 @@ class CustomerSeeder extends Seeder
                 'nationality' => 'brasileiro(a)',
                 'profession' => 'engenheiro',
                 'birthday' => fake()->date(),
+                'met_us' => 'google',
             ]);
         }
         
         if(! Customer::where("id","2")->first()){
             Customer::create([
                 'name' => fake()->name(),
-                'company_id' => '1',
+                'company_id' => '2',
                 'email' => fake()->email(),
                 'phone' => '61987453241',
                 'rg' => '32145698',
@@ -43,6 +44,7 @@ class CustomerSeeder extends Seeder
                 'nationality' => 'brasileiro(a)',
                 'profession' => 'serviços gerais',
                 'birthday' => fake()->date(),
+                'met_us' => 'instagram',
             ]);
         }
 
@@ -60,13 +62,14 @@ class CustomerSeeder extends Seeder
                 'nationality' => 'brasileiro(a)',
                 'profession' => 'porteiro(a)',
                 'birthday' => fake()->date(),
+                'met_us' => 'google',
             ]);
         }
 
         if(! Customer::where("id","4")->first()){
             Customer::create([
                 'name' => fake()->name(),
-                'company_id' => '1',
+                'company_id' => '2',
                 'email' => fake()->email(),
                 'phone' => '61987453241',
                 'rg' => '7898654',
@@ -76,6 +79,7 @@ class CustomerSeeder extends Seeder
                 'nationality' => 'brasileiro(a)',
                 'profession' => 'auxiliar administrativo',
                 'birthday' => fake()->date(),
+                'met_us' => 'tiktok',
             ]);
         }
     }

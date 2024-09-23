@@ -37,6 +37,7 @@ class CustomerRequest extends FormRequest
             'profession' => 'required',
             'birthday' => 'required',
             'company_id' => 'required',
+            'met_us' => 'required',
 
             /**Endereço do cliente */
             'zipcode' => 'required',
@@ -64,6 +65,7 @@ class CustomerRequest extends FormRequest
             'profession.required' => 'Campo Profissão é obrigatório!',
             'birthday.required' => 'Campo Data de Nascimento é obrigatório!',
             'company_id.required' => 'Campo Escritório é obrigatório!',
+            'met_us.required' => 'Informe como conheceu o nosso escritório!',
             
             /**Endereço */
             'zipcode.required' => 'Campo CEP é obrigatório!',

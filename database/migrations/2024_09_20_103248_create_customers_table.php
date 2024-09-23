@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('nationality');
             $table->string('profession');
             $table->date('birthday');
+            $table->string('met_us'); //no conheceu
             $table->softDeletes();
             $table->timestamps();
         });

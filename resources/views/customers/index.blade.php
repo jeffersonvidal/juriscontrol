@@ -59,12 +59,6 @@
                                         <button class="text-decoration-none btn btn-sm " title="Novo Endereço" data-id="{{ $customer->id }}" >
                                             <i class="fa-solid fa-earth-americas"></i></button>
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $customer->id }}" 
-                                            data-name="{{ $customer->name }}" data-email="{{ $customer->email }}" 
-                                            data-phone="{{ $customer->phone }}" data-rg="{{ $customer->rg }}" data-rg_expedidor="{{ $customer->rg_expedidor }}" 
-                                            data-cpf="{{ $customer->cpf }}" data-marital_status="{{ $customer->marital_status }}" data-nationality="{{ $customer->nationality }}" 
-                                            data-birthday="{{ $customer->birthday }}" data-zipcode="{{ $customer->zipcode }}" data-street="{{ $customer->street }}"
-                                            data-num="{{ $customer->num }}" data-complement="{{ $customer->complement }}" data-neighborhood="{{ $customer->neighborhood }}"
-                                            data-city="{{ $customer->city }}" data-state="{{ $customer->state }}"
                                             data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
                                         <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $customer->id }}" 
                                             data-name="{{ $customer->name }}" data-hexa_color_bg="{{ $customer->hexa_color_bg }}" 
@@ -132,7 +126,7 @@
                         <div class="col-md-3 mb-3">
                             <label for="marital_status" class="form-label">Estado Civil</label>
                             <select class="form-select" name="marital_status" id="marital_status">
-                                <option>Escolha um</option>
+                                <option value="" >Escolha um</option>
                                 <option value="solteiro(a)">Solteiro (a)</option>
                                 <option value="casado(a)">Casado (a)</option>
                                 <option value="divorciado(a)">Divorciado (a)</option>
@@ -146,13 +140,24 @@
                                 <option value="estrangeiro(a)">Estrangeiro (a)</option>
                             </select>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-2 mb-3">
                             <label for="profession" class="form-label">Profissão</label>
                             <input type="text" class="form-control" id="profession" name="profession" value="{{ old('profession') }}">
                         </div>
                         <div class="col-md-2 mb-3">
                             <label for="birthday" class="form-label">Nascimento</label>
                             <input type="date" class="form-control" id="birthday" name="birthday" value="{{ old('birthday') }}">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="met_us" class="form-label">Como nos conheceu?</label>
+                            <select class="form-select" name="met_us" id="met_us">
+                                <option value="google">Google</option>
+                                <option value="Instagram">Instagram</option>
+                                <option value="tiktok">Tiktok</option>
+                                <option value="facebook">Facebook</option>
+                                <option value="kwai">Kwai</option>
+                                <option value="indicação">Indicação</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -277,13 +282,24 @@
                                 <option value="estrangeiro(a)">Estrangeiro (a)</option>
                             </select>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-2 mb-3">
                             <label for="profession" class="form-label">Profissão</label>
                             <input type="text" class="form-control" id="edit_profession" name="profession" value="{{ old('profession') }}">
                         </div>
                         <div class="col-md-2 mb-3">
                             <label for="birthday" class="form-label">Nascimento</label>
                             <input type="date" class="form-control" id="edit_birthday" name="birthday" value="{{ old('birthday') }}">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="met_us" class="form-label">Como nos conheceu?</label>
+                            <select class="form-select" name="met_us" id="edit_met_us">
+                                <option value="google">Google</option>
+                                <option value="Instagram">Instagram</option>
+                                <option value="tiktok">Tiktok</option>
+                                <option value="facebook">Facebook</option>
+                                <option value="kwai">Kwai</option>
+                                <option value="indicação">Indicação</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -296,7 +312,7 @@
                     <div class="row">
                         <div class="col-md-2 mb-3">
                             <label for="cep" class="form-label">CEP (Apenas nº)</label>
-                            <input onblur="pesquisacep(this.value);" type="text" class="form-control" id="edit_cep" name="cep" placeholder="99999999" value="{{ old('cep') }}">
+                            <input onblur="pesquisacep(this.value);" type="text" class="form-control" id="edit_cep" name="zipcode" placeholder="99999999" value="{{ old('cep') }}">
                         </div>
                         <div class="col-md-8 mb-3">
                             <label for="street" class="form-label">Rua</label>
@@ -385,63 +401,92 @@
             // ['company_id', 'name','email','phone','rg',
             // 'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday'];
             if($(this).hasClass('editBtn')){
-                var dados = [
-                        { 
-                            id: $(this).attr('data-id'), 
-                            name: $(this).attr('data-name'), 
-                            email: $(this).attr('data-email'), 
-                            phone: $(this).attr('data-phone'), 
-                            rg: $(this).attr('data-rg'), 
-                            rg_expedidor: $(this).attr('data-rg_expedidor'), 
-                            cpf: $(this).attr('data-cpf'), 
-                            marital_status: $(this).attr('data-marital_status'), 
-                            nationality: $(this).attr('data-nationality'), 
-                            profession: $(this).attr('data-profession'), 
-                            birthday: $(this).attr('data-birthday'), 
-                            zipcode: $(this).attr('data-zipcode'), 
-                            street: $(this).attr('data-street'), 
-                            num: $(this).attr('data-num'), 
-                            complement: $(this).attr('data-complement'), 
-                            neighborhood: $(this).attr('data-neighborhood'), 
-                            city: $(this).attr('data-city'), 
-                            state: $(this).attr('data-state'), 
-                        }
-                    ];
-                    editLabel(dados);
+                // var dados = [
+                //         { 
+                //             id: $(this).attr('data-id'), 
+                //             name: $(this).attr('data-name'), 
+                //             email: $(this).attr('data-email'), 
+                //             phone: $(this).attr('data-phone'), 
+                //             rg: $(this).attr('data-rg'), 
+                //             rg_expedidor: $(this).attr('data-rg_expedidor'), 
+                //             cpf: $(this).attr('data-cpf'), 
+                //             marital_status: $(this).attr('data-marital_status'), 
+                //             nationality: $(this).attr('data-nationality'), 
+                //             profession: $(this).attr('data-profession'), 
+                //             birthday: $(this).attr('data-birthday'), 
+                //             zipcode: $(this).attr('data-zipcode'), 
+                //             street: $(this).attr('data-street'), 
+                //             num: $(this).attr('data-num'), 
+                //             complement: $(this).attr('data-complement'), 
+                //             neighborhood: $(this).attr('data-neighborhood'), 
+                //             city: $(this).attr('data-city'), 
+                //             state: $(this).attr('data-state'), 
+                //         }
+                //     ];
+                    editRegistro($(this).attr('data-id'));
             }else if($(this).hasClass('deleteBtn')){
                 var dados = [
                         { 
                             id: $(this).attr('data-id'), 
                         }
                     ];
-                    deleteLabel(dados);
+                    deleteRegistro($(this).attr('data-id'));
             }
         });
             
 
         /**Função que preenche os campos do formulário de atualização */
-        function editLabel(dados) {
+        function editRegistro(id) {
             let url = "{{ route('customers.show', 'id') }}";
-            url = url.replace('id', dados[0].id);
+            url = url.replace('id', id);
             /**Preenche os campos do form de atualização*/
             $.get(url, function() {
-                /**Dados pessoais*/
-                $('#edit_id').val(dados[0].id);
-                $('#edit_name').val(dados[0].name);
-                $('#edit_email').val(dados[0].email);
-                $('#edit_phone').val(dados[0].phone);
-                $('#edit_rg').val(dados[0].rg);
-                $('#edit_cpf').val(dados[0].cpf);
-                /**Endereço*/
-                $('#edit_street').val(dados[0].street);
-                $('#edit_num').val(dados[0].num);
-                $('#edit_complement').val(dados[0].complement);
-                $('#edit_neighborhood').val(dados[0].neighborhood);
-                $('#edit_city').val(dados[0].city);
-                $('#edit_state').val(dados[0].state);
+                fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                    throw new Error('Erro na rede: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    /**console.log(data[0][0]['customer']); //lista dados pessoais
+                     ** console.log(data[0][0]); //Lista dados do endereço */
+                    /**Dados pessoais*/
+                    $('#edit_id').val(data[0][0]['customer'].id);
+                    $('#edit_name').val(data[0][0]['customer'].name);
+                    $('#edit_email').val(data[0][0]['customer'].email);
+                    $('#edit_phone').val(data[0][0]['customer'].phone);
+                    $('#edit_rg').val(data[0][0]['customer'].rg);
+                    $('#edit_rg_expedidor').val(data[0][0]['customer'].rg_expedidor);
+                    $('#edit_cpf').val(data[0][0]['customer'].cpf);
+                    $('#edit_marital_status').val(data[0][0]['customer'].marital_status);
+                    $('#edit_nationality').val(data[0][0]['customer'].nationality);
+                    $('#edit_profession').val(data[0][0]['customer'].profession);
+                    $('#edit_birthday').val(data[0][0]['customer'].birthday);
+                    $('#edit_met_us').val(data[0][0]['customer'].met_us);
+
+                    /**Endereço*/
+                    $('#edit_cep').val(data[0][0].zipcode);
+                    $('#edit_street').val(data[0][0].street);
+                    $('#edit_num').val(data[0][0].num);
+                    $('#edit_complement').val(data[0][0].complement);
+                    $('#edit_neighborhood').val(data[0][0].neighborhood);
+                    $('#edit_city').val(data[0][0].city);
+                    $('#edit_state').val(data[0][0].state);
+                    $('#edit_customer_id').val(data[0][0].customer_id);
+                    $('#edit_address_id').val(data[0][0].id);
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                });
+                
+                
                 $('#updateModal').modal('show');
             });
-        }
+            //console.log(url);
+            
+
+        }//Fim aditRegistro()
 
         /**Formulário de atualização de registro */
         $('#updateForm').on('submit', function(e) {
@@ -455,7 +500,7 @@
                     $('#updateModal').modal('hide');
                     //$('#customersTable').DataTable().ajax.reload();
                     //Swal.fire('Success', 'Registro atualizado com sucesso', 'success');
-                    console.log(response);
+                    //console.log(response);
                     if(response){
                         Swal.fire('Pronto!', response.success, 'success');
                     }
@@ -475,7 +520,7 @@
 
 
         /**Exibe pergunta se deseja realmente excluir o registro */
-        function deleteLabel(dados) {
+        function deleteRegistro(id) {
             Swal.fire({
                 title: 'Deseja realmente excluir esse registro?',
                 text: "Não será possível reverter essa operação posteriormente!",
@@ -493,7 +538,7 @@
                         }
                     });
                     $.ajax({
-                        url: `/destroy-customer/${dados[0].id}`,
+                        url: `/destroy-customer/${id}`,
                         method: 'DELETE',
                         success: function() {
                             //$('#customersTable').DataTable().ajax.reload();

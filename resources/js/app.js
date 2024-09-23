@@ -25,8 +25,9 @@ document.addEventListener("DOMContentLoaded", function(){
   if(document.querySelector('#phone')){
     foneMask.mask(document.querySelector('#phone'));
   }
-  if(document.querySelector('.phone')){
-    foneMask.mask(document.querySelector('.phone'));
+
+  if(document.querySelector('#edit_phone')){
+    foneMask.mask(document.querySelector('#edit_phone'));
   }
 
   /**Máscara para cep */
@@ -34,14 +35,18 @@ document.addEventListener("DOMContentLoaded", function(){
   if(document.querySelector('#zipcode')){
     cepMask.mask(document.querySelector('#zipcode'));
   }
+  
+  if(document.querySelector('#edit_zipcode')){
+    cepMask.mask(document.querySelector('#edit_zipcode'));
+  }
 
   /**Máscara para cpf */
   var cpfMask = new Inputmask("999.999.999-99");
   if(document.querySelector('#cpf')){
     cpfMask.mask(document.querySelector('#cpf'));
   }
-  if(document.querySelector('.cpf')){
-    cpfMask.mask(document.querySelector('.cpf'));
+  if(document.querySelector('#edit_cpf')){
+    cpfMask.mask(document.querySelector('#edit_cpf'));
   }
   
 });

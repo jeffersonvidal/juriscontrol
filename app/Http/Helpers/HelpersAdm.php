@@ -2,6 +2,9 @@
 
 class HelpersAdm{
 
+  /**Laravel Helper Now e Today | Jeito fácil de obter datas e horas no Laravel
+   * https://www.youtube.com/watch?v=dhEQi6z4ghU */
+
   /**Remove caracteres de campos (CPF, CEP, Data, etc) */
   private function clearField($param){
     if(empty($param)){
