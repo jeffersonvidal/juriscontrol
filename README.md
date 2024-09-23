@@ -177,6 +177,24 @@ InputMask (para criar máscaras personalizadas em campos de formulários)
 npm install inputmask
 ```
 
+Instalar tradução do sistema (mensagens de erro e retorno) para Português Brasil
+```
+php artisan lang:publish
+```
+```
+composer require lucascudo/laravel-pt-br-localization --dev
+```
+```
+php artisan vendor:publish --tag=laravel-pt-br-localization
+```
+```
+// Versões antigas do Laravel - Altere Linha 85 do arquivo config/app.php para:
+'locale' => 'pt_BR'
+
+// Para versões 11.x altere a linha 8 do arquivo .env
+APP_LOCALE=pt_BR
+```
+
 ## Módulos do Sistema
 
 []-  Gestão Adminsitrativa
