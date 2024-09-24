@@ -18,6 +18,7 @@ class Task extends Model implements Auditable
 
     /** Table fields */
     protected $fillable = [
+        'title',
         'description',
         'priority',
         'label_id',
@@ -26,7 +27,13 @@ class Task extends Model implements Auditable
         'owner_user_id',
         'company_id',
         'employees_id',
+        'status',
+        'source',
+        'customer',
+        'court', //tribunal
     ];
+
+    //STATUS	ORIGEM	DATA	RESPONSÁVEL	DATA FATAL	TAREFA	CLIENTE	PROCESSO	TRIBUNAL	OBSERVAÇÕES
 
     /**Retorna usuário pelo id */
     public function getUser($user){

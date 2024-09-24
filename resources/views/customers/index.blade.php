@@ -348,7 +348,7 @@
                 <div class="col-md-12">
                     <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
                     <input type="hidden" class="form-control" id="edit_id" name="id">                 
-                    <input type="text" class="form-control" id="edit_address_id" name="id" value="Id do endereço: ">                 
+                    <input type="hidden" class="form-control" id="edit_address_id" name="id" value="">                 
                 </div>
                 
             

@@ -178,6 +178,8 @@ npm install inputmask
 ```
 
 Instalar tradução do sistema (mensagens de erro e retorno) para Português Brasil
+Fonte: https://github.com/lucascudo/laravel-pt-BR-localization
+
 ```
 php artisan lang:publish
 ```

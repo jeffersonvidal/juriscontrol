@@ -8,7 +8,7 @@
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <title>LOGIN - JurisControl - Sistema de Controle Jurídico</title>
+    <title>JurisControl - Sistema de Controle Jurídico</title>
 </head>
 
 <body class="bg-dark">
