@@ -80,7 +80,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="addForm" name="addForm" class="row g-3">
+      <form id="createForm" name="createForm" class="row g-3">
                 @csrf
                 <!-- @method('POST') -->
 
@@ -91,7 +91,7 @@
                 </div>
                 <div class="col-md-12">
                     <label for="description" class="form-label">Descrição</label>
-                    <textarea class="form-control" id="description" rows="3">{{ old('description') }}</textarea>
+                    <textarea class="form-control" id="description" name="description" rows="3">{{ old('description') }}</textarea>
                 </div>
                 <div class="col-md-4">
                     <label for="end_date" class="form-label">Data Fatal</label>
@@ -236,28 +236,7 @@
   </div>
 </div><!-- fim editModal -->
 
-<!-- deleteModal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Deletar Usuário</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-      
-        <h3>Você deseja realmente excluir o registro <span class="registro_name"></span>?</h3>
-                
-            
-      </div><!--fim modal-body-->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-        <button type="submit" class="btn btn-danger deleteModalButton">Excluir <i class="fa-solid fa-trash"></i></button>
-      </div><!--fim modal-footer-->
-      
-    </div>
-  </div>
-</div><!-- fim deleteModal -->
+
 
 
 </div><!--fim container-fluid-->
@@ -266,253 +245,173 @@
 <script>
     /**Add in database - store */
     $(document).ready(function(){
-
-        /**Mostra exemplo em tempo real */
-        let inputName = document.querySelector('#name');
-        let inputBgColor = document.querySelector('#hexa_color_bg');
-        let inputFontColor = document.querySelector('#hexa_color_font');
-        let spanResultado = document.querySelector('#resultado');
-        let textoDigitado;
-        spanResultado.style.backgroundColor = inputBgColor.value;
-        spanResultado.style.color = 'white';
-        //spanResultado.style.color = inputFontColor.value;
-
-        /**Manda para o span tudo que for digitado no campo name */
-        inputName.onkeyup = function(){
-            textoDigitado = inputName.value;
-            spanResultado.textContent = textoDigitado;
-            //console.log(textoDigitado);
-        }
-
-        /**Pega a cor de fundo escolhida e aplica no span */
-        inputBgColor.onchange = function(){
-            spanResultado.style.backgroundColor = inputBgColor.value;
-        }
-
-        /**Pega a cor da fonte escolhida e aplica no span */
-        inputFontColor.onchange = function(){
-            spanResultado.style.color = inputFontColor.value;
-        }
-
-        
-
-        /** Create */
-        $('form[name="addForm"]').submit(function(event){
-            event.preventDefault(); //não atualiza a página ao enviar os dados
-
+        /** Cadastrar registro funcionando com sucesso */
+        $('#createForm').on('submit', function(e) {
+            e.preventDefault();
             $.ajax({
-                url: "{{ route('labels.store') }}",
-                type: "get",
+                url: '{{ route('tasks.store') }}',
+                method: 'POST',
                 data: $(this).serialize(),
-                dataType: 'json',
-                beforeSend:function(){
-                    $('.addButton').prop('disabled', true);
+                success: function(response) {
+                    $('#createModal').modal('hide');
+                    if(response){
+                        Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 2000); // 3000 milissegundos = 3 segundos
                 },
-                complete:function(){
-                    $('.addButton').prop('disabled', false);
-                },
-                // success: function(response){
-                //     console.log(response);
-                // }
-                success: function(response){
-                    if(response.success == true){
-                        $('#addModal').hide();
-                        printSuccessMsg(response.msg);
-
-                        location.reload();
-                    }else if(response.success == false){
-                        printErrorMsg(response.msg);
-                    }else{
-                        printValidationErrorMsg(response.msg);
+                error: function(response) {
+                    console.log(response.responseJSON);
+                    if(response.responseJSON){
+                        Swal.fire('Erro!', response.responseJSON.message, 'error');
                     }
                 }
             });
-
-            /**Mensagens do sistema */
-            //Exibe mensagens abaixo dos campos obrigatórios, validação de campos
-            function printValidationErrorMsg(msg){
-                $.each(msg, function(field_name, error){
-                    $(document).find('#'+field_name+'_error').text(error);
-                });
-            }
-            //Exibe mensagem de erro do sistema
-            function printErrorMsg(msg){
-                $('#alert-danger').html('');
-                $('#alert-danger').css('display','block');
-                $('#alert-danger').append(''+msg+'');
-            }
-            //Mostra mensagem de sucesso
-            function printSuccessMsg(msg){
-                $('#alert-success').html('');
-                $('#alert-success').css('display','block');
-                $('#alert-success').append(''+msg+'');
-            }
         });
 
-        /** Update */
-        /**Mostra exemplo em tempo real */
-        let inputEditName = document.querySelector('#edit_name');
-        let inputEditBgColor = document.querySelector('#edit_hexa_color_bg');
-        let inputEditFontColor = document.querySelector('#edit_hexa_color_font');
-        let spanEditResultado = document.querySelector('#edit_resultado');
-        let textoEditDigitado;
-        spanEditResultado.style.backgroundColor = inputEditBgColor.value;
-        spanEditResultado.style.color = 'white';
-        //spanResultado.style.color = inputFontColor.value;
-
-        /**Manda para o span tudo que for digitado no campo name */
-        inputEditName.onkeyup = function(){
-            textoEditDigitado = inputEditName.value;
-            spanEditResultado.textContent = textoEditDigitado;
-            //console.log(textoDigitado);
-        }
-
-        /**Pega a cor de fundo escolhida e aplica no span */
-        inputEditBgColor.onchange = function(){
-            spanEditResultado.style.backgroundColor = inputEditBgColor.value;
-        }
-
-        /**Pega a cor da fonte escolhida e aplica no span */
-        inputEditFontColor.onchange = function(){
-            spanEditResultado.style.color = inputEditFontColor.value;
-        }
-        //Botão editBtn que abre a modal para editar registro
-        $('.editBtn').on('click', function(){
-            //Pega os valores dos campos vindos do BD para alimentar o formulário
-            let id = $(this).attr('data-id');
-            let name = $(this).attr('data-name');
-            let hexa_color_bg = $(this).attr('data-hexa_color_bg');
-            let company_id = $(this).attr('data-company_id');
-            let hexa_color_font = $(this).attr('data-hexa_color_font');
-            //let data_brasileira = user_birthday.split('-').reverse().join('/');
-
-            //Mostra os valores vindos do BD no form da modal
-            $('#edit_label_id').val(id);
-            $('#edit_name').val(name);
-            $('#edit_hexa_color_bg').val(hexa_color_bg);
-            $('#edit_hexa_color_font').val(hexa_color_font);
-            $('#edit_company_id').val(company_id);
-
-            let url = "{{ route('labels.update', 'id') }}";
-            url = url.replace('id', id);
-
-            //Botão do formulário que envia requisição para salvar alterações do BD
-            $('form[name="editForm"]').submit(function(event){
-                event.preventDefault(); //não atualiza a página ao enviar os dados
-
-                $.ajax({
-                    url: url,
-                    type: "get",
-                    data: $(this).serialize(),
-                    dataType: 'json',
-                    contentType: false,
-                    processData: false,
-                    beforeSend:function(){
-                        $('.editButton').prop('disabled', true);
-                    },
-                    complete:function(){
-                        $('.editButton').prop('disabled', false);
-                    },
-                    success: function(response){   
-                        console.log(response.msg);
-                        if(response.success == true){
-                            $('#editModal').hide();
-                            printSuccessMsg(response.msg);
-                            location.reload();
-
-                        }else if(response.success == false){
-                            printErrorMsg(response.msg);
-                        }else{
-                            printValidationErrorMsg(response.msg);
+        /**Atualiza registro no banco de dados*/
+        /**Passa valores do registro para o formulário na modal de atualização */
+        $('button').on('click', function() {
+            /**Verifica se o botão tem a classe condicional para fazer algo */
+            // ['company_id', 'name','email','phone','rg',
+            // 'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday'];
+            if($(this).hasClass('editBtn')){
+                editRegistro($(this).attr('data-id'));
+            }else if($(this).hasClass('deleteBtn')){
+                var dados = [
+                        { 
+                            id: $(this).attr('data-id'), 
                         }
-                    }
-                });
+                    ];
+                deleteRegistro($(this).attr('data-id'));
+            }
+        });
+            
 
-                /**Mensagens do sistema */
-                //Exibe mensagens abaixo dos campos obrigatórios, validação de campos
-                function printValidationErrorMsg(msg){
-                    $.each(msg, function(field_name, error){
-                        $(document).find('#'+field_name+'_error').text(error);
+        /**Função que preenche os campos do formulário de atualização */
+        function editRegistro(id) {
+            let url = "{{ route('customers.show', 'id') }}";
+            url = url.replace('id', id);
+            /**Preenche os campos do form de atualização*/
+            $.get(url, function() {
+                fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                    throw new Error('Erro na rede: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    /**console.log(data[0][0]['customer']); //lista dados pessoais
+                     ** console.log(data[0][0]); //Lista dados do endereço */
+                    /**Dados pessoais*/
+                    $('#edit_id').val(data[0][0]['customer'].id);
+                    $('#edit_name').val(data[0][0]['customer'].name);
+                    $('#edit_email').val(data[0][0]['customer'].email);
+                    $('#edit_phone').val(data[0][0]['customer'].phone);
+                    $('#edit_rg').val(data[0][0]['customer'].rg);
+                    $('#edit_rg_expedidor').val(data[0][0]['customer'].rg_expedidor);
+                    $('#edit_cpf').val(data[0][0]['customer'].cpf);
+                    $('#edit_marital_status').val(data[0][0]['customer'].marital_status);
+                    $('#edit_nationality').val(data[0][0]['customer'].nationality);
+                    $('#edit_profession').val(data[0][0]['customer'].profession);
+                    $('#edit_birthday').val(data[0][0]['customer'].birthday);
+                    $('#edit_met_us').val(data[0][0]['customer'].met_us);
+
+                    /**Endereço*/
+                    $('#edit_cep').val(data[0][0].zipcode);
+                    $('#edit_street').val(data[0][0].street);
+                    $('#edit_num').val(data[0][0].num);
+                    $('#edit_complement').val(data[0][0].complement);
+                    $('#edit_neighborhood').val(data[0][0].neighborhood);
+                    $('#edit_city').val(data[0][0].city);
+                    $('#edit_state').val(data[0][0].state);
+                    $('#edit_customer_id').val(data[0][0].customer_id);
+                    $('#edit_address_id').val(data[0][0].id);
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                });
+                
+                
+                $('#updateModal').modal('show');
+            });
+            //console.log(url);
+            
+
+        }//Fim aditRegistro()
+
+        /**Formulário de atualização de registro */
+        $('#updateForm').on('submit', function(e) {
+            e.preventDefault();
+            var id = $('#edit_id').val();
+            $.ajax({
+                url: `/update-customer/${id}`,
+                method: 'PUT',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#updateModal').modal('hide');
+                    //$('#customersTable').DataTable().ajax.reload();
+                    //Swal.fire('Success', 'Registro atualizado com sucesso', 'success');
+                    //console.log(response);
+                    if(response){
+                        Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 2000); // 3000 milissegundos = 3 segundos
+                },
+                error: function(response) {
+                    //Swal.fire('Error', 'ERRO ao atualizar registro', 'error');
+                    console.log(response.responseJSON);
+                    if(response.responseJSON){
+                        Swal.fire('Erro!', response.responseJSON.message, 'error');
+                    }
+                }
+            });
+        });
+
+
+        /**Exibe pergunta se deseja realmente excluir o registro */
+        function deleteRegistro(id) {
+            Swal.fire({
+                title: 'Deseja realmente excluir esse registro?',
+                text: "Não será possível reverter essa operação posteriormente!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim! Excluir!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    });
+                    $.ajax({
+                        url: `/destroy-customer/${id}`,
+                        method: 'DELETE',
+                        success: function() {
+                            //$('#customersTable').DataTable().ajax.reload();
+                            Swal.fire('Pronto!', 'Registro excluído.', 'success');
+                            setTimeout(function() {
+                                location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                            }, 2000); // 3000 milissegundos = 3 segundos
+                        },
+                        error: function() {
+                            Swal.fire('Erro!', 'ERRO ao excluir registro', 'error');
+                        }
                     });
                 }
-                //Exibe mensagem de erro do sistema
-                function printErrorMsg(msg){
-                    $('#alert-danger').html('');
-                    $('#alert-danger').css('display','block');
-                    $('#alert-danger').append(''+msg+'');
-                }
-                //Mostra mensagem de sucesso
-                function printSuccessMsg(msg){
-                    $('#alert-success').html('');
-                    $('#alert-success').css('display','block');
-                    $('#alert-success').append(''+msg+'');
-                }
             });
+        }
 
-            
-        });
-
-        /** Delete */
-        //Botão de deletar que chama modal
-        $('.deleteBtn').on('click', function(){
-            let registro_id = $(this).attr('data-id'); //pega id do registro a ser deletado
-            let registro_name = $(this).attr('data-name'); //pega name do registro a ser deletado
-
-            //Passa o nome para modal
-            $('.registro_name').html('');
-            $('.registro_name').html(registro_name);
-            
-            //Botão de confirmar deletar registro da modal
-            $('.deleteModalButton').on('click', function(){
-                let url = "{{ route('labels.destroy', 'id') }}";
-                url = url.replace('id', registro_id);
-                //console.log(url);
-                $.ajax({
-                    url: url,
-                    type: "get",
-                    data: $(this).serialize(),
-                    dataType: 'json',
-                    beforeSend:function(){
-                        $('.deleteModalButton').prop('disabled', true);
-                    },
-                    complete:function(){
-                        $('.deleteModalButton').prop('disabled', false);
-                    },
-                    // success: function(response){
-                    //     console.log(response);
-                    // }
-                    success: function(response){
-                        if(response.success == true){
-                            console.log(response.msg);
-                            $('#deleteModal').hide();
-                            printSuccessMsg(response.msg);
-
-                            location.reload();
-                            
-                        }else{
-                            printErrorMsg(respsonse.msg);
-                        }
-                        
-                    }
-                });
-
-                /**Mensagens do sistema */
-                //Exibe mensagem de erro do sistema
-                function printErrorMsg(msg){
-                    $('#alert-danger').html('');
-                    $('#alert-danger').css('display','block');
-                    $('#alert-danger').append(''+msg+'');
-                }
-                //Mostra mensagem de sucesso
-                function printSuccessMsg(msg){
-                    $('#alert-success').html('');
-                    $('#alert-success').css('display','block');
-                    $('#alert-success').append(''+msg+'');
-                }
-            });
-        });
         
     });
+
     
 </script>
 

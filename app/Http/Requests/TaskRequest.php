@@ -26,25 +26,32 @@ class TaskRequest extends FormRequest
         //$userId = $this->route('user');
         /**required|unique:posts|max:255 */
         return [
+            'title' => 'required',
             'description' => 'required',
-            'priority' => 'required',
+            'delivery_date' => 'required',
             'end_date' => 'required',
-            'law_suit_case_id' => 'required',
-            'owner_user_id' => 'required',
+            'responsible_id' => 'required',
+            'author_id' => 'required',
+            'priority' => 'required',
+            'status' => 'required',
+            'source' => 'required',
             'company_id' => 'required',
-            'employees_id' => 'required',
         ];
     }
 
+
     public function messages(): array{
         return [
+            'title' => 'O campo Título é de preenchimento obrigatório!',
             'description' => 'O campo Descrição é de preenchimento obrigatório!',
+            'delivery_date' => 'O campo Responsável (eis) é de preenchimento obrigatório!',
+            'end_date' => 'O campo Data Fatal é de preenchimento obrigatório!',
+            'responsible_id' => 'O campo Responsável é de preenchimento obrigatório!',
+            'author_id' => 'Informe quem está cadastrando essa tarefa!',
             'priority' => 'O campo Prioridade é de preenchimento obrigatório!',
-            'end_date' => 'O campo Data é de preenchimento obrigatório!',
-            'law_suit_case_id' => 'O campo Processo ou Caso é de preenchimento obrigatório!',
-            'owner_user_id' => 'O campo Autor é de preenchimento obrigatório!',
+            'status' => 'O campo Status é de preenchimento obrigatório!',
+            'source' => 'O campo Origem é de preenchimento obrigatório!',
             'company_id' => 'O campo Escritório é de preenchimento obrigatório!',
-            'employees_id' => 'O campo Responsável (eis) é de preenchimento obrigatório!',
         ] ;
     }
 }

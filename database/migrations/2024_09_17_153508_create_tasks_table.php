@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('client')->nullable(); //nome do cliente
             $table->string('process_number')->nullable();
             $table->string('court')->nullable(); //tribunal
-            $table->string('priority')->default('baixa');
+            $table->string('priority')->default('1');
             $table->integer('label_id')->nullable();
             $table->longText('description');
             $table->integer('company_id');
