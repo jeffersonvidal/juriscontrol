@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('priorities', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('color');
             $table->timestamps();
         });
     }

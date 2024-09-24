@@ -24,13 +24,19 @@ class DatabaseSeeder extends Seeder
             CompanySeeder::class,
             CompanyAddressSeeder::class,
             UserSeeder::class,
+            UserProfileSeeder::class,
             LabelSeeder::class,
             TaskSeeder::class,
             CustomerSeeder::class,
             CustomerAddressSeeder::class,
             InvoiceSeeder::class,
             CourtCaseSeeder::class,
-            PaymentRecordSeeder::class
+            PaymentRecordSeeder::class,
+            SystemStatusSeeder::class,
+            PrioritySeeder::class,
+            ExternalOfficeSeeder::class,
+            AccessPermissionSeeder::class,
+            DocumentTemplateSeeder::class,
         ]);
     }
 }

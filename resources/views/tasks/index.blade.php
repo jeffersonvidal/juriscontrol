@@ -105,7 +105,11 @@
                     <label for="responsible_id" class="form-label">Responsável</label>
                     <select id="responsible_id" name="responsible_id" class="form-select">
                         <option value="">Para quem é essa tarefa?</option>
-                        <option value="1">Estagiário</option>
+                        @if (count($users) > 0)
+                            @foreach($users as $user)
+                                echo '<option value="{{ $user->id }}">{{ $user->name }}</option>';
+                            @endforeach
+                        @endif
                     </select>
                 </div>
                 <div class="col-md-6">
@@ -124,7 +128,11 @@
                     <label for="priority" class="form-label">Prioridade</label>
                     <select id="priority" name="priority" class="form-select">
                         <option value="">Defina a Prioridade</option>
-                        <option value="1">Estagiário</option>
+                        @if (count($priorities) > 0)
+                            @foreach($priorities as $priority)
+                                echo '<option value="{{ $priority->id }}">{{ $priority->name }}</option>';
+                            @endforeach
+                        @endif
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -142,14 +150,22 @@
                     <label for="status" class="form-label">Status <a href=""><i class="fa-solid fa-plus" title="Adicionar Status"></i></a></label>
                     <select id="status" name="status" class="form-select">
                         <option value="">Informe o Status</option>
-                        <option value="1">Estagiário</option>
+                        @if (count($systemStatus) > 0)
+                            @foreach($systemStatus as $status)
+                                echo '<option value="{{ $status->id }}">{{ $status->name }}</option>';
+                            @endforeach
+                        @endif
                     </select>
                 </div>
                 <div class="col-md-3">
                     <label for="source" class="form-label">Origem</label>
                     <select id="source" name="source" class="form-select">
                         <option value="">Informe a Origem</option>
-                        <option value="1">Estagiário</option>
+                        @if (count($externalOffices) > 0)
+                            @foreach($externalOffices as $externalOffice)
+                                echo '<option value="{{ $externalOffice->id }}">{{ $externalOffice->name }}</option>';
+                            @endforeach
+                        @endif
                     </select>
                 </div>
                 
