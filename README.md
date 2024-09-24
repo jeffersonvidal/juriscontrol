@@ -165,6 +165,11 @@ Select2
 npm install select2
 ```
 
+Tema do Bootstrap 5 para Select2
+```
+npm install select2-bootstrap-5-theme
+```
+
 ## Bibliotecas dependentes
 
 JQuery

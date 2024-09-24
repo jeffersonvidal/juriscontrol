@@ -159,8 +159,9 @@
                 </div>
                 <div class="col-md-3">
                     <label for="source" class="form-label">Origem</label>
-                    <select id="source" name="source" class="form-select">
+                    <select id="source" name="source" class="form-select select2">
                         <option value="">Informe a Origem</option>
+                        <option value="{{ auth()->user()->company_id }}">Próprio Escritório</option>
                         @if (count($externalOffices) > 0)
                             @foreach($externalOffices as $externalOffice)
                                 echo '<option value="{{ $externalOffice->id }}">{{ $externalOffice->name }}</option>';
@@ -411,6 +412,11 @@
 
         
     });
+
+    /**Seletc2 */
+    // $('.select2').select2({
+    //     theme: 'bootstrap-5'
+    // });
 
     
 </script>
