@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Label;
 use App\Models\Task;
 use App\Http\Controllers\Controller;
 use HelpersAdm;
@@ -20,11 +21,13 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::where('company_id', auth()->user()->company_id)
+            ->with('label')
             ->orderBy('id', 'DESC')->get();
+        $labels = Label::where('company_id', auth()->user()->company_id)->orderBy('name', 'ASC')->get();
 
         
         //Carrega a view
-        return view('tasks.index', ['tasks' => $tasks]);
+        return view('tasks.index', ['tasks' => $tasks, 'labels' => $labels]);
     }
 
     /**

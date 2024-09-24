@@ -17,4 +17,8 @@ class Label extends Model implements Auditable
 
     //Quais colunas para serem cadastradas
     protected $fillable = ['name','hexa_color_bg', 'hexa_color_font','company_id'];
+
+    public function task(){
+        return $this->hasMany(Task::class);
+    }
 }

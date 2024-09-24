@@ -20,20 +20,30 @@ class Task extends Model implements Auditable
     protected $fillable = [
         'title',
         'description',
+        'delivery_date',
+        'end_date',
+        'responsible_id',
+        'author_id',
+        'client',
+        'process_number',
+        'court',
         'priority',
         'label_id',
-        'end_date',
-        'law_suit_case_id',
-        'owner_user_id',
-        'company_id',
-        'employees_id',
         'status',
         'source',
-        'customer',
-        'court', //tribunal
+        'company_id',
     ];
 
+
     //STATUS	ORIGEM	DATA	RESPONSÁVEL	DATA FATAL	TAREFA	CLIENTE	PROCESSO	TRIBUNAL	OBSERVAÇÕES
+
+    //Relacionamento com outras tabelas
+    public function users(){
+        return $this->belongsTo(User::class);
+    }
+    public function label(){
+        return $this->belongsTo(Label::class);
+    }
 
     /**Retorna usuário pelo id */
     public function getUser($user){
@@ -42,16 +52,6 @@ class Task extends Model implements Auditable
         ->orderBy('id', 'DESC')->first();
     }
 
-    //retorna empregados envolvidos com a tarefa
-    public function usersTask($users){
-        $indice_users = explode(',', $users);
-        foreach ($indice_users as $indice) {
-            $employee = User::where('id', $indice)
-                ->where('company_id', auth()->user()->company_id)
-                ->first();
-            if ($employee) {
-                return $employee->name . ', ';
-            }
-        }
-    }
+    
+
 }

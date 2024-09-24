@@ -25,16 +25,18 @@
         </div><!--fim card-header-->
 
         <div class="card-body">
-            <span class="alert alert-success" id="alert-success" style="display:none;"></span>
-            <span class="alert alert-danger" id="alert-danger" style="display:none;"></span>
+            @php
+                //dd($tasks->labels->id);
+            @endphp
             <table id="datatablesSimple" class="table table-striped table-hover">
             <thead>
                     <tr>
                       <th>Tarefa</th>
-                      <th>Autor</th>
                       <th>Responsável(eis)</th>
+                      <th>Cliente</th>
                       <th>Prioridade</th>
-                      <th>Data</th>
+                      <th>Status</th>
+                      <th>Entrega</th>
                       <th class="text-center">Ações</th>
                     </tr>
                   </thead>
@@ -43,15 +45,16 @@
                     @if (count($tasks) > 0)
                         @foreach ($tasks as $task)
                             <tr>
-                            <td>{{ $task->description }}</td>
-                            <td>{{ $task->getUser($task->owner_user_id)->name }}</td>
-                            <td>{{ $task->usersTask($task->employees_id) }}</td>
+                            <td>{{ $task->title }}</td>
+                            <td>{{ $task->getUser($task->responsible_id)->name }}</td>
+                            <td>{{ $task->client }}</td>
                             <td>{{ $task->priority }}</td>
-                            <td>{{ \Carbon\Carbon::parse($task->end_date)->format('d/m/Y') }}</td>
+                            <td>{{ $task->status }}</td>
+                            <td>{{ \Carbon\Carbon::parse($task->delivery_date)->format('d/m/Y') }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
-                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $task->id }}" data-name="{{ $task->name }}" data-hexa_color_bg="{{ $task->hexa_color_bg }}" data-hexa_color_font="{{ $task->hexa_color_font }}" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa-solid fa-pencil"></i></button>
-                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $task->id }}" data-name="{{ $task->name }}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i></button>
+                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $task->id }}"  data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa-solid fa-pencil"></i></button>
+                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $task->id }}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i></button>
 
                                     </span>
                                 </td>
@@ -70,10 +73,10 @@
 
 <!-- addModal -->
 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Etiqueta</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Tarefa</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -83,26 +86,79 @@
 
                 
                 <div class="col-md-12">
-                    <label for="name" class="form-label">Nome</label>
-                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
+                    <label for="title" class="form-label">Título</label>
+                    <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
                 </div>
-                <div class="col-md-3">
-                    <label for="hexa_color_bg" class="form-label">Cor de Fundo</label>
-                    <input type="color" class="form-control" id="hexa_color_bg" name="hexa_color_bg" value="{{ old('hexa_color_bg') }}">
+                <div class="col-md-12">
+                    <label for="description" class="form-label">Descrição</label>
+                    <textarea class="form-control" id="description" rows="3">{{ old('description') }}</textarea>
                 </div>
-                <div class="col-md-3">
-                    <label for="hexa_color_font" class="form-label">Cor do Texto</label>
-                    <input type="color" class="form-control" id="hexa_color_font" name="hexa_color_font" value="{{ old('hexa_color_font') }}">
+                <div class="col-md-4">
+                    <label for="end_date" class="form-label">Data Fatal</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date" value="{{ old('end_date') }}">
                 </div>
-
+                <div class="col-md-4">
+                    <label for="delivery_date" class="form-label">Entrega</label>
+                    <input type="date" class="form-control" id="delivery_date" name="delivery_date" value="{{ old('delivery_date') }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="responsible_id" class="form-label">Responsável</label>
+                    <select id="responsible_id" name="responsible_id" class="form-select">
+                        <option value="">Para quem é essa tarefa?</option>
+                        <option value="1">Estagiário</option>
+                    </select>
+                </div>
                 <div class="col-md-6">
-                    <label for="hexa_color_font" class="form-label">Resultado</label>
-                    <br><span id="resultado" class="badge rounded-pill"></span>
+                    <label for="client" class="form-label">Cliente</label>
+                    <input type="text" class="form-control" id="client" name="client" value="{{ old('client') }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="process_number" class="form-label">Processo</label>
+                    <input type="text" class="form-control" id="process_number" name="process_number" value="{{ old('process_number') }}">
+                </div>
+                <div class="col-md-2">
+                    <label for="court" class="form-label">Tribunal</label>
+                    <input type="text" class="form-control" id="court" name="court" value="{{ old('court') }}">
+                </div>
+                <div class="col-md-2">
+                    <label for="priority" class="form-label">Prioridade</label>
+                    <select id="priority" name="priority" class="form-select">
+                        <option value="">Defina a Prioridade</option>
+                        <option value="1">Estagiário</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="label_id" class="form-label">Etiqueta <a href=""><i class="fa-solid fa-plus" title="Adicionar Etiqueta"></i></a></label>
+                    <select id="label_id" name="label_id" class="form-select">
+                        <option value="">Defina uma Etiqueta</option>
+                        @if (count($labels) > 0)
+                            @foreach($labels as $label)
+                                echo '<option value="{{ $label->id }}">{{ $label->name }}</option>';
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="status" class="form-label">Status <a href=""><i class="fa-solid fa-plus" title="Adicionar Status"></i></a></label>
+                    <select id="status" name="status" class="form-select">
+                        <option value="">Informe o Status</option>
+                        <option value="1">Estagiário</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="source" class="form-label">Origem</label>
+                    <select id="source" name="source" class="form-select">
+                        <option value="">Informe a Origem</option>
+                        <option value="1">Estagiário</option>
+                    </select>
                 </div>
                 
+                <!-- Campos ocultos -->
                 <div class="col-md-12">
                     <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="author_id" name="author_id" value="{{ auth()->user()->id }}">                 
                 </div>
+
                 
             
       </div><!--fim modal-body-->
@@ -114,6 +170,7 @@
     </div>
   </div>
 </div><!-- fim addModal -->
+
 
 <!-- editModal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -54,9 +54,6 @@
                             <div class="collapse" id="collapseAdm" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{{ route('users.index') }}" title="Gestão de Usuários do Sistema">Usuários</a>
-                                    <a class="nav-link" href="{{ route('labels.index') }}" title="Gestão de Etiquestas do Sistema">Etiquetas</a>
-                                    <a class="nav-link" href="{{ route('tasks.index') }}" title="Gestão de Tarefas">Tarefas</a>
-                                    <a class="nav-link" href="" title="Gestão de Eventos">Eventos</a>
                                     <a class="nav-link" href="" title="Gestão de Escritórios Externos / Parceiros">Escritórios Externos</a>
                                     <a class="nav-link" href="" title="Gestão de Gamificação de Usuários do Sistema">Gamificação</a>
                                 </nav>
@@ -71,22 +68,23 @@
                             <div class="collapse" id="collapseClients" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{{ route('customers.index') }}" title="Gestão de Clientes">Clientes</a>
-                                    <a class="nav-link" href="" title="Gestão de Casos e Processos">Processos</a>
-                                    <a class="nav-link" href="" title="Gestão de Casos / Consultivos">Casos / Consultivos</a>
                                 </nav>
                             </div>
 
                         <!-- Gestão Jurídica-->
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseClients" aria-expanded="false" aria-controls="collapseLayouts">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseJuridico" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
                                 Gestão Jurídica
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                            <div class="collapse" id="collapseClients" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <div class="collapse" id="collapseJuridico" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="" title="Gestão de Clientes">Clientes</a>
                                     <a class="nav-link" href="" title="Gestão de Casos e Processos">Processos</a>
                                     <a class="nav-link" href="" title="Gestão de Casos / Consultivos">Casos / Consultivos</a>
+                                    <a class="nav-link" href="{{ route('labels.index') }}" title="Gestão de Etiquestas do Sistema">Etiquetas</a>
+                                    <a class="nav-link" href="{{ route('tasks.index') }}" title="Gestão de Tarefas">Tarefas</a>
+                                    <a class="nav-link" href="" title="Gestão de Eventos">Eventos</a>
                                 </nav>
                             </div>
 

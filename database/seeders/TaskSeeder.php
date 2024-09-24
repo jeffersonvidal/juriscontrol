@@ -15,14 +15,20 @@ class TaskSeeder extends Seeder
     {
         if(! Task::where("id","1")->first()){
             Task::create([
-                'description' => 'Levantamento dos documentos do vendedor',
+                'title' => 'Levantamento dos documentos do cliente',
+                'description' => '',
+                'status' => 'aberto',
+                'source' => 'wemerson guimaraes',
+                'delivery_date' => '2024-11-09',
+                'end_date' => '2024-11-05',
+                'responsible_id' => '3',
+                'client' => fake()->name(),
+                'process_number' => '0000230-47.2024.5.10.0018',
+                'court' => 'TRT10',
                 'priority' => 'Média',
                 'label_id' => '1',
-                'end_date' => '2024-08-30',
-                'law_suit_case_id' => '1',
-                'owner_user_id' => '1',
+                'author_id' => '1',
                 'company_id' => '1',
-                'employees_id' => '1,2',
             ]);
         }
     }

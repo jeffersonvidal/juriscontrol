@@ -13,14 +13,20 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('status');
+            $table->string('source'); //origem (escritórios parceiros ou não)
+            $table->date('delivery_date'); //data de entrega da tarefa
+            $table->date('end_date'); //data fatal para executar a tarefa
+            $table->string('responsible_id'); //responsável por executar a tarefa
+            $table->string('author_id')->constrained('users'); //quem cadastra a tarefa no sistema
+            $table->string('client')->nullable(); //nome do cliente
+            $table->string('process_number')->nullable();
+            $table->string('court')->nullable(); //tribunal
+            $table->string('priority')->default('baixa');
+            $table->integer('label_id')->nullable();
             $table->longText('description');
-            $table->string('priority');
-            $table->integer('label_id');
-            $table->date('end_date');
-            $table->integer('law_suit_case_id');
-            $table->integer('owner_user_id');
             $table->integer('company_id');
-            $table->string('employees_id');
             $table->timestamps();
         });
     }
