@@ -46,8 +46,8 @@
                             <td>{{ $task->title }}</td>
                             <td>{{ $task->getUser($task->responsible_id)->name }}</td>
                             <td>{{ $task->client }}</td>
-                            <td>{{ $task->priority }}</td>
-                            <td>{{ $task->status }}</td>
+                            <td>{{ $task->getPriority($task->priority)->name }}</td>
+                            <td>{{ $task->getStatus($task->status)->name }}</td>
                             <td>{{ \Carbon\Carbon::parse($task->delivery_date)->format('d/m/Y') }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
@@ -58,7 +58,8 @@
                                         data-priority="{{ $task->priority }}" data-label_id="{{ $task->label_id }}" data-status="{{ $task->status }}"
                                         data-source="{{ $task->source }}" data-id="{{ $task->id }}" data-id="{{ $task->id }}"
                                         data-id="{{ $task->id }}" data-company_id="{{ $task->company_id }}"  data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
-                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $task->id }}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i></button>
+                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" 
+                                        data-id="{{ $task->id }}" data-name="{{ $task->name }}" ><i class="fa-solid fa-trash"></i></button>
 
                                     </span>
                                 </td>
@@ -459,16 +460,17 @@
         });
 
 
+        /** Delete */
         /**Exibe pergunta se deseja realmente excluir o registro */
         function deleteRegistro(dados) {
             Swal.fire({
-                title: 'Deseja realmente excluir esse registro?',
-                text: "Não será possível reverter essa operação posteriormente!",
+                title: 'Você tem certeza que deseja excluir esse registro?',
+                text: "Você não poderá reverter essa operação!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Sim! Excluir!'
+                confirmButtonText: 'Sim, excluir!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -481,7 +483,7 @@
                         url: `/destroy-task/${dados[0].id}`,
                         method: 'DELETE',
                         success: function() {
-                            //$('#customersTable').DataTable().ajax.reload();
+                            //$('#labelsTable').DataTable().ajax.reload();
                             Swal.fire('Pronto!', 'Registro excluído.', 'success');
                             setTimeout(function() {
                                 location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor

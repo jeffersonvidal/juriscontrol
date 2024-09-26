@@ -61,6 +61,12 @@ class Task extends Model implements Auditable
         ->orderBy('id', 'DESC')->first();
     }
 
-    
+    public function getPriority($priority){
+        return Priority::where('id', $priority)->first();
+    }
+
+    public function getStatus($status){
+        return SystemStatus::where('id', $status)->first();
+    }
 
 }

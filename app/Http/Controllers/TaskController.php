@@ -39,7 +39,7 @@ class TaskController extends Controller
 
         
         //Carrega a view
-        return view('tasks.index', ['tasks', 'labels' => $labels,
+        return view('tasks.index', ['tasks' => $tasks, 'labels' => $labels,
         'systemStatus' => $systemStatus, 'priorities' => $priorities, 'externalOffices' => $externalOffices,
         'users' => $users]);
     }
@@ -173,6 +173,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
+        return response()->json(null, 204);
     }
 }
