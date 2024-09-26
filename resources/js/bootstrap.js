@@ -51,6 +51,15 @@ document.addEventListener("DOMContentLoaded", function(){
   if(document.querySelector('#edit_cpf')){
     cpfMask.mask(document.querySelector('#edit_cpf'));
   }
+
+  /**Máscara para cnpj */
+  var cnpjMask = new Inputmask("99.999.999/9999-99");
+  if(document.querySelector('#cnpj')){
+    cnpjMask.mask(document.querySelector('#cnpj'));
+  }
+  if(document.querySelector('#edit_cnpj')){
+    cnpjMask.mask(document.querySelector('#edit_cnpj'));
+  }
   
 });
 

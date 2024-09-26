@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ExternalOfficeRequest;
 use App\Models\ExternalOffice;
 use App\Http\Controllers\Controller;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
 use HelpersAdm;
 
@@ -19,25 +22,50 @@ class ExternalOfficeController extends Controller
      */
     public function index()
     {
-        $externalOffices = ExternalOffice::where('company_id', auth()->user()->company_id)->get();
+        $externalOffices = ExternalOffice::where('company_id', auth()->user()->company_id)
+        ->orderBy('id', 'DESC')->get();
 
         return view('external_offices.index', ['externalOffices' => $externalOffices]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ExternalOfficeRequest $request)
     {
-        //
+        //Validar o formulário
+        $request->validated();
+
+        //garantir que salve nas duas tabelas do banco de dados
+        DB::beginTransaction();
+        
+        try {
+            //Model da tabela - campos a serem salvos
+            $externalOfficeData = new ExternalOffice;
+            $externalOfficeData->name = $request->name;
+            $externalOfficeData->responsible = $request->responsible;
+            $externalOfficeData->phone = $request->phone;
+            $externalOfficeData->email = $request->email;
+            $externalOfficeData->cnpj = $request->cnpj;
+            $externalOfficeData->pix = $request->pix;
+            $externalOfficeData->agency = $request->agency;
+            $externalOfficeData->current_account = $request->current_account;
+            $externalOfficeData->bank = $request->bank;
+            $externalOfficeData->company_id = $request->company_id;
+            $externalOfficeData->save();
+
+            //comita depois de tudo ter sido salvo
+            DB::commit();
+
+            //Redireciona para outra página após cadastrar com sucesso
+            return response()->json( ['success' => 'Registro cadastrado com sucesso!']);
+        } catch (Exception $e) {
+            //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+            DB::rollBack();
+
+            //Redireciona para outra página se der erro
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 
     /**
