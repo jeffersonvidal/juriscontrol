@@ -1,9 +1,9 @@
 
 /**Importar jQuery */ 
-import jQuery from 'jquery';
-window.$ = jQuery;
+// import jQuery from 'jquery';
+// window.$ = jQuery;
 
-/**Importar select2 */
+// /**Importar select2 */
 import select2 from 'select2';
 select2();
 

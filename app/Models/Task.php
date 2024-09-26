@@ -38,11 +38,20 @@ class Task extends Model implements Auditable
     //STATUS	ORIGEM	DATA	RESPONSÁVEL	DATA FATAL	TAREFA	CLIENTE	PROCESSO	TRIBUNAL	OBSERVAÇÕES
 
     //Relacionamento com outras tabelas
-    public function users(){
+    public function user(){
         return $this->belongsTo(User::class);
     }
     public function label(){
         return $this->belongsTo(Label::class);
+    }
+    public function externalOffice(){
+        return $this->belongsTo(ExternalOffice::class);
+    }
+    public function priority(){
+        return $this->belongsTo(Priority::class);
+    }
+    public function status(){
+        return $this->belongsTo(SystemStatus::class);
     }
 
     /**Retorna usuário pelo id */

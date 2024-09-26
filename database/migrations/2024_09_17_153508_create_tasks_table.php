@@ -12,18 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tasks', function (Blueprint $table) {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');//
             $table->id();
             $table->string('title');
-            $table->string('status');
-            $table->string('source'); //origem (escritórios parceiros ou não)
+            $table->integer('status');
+            $table->integer('source'); //origem (escritórios parceiros ou não)
             $table->date('delivery_date'); //data de entrega da tarefa
             $table->date('end_date'); //data fatal para executar a tarefa
-            $table->string('responsible_id'); //responsável por executar a tarefa
-            $table->string('author_id')->constrained('users'); //quem cadastra a tarefa no sistema
+            $table->integer('responsible_id'); //responsável por executar a tarefa
+            $table->integer('author_id'); //quem cadastra a tarefa no sistema
             $table->string('client')->nullable(); //nome do cliente
             $table->string('process_number')->nullable();
             $table->string('court')->nullable(); //tribunal
-            $table->string('priority')->default('1');
+            $table->integer('priority')->default(1);
             $table->integer('label_id')->nullable();
             $table->longText('description');
             $table->integer('company_id');

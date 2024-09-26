@@ -20,4 +20,8 @@ class SystemStatus extends Model implements Auditable
     protected $fillable = [
         'name',
     ];
+
+    public function task(){
+        return $this->hasMany(Task::class);
+    }
 }

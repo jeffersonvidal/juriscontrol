@@ -21,4 +21,8 @@ class Priority extends Model implements Auditable
         'name',
         'color',
     ];
+
+    public function task(){
+        return $this->hasMany(Task::class);
+    }
 }

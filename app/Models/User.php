@@ -51,5 +51,9 @@ class User extends Authenticatable implements Auditable
     public function getUserProfile($profile){
         return UserProfile::where('id', $profile)->first();
     }
+
+    public function task(){
+        return $this->hasMany(Task::class);
+    }
     
 }

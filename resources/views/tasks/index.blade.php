@@ -25,9 +25,7 @@
         </div><!--fim card-header-->
 
         <div class="card-body">
-            @php
-                //dd($tasks->labels->id);
-            @endphp
+            
             <table id="datatablesSimple" class="table table-striped table-hover">
             <thead>
                     <tr>
@@ -53,7 +51,13 @@
                             <td>{{ \Carbon\Carbon::parse($task->delivery_date)->format('d/m/Y') }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
-                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $task->id }}"  data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa-solid fa-pencil"></i></button>
+                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $task->id }}"
+                                        data-title="{{ $task->title }}" data-description="{{ $task->description }}" data-delivery_date="{{ $task->delivery_date }}"
+                                        data-end_date="{{ $task->end_date }}" data-responsible_id="{{ $task->responsible_id }}" data-author_id="{{ $task->author_id }}"
+                                        data-client="{{ $task->client }}" data-process_number="{{ $task->process_number }}" data-court="{{ $task->court }}"
+                                        data-priority="{{ $task->priority }}" data-label_id="{{ $task->label_id }}" data-status="{{ $task->status }}"
+                                        data-source="{{ $task->source }}" data-id="{{ $task->id }}" data-id="{{ $task->id }}"
+                                        data-id="{{ $task->id }}" data-company_id="{{ $task->company_id }}"  data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
                                         <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $task->id }}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i></button>
 
                                     </span>
@@ -189,41 +193,110 @@
 </div><!-- fim addModal -->
 
 
-<!-- editModal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<!-- updateModal -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Alterar Etiqueta</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="editForm" name="editForm" class="row g-3">
+      <form id="updateForm" name="editForm" class="row g-3">
                 @csrf
                 <!-- @method('POST') -->
 
                 
                 <div class="col-md-12">
-                    <label for="name" class="form-label">Nome</label>
-                    <input type="text" class="form-control" id="edit_name" name="name" value="{{ old('name') }}">
+                    <label for="title" class="form-label">Título</label>
+                    <input type="text" class="form-control" id="edit_title" name="title" value="{{ old('title') }}">
                 </div>
-                <div class="col-md-3">
-                    <label for="hexa_color_bg" class="form-label">Cor de Fundo</label>
-                    <input type="color" class="form-control" id="edit_hexa_color_bg" name="hexa_color_bg" value="{{ old('hexa_color_bg') }}">
+                <div class="col-md-12">
+                    <label for="description" class="form-label">Descrição</label>
+                    <textarea class="form-control" id="edit_description" name="description" rows="3">{{ old('description') }}</textarea>
                 </div>
-                <div class="col-md-3">
-                    <label for="hexa_color_font" class="form-label">Cor do Texto</label>
-                    <input type="color" class="form-control" id="edit_hexa_color_font" name="hexa_color_font" value="{{ old('hexa_color_font') }}">
+                <div class="col-md-4">
+                    <label for="end_date" class="form-label">Data Fatal</label>
+                    <input type="date" class="form-control" id="edit_end_date" name="end_date" value="{{ old('end_date') }}">
                 </div>
-
+                <div class="col-md-4">
+                    <label for="delivery_date" class="form-label">Entrega</label>
+                    <input type="date" class="form-control" id="edit_delivery_date" name="delivery_date" value="{{ old('delivery_date') }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="responsible_id" class="form-label">Responsável</label>
+                    <select id="edit_responsible_id" name="responsible_id" class="form-select">
+                        <option value="">Para quem é essa tarefa?</option>
+                        @if (count($users) > 0)
+                            @foreach($users as $user)
+                                echo '<option value="{{ $user->id }}">{{ $user->name }}</option>';
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
                 <div class="col-md-6">
-                    <label for="hexa_color_font" class="form-label">Resultado</label>
-                    <br><span id="edit_resultado" class="badge rounded-pill"></span>
+                    <label for="client" class="form-label">Cliente</label>
+                    <input type="text" class="form-control" id="edit_client" name="client" value="{{ old('client') }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="process_number" class="form-label">Processo</label>
+                    <input type="text" class="form-control" id="edit_process_number" name="process_number" value="{{ old('process_number') }}">
+                </div>
+                <div class="col-md-2">
+                    <label for="court" class="form-label">Tribunal</label>
+                    <input type="text" class="form-control" id="edit_court" name="court" value="{{ old('court') }}">
+                </div>
+                <div class="col-md-2">
+                    <label for="priority" class="form-label">Prioridade</label>
+                    <select id="edit_priority" name="priority" class="form-select">
+                        <option value="">Defina a Prioridade</option>
+                        @if (count($priorities) > 0)
+                            @foreach($priorities as $priority)
+                                echo '<option value="{{ $priority->id }}">{{ $priority->name }}</option>';
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="label_id" class="form-label">Etiqueta <a href=""><i class="fa-solid fa-plus" title="Adicionar Etiqueta"></i></a></label>
+                    <select id="edit_label_id" name="label_id" class="form-select">
+                        <option value="">Defina uma Etiqueta</option>
+                        @if (count($labels) > 0)
+                            @foreach($labels as $label)
+                                echo '<option value="{{ $label->id }}">{{ $label->name }}</option>';
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="status" class="form-label">Status <a href=""><i class="fa-solid fa-plus" title="Adicionar Status"></i></a></label>
+                    <select id="edit_status" name="status" class="form-select">
+                        <option value="">Informe o Status</option>
+                        @if (count($systemStatus) > 0)
+                            @foreach($systemStatus as $status)
+                                echo '<option value="{{ $status->id }}">{{ $status->name }}</option>';
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="source" class="form-label">Origem</label>
+                    <select id="edit_source" name="source" class="form-select select2">
+                        <option value="">Informe a Origem</option>
+                        <option value="{{ auth()->user()->company_id }}">Próprio Escritório</option>
+                        @if (count($externalOffices) > 0)
+                            @foreach($externalOffices as $externalOffice)
+                                echo '<option value="{{ $externalOffice->id }}">{{ $externalOffice->name }}</option>';
+                            @endforeach
+                        @endif
+                    </select>
                 </div>
                 
+                <!-- Campos ocultos -->
                 <div class="col-md-12">
-                    <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
-                    <input type="hidden" class="form-control" id="edit_label_id" name="id">                 
+                    <input type="hidden" class="form-control" id="edit_company_id" name="company_id" value="">                 
+                    <input type="hidden" class="form-control" id="edit_author_id" name="author_id" value="">                 
+                    <input type="hidden" class="form-control" id="edit_id" name="id" value="">                 
                 </div>
                 
             
@@ -242,7 +315,7 @@
 
 </div><!--fim container-fluid-->
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
 <script>
     /**Add in database - store */
     $(document).ready(function(){
@@ -278,22 +351,42 @@
             // ['company_id', 'name','email','phone','rg',
             // 'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday'];
             if($(this).hasClass('editBtn')){
-                editRegistro($(this).attr('data-id'));
+                var dados = [
+                        { 
+                            id: $(this).attr('data-id'), 
+                            title: $(this).attr('data-title'), 
+                            description: $(this).attr('data-description'), 
+                            delivery_date: $(this).attr('data-delivery_date'), 
+                            end_date: $(this).attr('data-end_date'), 
+                            responsible_id: $(this).attr('data-responsible_id'), 
+                            author_id: $(this).attr('data-author_id'), 
+                            client: $(this).attr('data-client'), 
+                            process_number: $(this).attr('data-process_number'), 
+                            court: $(this).attr('data-court'), 
+                            priority: $(this).attr('data-priority'), 
+                            label_id: $(this).attr('data-label_id'), 
+                            status: $(this).attr('data-status'), 
+                            source: $(this).attr('data-source'), 
+                            company_id: $(this).attr('data-company_id'), 
+                        }
+                    ];
+                    //console.log(dados);
+                editRegistro(dados);
             }else if($(this).hasClass('deleteBtn')){
                 var dados = [
                         { 
                             id: $(this).attr('data-id'), 
                         }
                     ];
-                deleteRegistro($(this).attr('data-id'));
+                deleteRegistro(dados);
             }
         });
             
 
         /**Função que preenche os campos do formulário de atualização */
-        function editRegistro(id) {
-            let url = "{{ route('customers.show', 'id') }}";
-            url = url.replace('id', id);
+        function editRegistro(dados) {
+            let url = "{{ route('tasks.show', 'id') }}";
+            url = url.replace('id', dados[0].id);
             /**Preenche os campos do form de atualização*/
             $.get(url, function() {
                 fetch(url)
@@ -307,29 +400,21 @@
                     /**console.log(data[0][0]['customer']); //lista dados pessoais
                      ** console.log(data[0][0]); //Lista dados do endereço */
                     /**Dados pessoais*/
-                    $('#edit_id').val(data[0][0]['customer'].id);
-                    $('#edit_name').val(data[0][0]['customer'].name);
-                    $('#edit_email').val(data[0][0]['customer'].email);
-                    $('#edit_phone').val(data[0][0]['customer'].phone);
-                    $('#edit_rg').val(data[0][0]['customer'].rg);
-                    $('#edit_rg_expedidor').val(data[0][0]['customer'].rg_expedidor);
-                    $('#edit_cpf').val(data[0][0]['customer'].cpf);
-                    $('#edit_marital_status').val(data[0][0]['customer'].marital_status);
-                    $('#edit_nationality').val(data[0][0]['customer'].nationality);
-                    $('#edit_profession').val(data[0][0]['customer'].profession);
-                    $('#edit_birthday').val(data[0][0]['customer'].birthday);
-                    $('#edit_met_us').val(data[0][0]['customer'].met_us);
-
-                    /**Endereço*/
-                    $('#edit_cep').val(data[0][0].zipcode);
-                    $('#edit_street').val(data[0][0].street);
-                    $('#edit_num').val(data[0][0].num);
-                    $('#edit_complement').val(data[0][0].complement);
-                    $('#edit_neighborhood').val(data[0][0].neighborhood);
-                    $('#edit_city').val(data[0][0].city);
-                    $('#edit_state').val(data[0][0].state);
-                    $('#edit_customer_id').val(data[0][0].customer_id);
-                    $('#edit_address_id').val(data[0][0].id);
+                    $('#edit_id').val(dados[0].id);
+                    $('#edit_title').val(dados[0].title);
+                    $('#edit_description').val(dados[0].description);
+                    $('#edit_delivery_date').val(dados[0].delivery_date);
+                    $('#edit_end_date').val(dados[0].end_date);
+                    $('#edit_responsible_id').val(dados[0].responsible_id);
+                    $('#edit_author_id').val(dados[0].author_id);
+                    $('#edit_client').val(dados[0].client);
+                    $('#edit_process_number').val(dados[0].process_number);
+                    $('#edit_court').val(dados[0].court);
+                    $('#edit_priority').val(dados[0].priority);
+                    $('#edit_label_id').val(dados[0].label_id);
+                    $('#edit_status').val(dados[0].status);
+                    $('#edit_source').val(dados[0].source);
+                    $('#edit_company_id').val(dados[0].company_id);
                 })
                 .catch(error => {
                     console.error('Erro:', error);
@@ -338,7 +423,7 @@
                 
                 $('#updateModal').modal('show');
             });
-            //console.log(url);
+            //console.log(data);
             
 
         }//Fim aditRegistro()
@@ -348,7 +433,7 @@
             e.preventDefault();
             var id = $('#edit_id').val();
             $.ajax({
-                url: `/update-customer/${id}`,
+                url: `/update-task/${id}`,
                 method: 'PUT',
                 data: $(this).serialize(),
                 success: function(response) {
@@ -375,7 +460,7 @@
 
 
         /**Exibe pergunta se deseja realmente excluir o registro */
-        function deleteRegistro(id) {
+        function deleteRegistro(dados) {
             Swal.fire({
                 title: 'Deseja realmente excluir esse registro?',
                 text: "Não será possível reverter essa operação posteriormente!",
@@ -393,7 +478,7 @@
                         }
                     });
                     $.ajax({
-                        url: `/destroy-customer/${id}`,
+                        url: `/destroy-task/${dados[0].id}`,
                         method: 'DELETE',
                         success: function() {
                             //$('#customersTable').DataTable().ajax.reload();

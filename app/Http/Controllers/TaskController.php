@@ -27,18 +27,19 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::where('company_id', auth()->user()->company_id)
-            ->with('label')
-            ->orderBy('id', 'DESC')->get();
         $labels = Label::where('company_id', auth()->user()->company_id)->orderBy('name', 'ASC')->get();
         $externalOffices = ExternalOffice::where('company_id', auth()->user()->company_id)->orderBy('name', 'ASC')->get();
         $users = User::where('company_id', auth()->user()->company_id)->orderBy('name', 'ASC')->get();
         $systemStatus = SystemStatus::all();
         $priorities = Priority::all();
+        $tasks = Task::with(['user', 'label', 'priority', 'externalOffice'])
+            ->where('company_id', auth()->user()->company_id)->get();
+
+        //return view('tasks.index', compact('tasks'));
 
         
         //Carrega a view
-        return view('tasks.index', ['tasks' => $tasks, 'labels' => $labels,
+        return view('tasks.index', ['tasks', 'labels' => $labels,
         'systemStatus' => $systemStatus, 'priorities' => $priorities, 'externalOffices' => $externalOffices,
         'users' => $users]);
     }
@@ -48,6 +49,9 @@ class TaskController extends Controller
     {
         $tasks = Task::where('company_id', auth()->user()->company_id)
             ->with('label')
+            ->with('user')
+            ->with('externalOffice')
+            ->with('priority')
             ->orderBy('id', 'DESC')->get();
         $labels = Label::where('company_id', auth()->user()->company_id)->orderBy('name', 'ASC')->get();
         $externalOffices = ExternalOffice::where('company_id', auth()->user()->company_id)->orderBy('name', 'ASC')->get();
@@ -121,19 +125,47 @@ class TaskController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Task $task)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Task $task)
+    public function update(TaskRequest $request, Task $task)
     {
-        //
+        //Validar o formulário
+        $request->validated();
+
+        //garantir que salve nas duas tabelas do banco de dados
+        DB::beginTransaction();
+
+        try {
+            //Model da tabela - campos a serem salvos
+            $task->title = $request->title;
+            $task->description = $request->description;
+            $task->delivery_date = $request->delivery_date;
+            $task->end_date = $request->end_date;
+            $task->responsible_id = $request->responsible_id;
+            $task->author_id = $request->author_id;
+            $task->client = $request->client;
+            $task->process_number = $request->process_number;
+            $task->court = $request->court;
+            $task->priority = $request->priority;
+            $task->label_id = $request->label_id;
+            $task->status = $request->status;
+            $task->source = $request->source;
+            $task->company_id = $request->company_id;
+            $task->update();
+            //dd($task);
+
+            //comita depois de tudo ter sido salvo
+            DB::commit();
+
+            //Redireciona para outra página após cadastrar com sucesso
+            return response()->json( ['success' => 'Registro alterado com sucesso!']);
+        } catch (Exception $e) {
+            //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+            DB::rollBack();
+
+            //Redireciona para outra página se der erro
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 
     /**
