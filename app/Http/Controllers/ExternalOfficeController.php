@@ -5,15 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\ExternalOffice;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use HelpersAdm;
 
 class ExternalOfficeController extends Controller
 {
+    private $helperAdm;
+
+    public function __construct(HelpersAdm $helpersAdm){
+        $this->helperAdm = $helpersAdm;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $externalOffices = ExternalOffice::where('company_id', auth()->user()->company_id)->get();
+
+        return view('external_offices.index', ['externalOffices' => $externalOffices]);
     }
 
     /**

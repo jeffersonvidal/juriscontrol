@@ -5,13 +5,13 @@
 
 <div class="container-fluid px-4">
     <div class="mb-1 hstack gap-2">
-        <h2 class="mt-3">Tarefas</h2>
+        <h2 class="mt-3">Tarefas Diárias</h2>
 
         <ol class="breadcrumb mb-3 mt-3 ms-auto">
             <li class="breadcrumb-item">
                 <a class="text-decoration-none" href="{{ route('dashboard.index') }}" title="Dashboard">Dashboard</a>
             </li>
-            <li class="breadcrumb-item active">Tarefas</li>
+            <li class="breadcrumb-item active">Tarefas Diárias</li>
         </ol>
     </div>    
 
@@ -58,9 +58,7 @@
                                         data-priority="{{ $task->priority }}" data-label_id="{{ $task->label_id }}" data-status="{{ $task->status }}"
                                         data-source="{{ $task->source }}" data-id="{{ $task->id }}" data-id="{{ $task->id }}"
                                         data-id="{{ $task->id }}" data-company_id="{{ $task->company_id }}"  data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
-                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" 
-                                        data-id="{{ $task->id }}" data-name="{{ $task->name }}" ><i class="fa-solid fa-trash"></i></button>
-
+                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $task->id }}" ><i class="fa-solid fa-trash"></i></button>
                                     </span>
                                 </td>
                             </tr>

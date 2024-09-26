@@ -55,7 +55,7 @@
                             <div class="collapse" id="collapseAdm" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{{ route('users.index') }}" title="Gestão de Usuários do Sistema">Usuários</a>
-                                    <a class="nav-link" href="" title="Gestão de Escritórios Externos / Parceiros">Escritórios Externos</a>
+                                    <a class="nav-link" href="{{ route('external-offices.index') }}" title="Gestão de Escritórios Externos / Parceiros">Escritórios Externos</a>
                                     <a class="nav-link" href="" title="Gestão de Gamificação de Usuários do Sistema">Gamificação</a>
                                 </nav>
                             </div>
@@ -80,11 +80,12 @@
                         </a>
                             <div class="collapse" id="collapseJuridico" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="" title="Gestão de Clientes">Clientes</a>
-                                    <a class="nav-link" href="" title="Gestão de Casos e Processos">Processos</a>
-                                    <a class="nav-link" href="" title="Gestão de Casos / Consultivos">Casos / Consultivos</a>
+                                    <a class="nav-link" href="{{ route('tasks.index') }}" title="Gestão de Tarefas">Tarefas Diárias</a>
+                                    <a class="nav-link" href="" title="Petições de Parceiros">Petições Parceiros</a>
+                                    <a class="nav-link" href="" title="Audiências e Perícias de Parceiros">Audiências/Perícias Parceiros</a>
+                                    <a class="nav-link" href="" title="Gestão de Processos">Processos</a>
+                                    <a class="nav-link" href="" title="Gestão de Casos e Consultivos">Casos e Consultivos</a>
                                     <a class="nav-link" href="{{ route('labels.index') }}" title="Gestão de Etiquestas do Sistema">Etiquetas</a>
-                                    <a class="nav-link" href="{{ route('tasks.index') }}" title="Gestão de Tarefas">Tarefas</a>
                                     <a class="nav-link" href="" title="Gestão de Eventos">Eventos</a>
                                 </nav>
                             </div>
