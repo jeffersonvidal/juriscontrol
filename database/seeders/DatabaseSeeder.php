@@ -37,6 +37,8 @@ class DatabaseSeeder extends Seeder
             ExternalOfficeSeeder::class,
             AccessPermissionSeeder::class,
             DocumentTemplateSeeder::class,
+            WalletSeeder::class,
+            PaymentSeeder::class,
         ]);
     }
 }
