@@ -58,6 +58,8 @@
                                             <i class="fa-solid fa-book"></i></button>
                                         <button class="text-decoration-none btn btn-sm " title="Novo Endereço" data-id="{{ $customer->id }}" >
                                             <i class="fa-solid fa-earth-americas"></i></button>
+                                        <button class="text-decoration-none btn btn-sm " title="Timesheet - Atividades" data-id="" >
+                                        <i class="fa-regular fa-clock"></i></button>
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $customer->id }}" 
                                             data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
                                         <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $customer->id }}" 

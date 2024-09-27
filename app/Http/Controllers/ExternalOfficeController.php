@@ -44,9 +44,9 @@ class ExternalOfficeController extends Controller
             $externalOfficeData = new ExternalOffice;
             $externalOfficeData->name = $request->name;
             $externalOfficeData->responsible = $request->responsible;
-            $externalOfficeData->phone = $request->phone;
+            $externalOfficeData->phone = $this->helperAdm->limpaCampo($request->phone);
             $externalOfficeData->email = $request->email;
-            $externalOfficeData->cnpj = $request->cnpj;
+            $externalOfficeData->cnpj = $this->helperAdm->limpaCampo($request->cnpj);
             $externalOfficeData->pix = $request->pix;
             $externalOfficeData->agency = $request->agency;
             $externalOfficeData->current_account = $request->current_account;
@@ -73,23 +73,49 @@ class ExternalOfficeController extends Controller
      */
     public function show(ExternalOffice $externalOffice)
     {
-        //
-    }
+        $theExternalOffice = ExternalOffice::where('id', $externalOffice)->first();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ExternalOffice $externalOffice)
-    {
-        //
+        return response()->json($theExternalOffice);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ExternalOffice $externalOffice)
+    public function update(ExternalOfficeRequest $request, ExternalOffice $externalOffice)
     {
-        //
+        //Validar o formulário
+        $request->validated();
+
+        //garantir que salve nas duas tabelas do banco de dados
+        DB::beginTransaction();
+
+        try {
+            //$label->update($request->validated());
+            $externalOffice->name = $request->name;
+            $externalOffice->responsible = $request->responsible;
+            $externalOffice->phone = $this->helperAdm->limpaCampo($request->phone);
+            $externalOffice->email = $request->email;
+            $externalOffice->cnpj = $this->helperAdm->limpaCampo($request->cnpj);
+            $externalOffice->pix = $request->pix;
+            $externalOffice->agency = $request->agency;
+            $externalOffice->current_account = $request->current_account;
+            $externalOffice->bank = $request->bank;
+            $externalOffice->company_id = $request->company_id;
+            $externalOffice->update();
+
+            //comita depois de tudo ter sido salvo
+            DB::commit();
+
+            //return response()->json($label);
+            return response()->json(['success' => 'Registro alterado com sucesso!']);
+        } catch (Exception $e) {
+            //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+            DB::rollBack();
+
+            //Redireciona para outra página se der erro
+            return response()->json(['error' => $e->getMessage()]);
+            //return back()->withInput()->with('error', 'Erro ao cadastrar registro!<br>Tente novamente! Du doido<br>'.$e->getMessage());
+        }
     }
 
     /**
@@ -97,6 +123,8 @@ class ExternalOfficeController extends Controller
      */
     public function destroy(ExternalOffice $externalOffice)
     {
-        //
+        //$theLabel = Label::where('id',$label)->delete();
+        $externalOffice->delete();
+        return response()->json(null, 204);
     }
 }

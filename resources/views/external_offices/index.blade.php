@@ -53,6 +53,8 @@
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $externalOffice->id }}"
                                         data-name="{{ $externalOffice->name }}" data-responsible="{{ $externalOffice->responsible }}" data-phone="{{ $externalOffice->phone }}"
                                         data-email="{{ $externalOffice->email }}" data-cnpj="{{ $externalOffice->cnpj }}" 
+                                        data-agency="{{ $externalOffice->agency }}" data-current_account="{{ $externalOffice->current_account }}" 
+                                        data-bank="{{ $externalOffice->bank }}" data-pix="{{ $externalOffice->pix }}" data-company_id="{{ $externalOffice->company_id }}"
                                         data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
                                         <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $externalOffice->id }}" ><i class="fa-solid fa-trash"></i></button>
                                     </span>
@@ -153,6 +155,90 @@
 </div><!-- fim addModal -->
 
 
+<!-- editModal -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Alterar Escritório Externo</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <form id="updateForm" class="row g-3">
+                  @csrf
+                  <!-- @method('POST') -->
+  
+                  
+                  <div class="col-md-6">
+                    <label for="name" class="form-label">Nome do Escritório</label>
+                    <input type="text" class="form-control" id="edit_name" name="name" value="{{ old('name') }}">
+                    <span id="name_error" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="edit_email" name="email" value="{{ old('email') }}">
+                    <span id="email_error" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="phone" class="form-label">Telefone</label>
+                    <input type="tel" class="form-control" id="edit_phone" name="phone" value="{{ old('phone') }}">
+                </div>
+            
+                <div class="col-md-4">
+                    <label for="cnpj" class="form-label">CNPJ</label>
+                    <input type="text" class="form-control" id="edit_cnpj" name="cnpj" value="{{ old('cnpj') }}">
+                </div>
+            
+                <div class="col-md-4">
+                    <label for="responsible" class="form-label">Responsável</label>
+                    <input type="text" class="form-control" id="edit_responsible" name="responsible" value="{{ old('responsible') }}">
+                </div>
+            
+
+                <fieldset>
+                    <legend>Dados Bancários</legend>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label for="agency" class="form-label">Agência</label>
+                            <input type="text" class="form-control" id="edit_agency" name="agency" value="{{ old('agency') }}">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="current_account" class="form-label">Conta Corrente</label>
+                            <input type="text" class="form-control" id="edit_current_account" name="current_account" value="{{ old('current_account') }}">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="bank" class="form-label">Banco</label>
+                            <input type="text" class="form-control" id="edit_bank" name="bank" value="{{ old('bank') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="pix" class="form-label">Chave PIX</label>
+                            <input type="text" class="form-control" id="edit_pix" name="pix" value="{{ old('pix') }}">
+                        </div> 
+                    </div>
+                </fieldset>
+                
+                
+                
+                <div class="col-md-12">
+                    <input type="hidden" class="form-control" id="edit_company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="edit_id" name="id" value="">                 
+                </div>
+                  
+              
+        </div><!--fim modal-body-->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="submit" class="btn btn-primary editButton">Salvar Alterações <i class="fa-solid fa-paper-plane"></i></button>
+        </div><!--fim modal-footer-->
+        </form><!--finalizando form aqui para garantir pegar a ação do botão de salvar-->
+      </div>
+    </div>
+  </div><!-- fim editModal -->
+
 
 </div><!--fim container-fluid-->
 
@@ -215,34 +301,40 @@
                             id: $(this).attr('data-id'), 
                             name: $(this).attr('data-name'), 
                             email: $(this).attr('data-email'), 
-                            cpf: $(this).attr('data-cpf'), 
+                            responsible: $(this).attr('data-responsible'), 
                             phone: $(this).attr('data-phone'), 
-                            birthday: $(this).attr('data-birthday'), 
+                            cnpj: $(this).attr('data-cnpj'), 
+                            agency: $(this).attr('data-agency'), 
+                            current_account: $(this).attr('data-current_account'), 
+                            bank: $(this).attr('data-bank'), 
+                            pix: $(this).attr('data-pix'), 
                             company_id: $(this).attr('data-company_id'), 
-                            user_profile_id: $(this).attr('data-user_profile_id'), 
                         }
                     ];
-                    editLabel(dados);
+                    editRegistro(dados);
             }else if($(this).hasClass('deleteBtn')){
                 var dados = [{ id: $(this).attr('data-id'), }];
-                    deleteLabel(dados);
+                    deleteRegistro(dados);
             }
         });
 
         /**Função que preenche os campos do formulário de atualização */
-        function editLabel(dados) {
-            let url = "{{ route('users.show', 'id') }}";
+        function editRegistro(dados) {
+            let url = "{{ route('external-offices.show', 'id') }}";
             url = url.replace('id', dados[0].id);
             /**Preenche os campos do form de atualização*/
             $.get(url, function() {
                 $('#edit_id').val(dados[0].id);
                 $('#edit_name').val(dados[0].name);
                 $('#edit_email').val(dados[0].email);
-                $('#edit_cpf').val(dados[0].cpf);
+                $('#edit_responsible').val(dados[0].responsible);
                 $('#edit_phone').val(dados[0].phone);
-                $('#edit_birthday').val(dados[0].birthday);
+                $('#edit_cnpj').val(dados[0].cnpj);
+                $('#edit_agency').val(dados[0].agency);
+                $('#edit_current_account').val(dados[0].current_account);
+                $('#edit_bank').val(dados[0].bank);
+                $('#edit_pix').val(dados[0].pix);
                 $('#edit_company_id').val(dados[0].company_id);
-                $('#edit_user_profile_id').val(dados[0].user_profile_id);
                 $('#updateModal').modal('show');
             });
         }
@@ -252,7 +344,7 @@
             e.preventDefault();
             var id = $('#edit_id').val();
             $.ajax({
-                url: `/update-user/${id}`,
+                url: `/update-external-office/${id}`,
                 method: 'PUT',
                 data: $(this).serialize(),
                 success: function(response) {
@@ -279,7 +371,7 @@
 
         /** Delete */
         /**Exibe pergunta se deseja realmente excluir o registro */
-        function deleteLabel(dados) {
+        function deleteRegistro(dados) {
             Swal.fire({
                 title: 'Você tem certeza que deseja excluir esse registro?',
                 text: "Você não poderá reverter essa operação!",
@@ -297,7 +389,7 @@
                         }
                     });
                     $.ajax({
-                        url: `/destroy-user/${dados[0].id}`,
+                        url: `/destroy-external-office/${dados[0].id}`,
                         method: 'DELETE',
                         success: function() {
                             //$('#labelsTable').DataTable().ajax.reload();

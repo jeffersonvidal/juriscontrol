@@ -206,18 +206,24 @@ APP_LOCALE=pt_BR
 
 []-  Gestão Adminsitrativa
     [x]-  Usuários
-    [x]-  Etiquetas
-    [x]-  Tarefas
-    []-  Empresas
+    [x]-  Escritórios Externos
     []-  Gamificação
 []-  Gestão de Clientes
     []-  Clientes
-    []-  Processos e Casos
-    []-  Consultivos
+    []-  Timesheet - registrar tempo gasto em cada atividade/evento executada para o cliente (id, titulo, descricao, dataInicio, HoraInicio, dataFim, HoraFim, tempoTotal, valorDaHora, valorFinal, statusPagto) - Integrar com caixa do escritório (Receitas e Despesas)
+    Calcular valores e tempo por atividade/evento e emitir relatório com gráfico do total
+[]-  Gestão Jurídica
+    [x]-  Tarefas Diárias
+    []-  Petições Parceiros
+    []-  Audiências/Perícias Parceiros
+    []-  Processos
+    []-  Casos e Consultivos
+    [x]-  Etiquetas
+    []-  Eventos/Timesheet
 []-  Gestão Financeira
     []-  Caixa
-    []-  Contas a Pagar
-    []-  Contas a Receber
+    []-  Faturas (Pagar e Receber)
+    []-  Pagamentos
 []-  Gestão de RH
     []-  Funcionários
     []-  Cargas Horárias
@@ -226,6 +232,9 @@ APP_LOCALE=pt_BR
     []-  Aniversariantes
     []-  Campanhas
     []-  Email Mkt
+[]-  SUPORTE
+    []-  Tutoriais
+    []-  Abrir Chamado
 
 ## APIs Externas
 
