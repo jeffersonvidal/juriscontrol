@@ -205,9 +205,9 @@ APP_LOCALE=pt_BR
 ## Módulos do Sistema
 
 []-  Gestão Adminsitrativa
-    []-  Usuários
-    []-  Etiquetas
-    []-  Tarefas
+    [x]-  Usuários
+    [x]-  Etiquetas
+    [x]-  Tarefas
     []-  Empresas
     []-  Gamificação
 []-  Gestão de Clientes
@@ -235,7 +235,7 @@ APP_LOCALE=pt_BR
 -[] - CORREIOS (CPF)
     -[] -  https://cws.correios.com.br/dashboard/pesquisa
     -[] -  https://api.correios.com.br/token/v3/api-docs
-    -[] -  
+    -[] -  Consulta endereço e cep com viacep - https://viacep.com.br/exemplo/javascript/
     -[] -  
     -[] -  
 -[] - 
