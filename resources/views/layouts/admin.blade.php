@@ -98,8 +98,7 @@
                         </a>
                             <div class="collapse" id="collapseFinance" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="" title="Caixa da Empresa">Caixa</a>
-                                    <a class="nav-link" href="" title="Contas a Pagar e Receber">Pagar e Receber</a>
+                                    <a class="nav-link" href="{{ route('invoices.index') }}" title="Contas a Pagar e Receber">Pagar e Receber</a>
                                     <a class="nav-link" href="" title="Pagamentos">Pagamentos</a>
                                 </nav>
                             </div>

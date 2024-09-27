@@ -3,6 +3,7 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExternalOfficeController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TaskController;
@@ -78,5 +79,12 @@ Route::group(['middleware' => 'auth'], function(){
   Route::post('/store-external-office', [ExternalOfficeController::class, 'store'])->name('external-offices.store'); //Salva novo registro no BD
   Route::put('/update-external-office/{externalOffice}', [ExternalOfficeController::class, 'update'])->name('external-offices.update'); //Atualiza um registro no BD
   Route::delete('/destroy-external-office/{externalOffice}', [ExternalOfficeController::class, 'destroy'])->name('external-offices.destroy'); //Exclui um registro no BD
+
+  /**Rotas de Faturas (Invoices) */
+  Route::get('/index-invoice', [InvoiceController::class, 'index'])->name('invoices.index'); //Listar todos os registros da tabela
+  Route::get('/show-invoice/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show'); //Mostra detalhe de um registro
+  Route::post('/store-invoice', [InvoiceController::class, 'store'])->name('invoices.store'); //Salva novo registro no BD
+  Route::put('/update-invoice/{invoice}', [InvoiceController::class, 'update'])->name('invoices.update'); //Atualiza um registro no BD
+  Route::delete('/destroy-invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy'); //Exclui um registro no BD
 
 }); //fim da restrição de acesso para quem não está logado no sistema
