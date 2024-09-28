@@ -333,3 +333,5 @@ method = card, cash, pix, ted
 
 id, wallet_id, user_id, company_id, invoice_id, customer_id, method, enrollment_of,
 amount_owed, amount_paid, amount_remaining
+
+**
