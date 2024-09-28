@@ -18,6 +18,34 @@ import './datatables-simple-demo';
 import Swal from 'sweetalert2';
 window.Swal = Swal;
 
+/** Habilitar Campos de parcelas no form de faturas */
+let parcelarFatura = document.querySelector('#parcela');
+let parcelarUnica = document.querySelector('#unica');
+let parcelarFixa = document.querySelector('#fixa');
+if(document.querySelector('#parcela')){
+  parcelarFatura.addEventListener("click", () =>{
+    /** Habilita campo de parcela em faturas */
+    if(parcelarFatura.checked == true){
+      document.querySelector('#enrollments').disabled = false;
+      document.querySelector('#enrollments').value = '2';
+      //alert('parcela habilitada');
+    }
+    if(parcelarFatura.checked == false){
+      document.querySelector('#enrollments').disabled = true;
+      document.querySelector('#enrollments').value = '';
+    }
+    parcelarUnica.addEventListener("click", () =>{
+      document.querySelector('#enrollments').disabled = true;
+    });
+    
+    parcelarFixa.addEventListener("click", () =>{
+      document.querySelector('#enrollments').disabled = true;
+      document.querySelector('#enrollments').value = '';
+    });
+  });
+}
+
+
 //Inputmask
 import Inputmask from 'inputmask';
 

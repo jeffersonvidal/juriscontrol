@@ -118,8 +118,13 @@
                         <div class="col-md-6 mb-3">
                             <label for="wallet_id" class="form-label">Carteira</label>
                             <select class="form-select" name="wallet_id" id="wallet_id">
-                                <option value="" >Escolha um</option>
+                                
                                 @foreach ($wallets as $wallet)
+                                    @if ($wallet->main = '1')
+                                    <option value="{{ $wallet->id }}" >{{ $wallet->name }}</option>
+                                    @else
+                                        <option value="" >Escolha um</option>
+                                    @endif
                                     <option value="" >{{ $wallet->name }}</option>
                                 @endforeach
                             </select>
@@ -128,29 +133,30 @@
                             <label for="invoice_category_id" class="form-label">Categoria</label>
                             <select class="form-select" name="invoice_category_id" id="invoice_category_id">
                                 <option value="" >Escolha um</option>
+                                <option value="15" >Teste</option>
                             </select>
                         </div>
                     </div>
                 </fieldset>
                 
                 <fieldset>
-                    <legend><i class="fa-solid fa-right-left"></i> Repetição</legend>
-                    <div class="row">
-                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group col-md-6 mb-3" role="group" aria-label="Basic radio toggle button group">
                             <input type="radio" class="btn-check" name="repeat_when" id="unica" value="unique">
-                            <label class="btn btn-outline-primary" for="unica">Única</label>
+                            <label class="btn btn-sm btn-outline-dark" for="unica">Única</label>
 
                             <input type="radio" class="btn-check" name="repeat_when" id="fixa" value="fixed">
-                            <label class="btn btn-outline-primary" for="fixa">Fixa</label>
+                            <label class="btn btn-sm btn-outline-dark" for="fixa">Fixa</label>
 
                             <input type="radio" class="btn-check" name="repeat_when" id="parcela" value="enrollment">
-                            <label class="btn btn-outline-primary" for="parcela">Parcelas</label>
+                            <label class="btn btn-sm btn-outline-dark" for="parcela">Parcelas</label>
                         </div>
 
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="form-check form-check-inline  mb-3">
+                        <div class=" col-md-6 mb-3">
+                            <div class="form-check form-check-inline  mb-4">
                                 <label for="enrollments" class="form-label">Parcelas</label>
-                                <input type="number" disabled min="2" class="form-control" id="enrollments" name="enrollments" placeholder="10" value="{{ old('value') }}">
+                                <input type="number" disabled min="2" class="form-control" id="enrollments" name="enrollments" placeholder="2" value="{{ old('value') }}">
                             </div>
                         </div>
                     </div>
@@ -169,6 +175,7 @@
                 
                 <div class="col-md-12">
                     <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="user_id" name="user_id" value="{{ auth()->user()->id }}">                 
                 </div>
                 
             
