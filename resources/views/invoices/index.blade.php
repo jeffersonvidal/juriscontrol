@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 <div class="container-fluid px-4">
     <div class="mb-1 hstack gap-2">
         <h2 class="mt-3">Contas a Pagar e Receber</h2>
@@ -16,6 +15,86 @@
     </div>    
 
     <div class="card mb-4 border-light shadow-sm">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col">
+                    <div class="card container text-center">
+                        <div class="card-header text-bg-success p-3 row align-items-end">
+                            <div class="col">
+                                <h5 class="card-title"><i class="fa-solid fa-circle-up"></i> Receita [{{ $mesAtual }}]</h5>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title ms-auto">R$2.562,87</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card container text-center">
+                        <div class="card-header text-bg-danger p-3 row align-items-end">
+                            <div class="col">
+                                <h5 class="card-title"><i class="fa-solid fa-circle-down"></i> Despesa [{{ $mesAtual }}]</h5>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title ms-auto">R$2.562,87</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card container text-center">
+                        <div class="card-header p-3 row align-items-end">
+                            <div class="col">
+                                <h5 class="card-title"><i class="fa-solid fa-sack-dollar"></i> Saldo/Caixa</h5>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title ms-auto">R$2.562,87</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!--fim dirv.row-->
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid px-4">
+
+     <!--buscar entre datas-->
+     <div class="card mt-3 mb-4 border-light shadow">
+        <div class="card-header d-flex justify-content-between">
+            <span>Pesquisar em intervalo de datas</span>
+        </div>
+
+
+        <div class="card-body">
+            <form action="{{ route('invoices.index') }}">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <label for="nome" class="form-label">Nome</label>
+                        <input class="form-control" type="text" name="nome" id="nome" value="{{ $nome }}" placeholder="Nome da fatura">
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <label for="data_inicio" class="form-label">Data Início</label>
+                        <input class="form-control" type="date" name="data_inicio" id="data_inicio" value="{{ $data_inicio }}" placeholder="Nome da fatura">
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <label for="data_fim" class="form-label">Data Fim</label>
+                        <input class="form-control" type="date" name="data_fim" id="data_fim" value="{{ $data_fim }}" placeholder="Nome da fatura">
+                    </div>
+
+                    <div class="col-md-2 col-sm-12 mt-3 pt-4">
+                        <button type="submit" class="btn btn-info btn-sm">Pesquisar</button>
+                        <a href="{{ route('invoices.index') }}" class="btn btn-warning btn-sm">Limpar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+  
+
+    <div class="card mb-4 border-light shadow-sm">
         <div class="card-header hstack gap-2">
             <span>Listar todos os registros</span>
 
@@ -27,6 +106,7 @@
         <div class="card-body">
             <x-alerts />
 
+            
             <table id="datatablesSimple" class="table table-striped table-hover">
                 <thead>
 

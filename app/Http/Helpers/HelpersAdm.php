@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 class HelpersAdm{
 
   /**Laravel Helper Now e Today | Jeito fácil de obter datas e horas no Laravel
@@ -26,6 +28,14 @@ class HelpersAdm{
     }
 
     return str_replace(',', '.', str_replace('.', '', $param));
+  }
+
+  public function getMonth(){
+    \Carbon\Carbon::setLocale('pt_BR');
+    $data = \Carbon\Carbon::now();
+    $mes = $data->translatedFormat('M'); // Formato local abreviado do mês
+    return ucfirst($mes);
 }
+
 
 } /**Fim classe Helper */
