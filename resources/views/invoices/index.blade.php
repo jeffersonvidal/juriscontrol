@@ -21,7 +21,7 @@
                     <div class="card container text-center">
                         <div class="card-header text-bg-success p-3 row align-items-end">
                             <div class="col">
-                                <h5 class="card-title"><i class="fa-solid fa-circle-up"></i> Receita [{{ $mesAtual }}]</h5>
+                                <h5 class="card-title"><i class="fa-solid fa-circle-up"></i> Entrada [{{ $mesAtual }}]</h5>
                             </div>
                             <div class="col">
                                 <h5 class="card-title ms-auto">R$2.562,87</h5>
@@ -33,7 +33,7 @@
                     <div class="card container text-center">
                         <div class="card-header text-bg-danger p-3 row align-items-end">
                             <div class="col">
-                                <h5 class="card-title"><i class="fa-solid fa-circle-down"></i> Despesa [{{ $mesAtual }}]</h5>
+                                <h5 class="card-title"><i class="fa-solid fa-circle-down"></i> Saída [{{ $mesAtual }}]</h5>
                             </div>
                             <div class="col">
                                 <h5 class="card-title ms-auto">R$2.562,87</h5>
