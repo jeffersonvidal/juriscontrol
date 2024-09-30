@@ -130,7 +130,7 @@
                             <td>{{ $invoice->getCategory($invoice->invoice_category_id) }}</td>
                             <td>{{ $invoice->getType($invoice->type) }}</td>
                             <td>{{ 'R$' . number_format($invoice->amount, 2, ',', '.') }}</td>
-                            <td class="text-center align-middle">{{ $invoice->enrollment_of }} / {{ $invoice->getEnrollments($invoice->description) }}</td>
+                            <td class="text-center align-middle">{{ $invoice->enrollment_of }} / {{ $invoice->getEnrollments($invoice->description, $invoice->type) }}</td>
                             <td>{{ \Carbon\Carbon::parse($invoice->due_at)->format('d/m/Y') }}</td>
                             <td>{{ $invoice->getStatus($invoice->status) }}</td>
                                 <td>
@@ -146,11 +146,15 @@
                                         <button class="text-decoration-none btn btn-sm " title="Timesheet - Atividades" data-id="" >
                                         <i class="fa-regular fa-clock"></i></button>
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $invoice->id }}" 
+                                            data-description="{{ $invoice->description }}" data-wallet_id="{{ $invoice->wallet_id }}" data-id="{{ $invoice->id }}"
+                                            data-invoice_category_id="{{ $invoice->invoice_category_id }}" data-invoice_of="{{ $invoice->invoice_of }}" data-type="{{ $invoice->type }}"
+                                            data-amount="{{ $invoice->amount }}" data-due_at="{{ $invoice->due_at }}" data-repeat_when="{{ $invoice->repeat_when }}"
+                                            data-period="{{ $invoice->period }}" data-enrollments="{{ $invoice->enrollments }}" data-enrollment_of="{{ $invoice->enrollment_of }}"
+                                            data-status="{{ $invoice->status }}" 
                                             data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
                                         <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $invoice->id }}" 
                                             data-name="{{ $invoice->name }}" data-hexa_color_bg="{{ $invoice->hexa_color_bg }}" 
                                             data-hexa_color_font="{{ $invoice->hexa_color_font }}" ><i class="fa-solid fa-trash"></i></button>
-
                                     </span>
                                 </td>
                             </tr>
@@ -214,8 +218,10 @@
                         <div class="col-md-6 mb-3">
                             <label for="invoice_category_id" class="form-label">Categoria</label>
                             <select class="form-select" name="invoice_category_id" id="invoice_category_id">
-                                <option value="" >Escolha um</option>
-                                <option value="15" >Teste</option>
+                                <option value="" >Escolha uma</option>
+                                @foreach ($invoiceCategories as $invoiceCategory)
+                                    <option value="{{ $invoiceCategory->id }}" >{{ $invoiceCategory->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -295,13 +301,100 @@
       <form id="updateForm" class="row g-3">
                 @csrf
 
+                <fieldset>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="description" class="form-label">Descrição</label>
+                            <input type="text" class="form-control" id="edit_description" name="description" value="{{ old('description') }}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="amount" class="form-label">Valor</label>
+                            <input type="text" class="form-control" id="edit_amount" name="amount" value="{{ old('amount') }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="due_at" class="form-label">Vencimento</label>
+                            <input type="date" class="form-control" id="edit_due_at" name="due_at" value="{{ old('due_at') }}">
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="wallet_id" class="form-label">Carteira</label>
+                            <select class="form-select" name="wallet_id" id="edit_wallet_id">
+                                
+                                @foreach ($wallets as $wallet)
+                                    @if ($wallet->main = '1')
+                                    <option value="{{ $wallet->id }}" >{{ $wallet->name }}</option>
+                                    @else
+                                        <option value="" >Escolha um</option>
+                                    @endif
+                                    <option value="" >{{ $wallet->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="invoice_category_id" class="form-label">Categoria</label>
+                            <select class="form-select" name="invoice_category_id" id="edit_invoice_category_id">
+                                <option value="" >Escolha um</option>
+                                <option value="" >Teste</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
                 
-                
+                <fieldset>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group col-md-6 mb-3" role="group" aria-label="Basic radio toggle button group">
+                            <input type="radio" class="btn-check" name="repeat_when" id="edit_unica" value="unique">
+                            <label class="btn btn-sm btn-outline-dark" for="unica">Única</label>
+
+                            <input type="radio" class="btn-check" name="repeat_when" id="edit_fixa" value="fixed">
+                            <label class="btn btn-sm btn-outline-dark" for="fixa">Fixa</label>
+
+                            <input type="radio" class="btn-check" name="repeat_when" id="edit_parcela" value="enrollment">
+                            <label class="btn btn-sm btn-outline-dark" for="parcela">Parcelas</label>
+                        </div>
+
+                        <div id="campoParcela" class=" col-md-6 mb-3">
+                            <div class="form-check form-check-inline mb-4">
+                                <label for="enrollments" class="form-label">Parcelas</label>
+                                <input type="number" disabled min="2" class="form-control" id="edit_enrollments" name="enrollments" placeholder="2" value="{{ old('value') }}">
+                            </div>
+                        </div>
+
+                        <div id="campoPeriodo" class="col-md-6 mb-3" style="display:none;">
+                            <div class="form-check mb-4">
+                                <label for="period" class="form-label">Período</label>
+                                <select class="form-select" name="period" id="edit_period">
+                                    <option value="" >Selecione o período</option>
+                                    <option value="month" >Mensal</option>
+                                    <option value="year" >Anual</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                            <input type="radio" class="btn-check" name="type" id="edit_income" value="income" autocomplete="off" >
+                            <label class="btn btn-outline-success" for="income"><i class="fa-solid fa-circle-up"></i> Receita</label>
+
+                            <input type="radio" class="btn-check" name="type" id="edit_expense" value="expense" autocomplete="off">
+                            <label class="btn btn-outline-danger" for="expense"><i class="fa-solid fa-circle-down"></i> Despesa</label>
+                        </div>
+
+                </fieldset>
+
                 
                 <div class="col-md-12">
-                    <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
-                    <input type="hidden" class="form-control" id="edit_id" name="id">                 
-                    <input type="hidden" class="form-control" id="edit_address_id" name="id" value="">                 
+                    <input type="hidden" class="form-control" id="edit_company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="edit_user_id" name="user_id" value="{{ auth()->user()->id }}">                 
+                    <input type="hidden" class="form-control" id="edit_invoice_id" name="id" value="">                 
                 </div>
                 
             

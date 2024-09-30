@@ -51,22 +51,31 @@ class InvoiceController extends Controller
         $inicioMes = Carbon::create($ano, $mes, 1);
         $fimMes = $inicioMes->copy()->endOfMonth();
         $receitaMensal = Invoice::whereBetween('due_at', [$inicioMes, $fimMes])
+            ->where('company_id', auth()->user()->company_id)
             ->where('type', 'income')->sum('amount');
 
         /**Somar Despesas do mês corrente */
         $despesaMensal = Invoice::whereBetween('due_at', [$inicioMes, $fimMes])
+            ->where('company_id', auth()->user()->company_id)
             ->where('type', 'expense')->sum('amount');
 
         /**Somar todas as despesas pagas */
         $despesasTotal = Invoice::where('status', '=', 'paid')
+            ->where('company_id', auth()->user()->company_id)
             ->where('type', 'expense')->sum('amount');
 
         /**Somar todas as receitas pagas */
         $receitasTotal = Invoice::where('status', '=', 'paid')
+            ->where('company_id', auth()->user()->company_id)
             ->where('type', 'income')->sum('amount');
         
         /**Contabiliza saldo em caixa */
         $saldoCaixa = ($receitasTotal - $despesasTotal);
+
+        /**Categorias das Faturas */
+        $invoiceCategories = InvoiceCategory::where('company_id', auth()->user()->company_id)
+            ->orderBy('name', 'ASC')
+            ->get();
 
         
 
@@ -84,6 +93,7 @@ class InvoiceController extends Controller
             'receitaMes' => $receitaMensal,
             'despesaMes' => $despesaMensal,
             'saldoCaixa' => $saldoCaixa,
+            'invoiceCategories' => $invoiceCategories,
         ]);
     }
 
@@ -108,7 +118,7 @@ class InvoiceController extends Controller
             $invoice->type = $request->type;
             $invoice->amount = str_replace([".", ","], ["", "."], $request->amount);
             //$invoice->amount = number_format($request->amount, 2, ',', '.');
-            //$invoice->period = ($request->period ?: "month");
+            $invoice->period = ($request->period == null ? $request->period : "month");
             $invoice->enrollments = ($request->enrollments ?: 1);
             $invoice->enrollment_of = 1;
             $invoice->description = $request->description;

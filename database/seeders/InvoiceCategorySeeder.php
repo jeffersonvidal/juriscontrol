@@ -15,13 +15,29 @@ class InvoiceCategorySeeder extends Seeder
     {
         if(! InvoiceCategory::where("id","1")->first()){
             InvoiceCategory::create([
-                'name' => 'month',
+                'name' => 'Salário',
+                'value' => 'salario',
                 'company_id' => '1',
             ]);
         }
         if(! InvoiceCategory::where("id","2")->first()){
             InvoiceCategory::create([
-                'name' => 'year',
+                'name' => 'Empréstimo',
+                'value' => 'emprestimo',
+                'company_id' => '1',
+            ]);
+        }
+        if(! InvoiceCategory::where("id","3")->first()){
+            InvoiceCategory::create([
+                'name' => 'Investimento',
+                'value' => 'investimento',
+                'company_id' => '1',
+            ]);
+        }
+        if(! InvoiceCategory::where("id","4")->first()){
+            InvoiceCategory::create([
+                'name' => 'Diversos',
+                'value' => 'diversos',
                 'company_id' => '1',
             ]);
         }

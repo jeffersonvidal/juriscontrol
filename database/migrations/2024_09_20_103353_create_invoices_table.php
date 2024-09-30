@@ -24,7 +24,7 @@ return new class extends Migration
             $table->double('amount'); //valor total da fatura
             $table->date('due_at'); //data de vencimento
             $table->string('repeat_when'); //se é unica, fixa ou parcelada
-            $table->string('preiod')->nullable(); //quando for fixa (mensal/anual)
+            $table->string('period')->nullable(); //quando for fixa (mensal/anual)
             $table->integer('enrollments'); //quantidade de parcelas
             $table->integer('enrollment_of'); //número da parcela
             $table->string('status'); //pago, não pago, atrasado

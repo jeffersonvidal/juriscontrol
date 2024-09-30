@@ -19,7 +19,7 @@ class Invoice extends Model implements Auditable
 
     //Quais colunas para serem cadastradas
     protected $fillable = ['description','wallet_id', 'user_id','company_id', 'customer_id',
-    'invoice_category_id', 'invoice_of', 'type', 'amount', 'due_at', 'repeat_when', 'preiod', 
+    'invoice_category_id', 'invoice_of', 'type', 'amount', 'due_at', 'repeat_when', 'period', 
     'enrollments', 'enrollment_of', 'status'];
 
     public function getStatus($status){
@@ -43,13 +43,7 @@ class Invoice extends Model implements Auditable
     public function getCategory($category){
         $theCategory = InvoiceCategory::where('id', $category)
             ->where('company_id', auth()->user()->company_id)->first();
-        if($theCategory->name == 'month'){
-            return 'Mensal';
-        }
-        
-        if($theCategory->name == 'year'){
-            return 'Anual';
-        }
+        return $theCategory->name;
     }
 
     /**Pega o número do mês da data informada */
@@ -73,8 +67,9 @@ class Invoice extends Model implements Auditable
     }
 
     /**Pega quantidade de parcelas de uma fatura */
-    public function getEnrollments($invoice){
-        return Invoice::where('description', $invoice)->count();
+    public function getEnrollments($invoice, $type){
+        return Invoice::where('description', $invoice)
+            ->where('type', $type)->count();
     }
       
 }

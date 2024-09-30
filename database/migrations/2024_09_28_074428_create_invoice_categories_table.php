@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('invoice_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name'); //nome visível no sistema
+            $table->string('value'); //valor que será usado nas lógicas/regras de negócio
             $table->integer('company_id');
             $table->timestamps();
         });
