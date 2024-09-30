@@ -34,6 +34,18 @@ document.querySelectorAll('input[name="repeat_when"]').forEach(function(radio) {
     }
   });
 });
+/**UpdateForm - Se clicar em fixa oculta campo parcelas e mostra o período (mensal/anual) */
+document.querySelectorAll('input[name="repeat_when"]').forEach(function(radio) {
+  radio.addEventListener('change', function() {
+    if (document.querySelector('#edit_fixa').checked) {
+      $('#editCampoParcela').hide('slow');
+      $('#editCampoPeriodo').show('slow');
+    } else {
+      $('#editCampoPeriodo').hide('slow');
+      $('#editCampoParcela').show('slow');
+    }
+  });
+});
 
 if(document.querySelector('#parcela')){
   parcelarFatura.addEventListener("click", () =>{

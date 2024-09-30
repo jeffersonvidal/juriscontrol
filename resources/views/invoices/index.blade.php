@@ -141,7 +141,8 @@
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $invoice->id }}" 
                                             data-description="{{ $invoice->description }}" data-wallet_id="{{ $invoice->wallet_id }}" data-id="{{ $invoice->id }}"
                                             data-invoice_category_id="{{ $invoice->invoice_category_id }}" data-invoice_of="{{ $invoice->invoice_of }}" data-type="{{ $invoice->type }}"
-                                            data-amount="{{ $invoice->amount }}" data-due_at="{{ $invoice->due_at }}" data-repeat_when="{{ $invoice->repeat_when }}"
+                                            data-amount="{{ $invoice->amount }}" data-due_at="{{ $invoice->due_at }}" 
+                                            data-unica="{{ $invoice->repeat_when }}" data-fixa="{{ $invoice->repeat_when }}" data-parcela="{{ $invoice->repeat_when }}"
                                             data-period="{{ $invoice->period }}" data-enrollments="{{ $invoice->enrollments }}" data-enrollment_of="{{ $invoice->enrollment_of }}"
                                             data-status="{{ $invoice->status }}" 
                                             data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
@@ -208,6 +209,7 @@
                                 @endforeach
                             </select>
                         </div>
+
                         <div class="col-md-6 mb-3">
                             <label for="invoice_category_id" class="form-label">Categoria</label>
                             <select class="form-select" name="invoice_category_id" id="invoice_category_id">
@@ -328,11 +330,14 @@
                                 @endforeach
                             </select>
                         </div>
+
                         <div class="col-md-6 mb-3">
                             <label for="invoice_category_id" class="form-label">Categoria</label>
                             <select class="form-select" name="invoice_category_id" id="edit_invoice_category_id">
-                                <option value="" >Escolha um</option>
-                                <option value="" >Teste</option>
+                                <option value="" >Escolha uma</option>
+                                @foreach ($invoiceCategories as $invoiceCategory)
+                                    <option value="{{ $invoiceCategory->id }}" >{{ $invoiceCategory->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -352,14 +357,14 @@
                             <label class="btn btn-sm btn-outline-dark" for="parcela">Parcelas</label>
                         </div>
 
-                        <div id="campoParcela" class=" col-md-6 mb-3">
+                        <div id="editCampoParcela" class=" col-md-6 mb-3">
                             <div class="form-check form-check-inline mb-4">
                                 <label for="enrollments" class="form-label">Parcelas</label>
                                 <input type="number" disabled min="2" class="form-control" id="edit_enrollments" name="enrollments" placeholder="2" value="{{ old('value') }}">
                             </div>
                         </div>
 
-                        <div id="campoPeriodo" class="col-md-6 mb-3" style="display:none;">
+                        <div id="editCampoPeriodo" class="col-md-6 mb-3" style="display:none;">
                             <div class="form-check mb-4">
                                 <label for="period" class="form-label">Período</label>
                                 <select class="form-select" name="period" id="edit_period">
@@ -451,7 +456,7 @@
                             type: $(this).attr('data-type'), 
                             amount: $(this).attr('data-amount'), 
                             due_at: $(this).attr('data-due_at'), 
-                            repeat_when: $(this).attr('data-repeat_when'), 
+                            //repeat_when: $(this).attr('data-repeat_when'), 
                             period: $(this).attr('data-period'), 
                             enrollments: $(this).attr('data-enrollments'), 
                             enrollment_of: $(this).attr('data-enrollment_of'), 
@@ -502,11 +507,28 @@
                     $('#edit_type').val(data.type);
                     $('#edit_amount').val(data.amount);
                     $('#edit_due_at').val(data.due_at);
-                    $('#edit_repeat_when').val(data.repeat_when);
                     $('#edit_period').val(data.period);
                     $('#edit_enrollments').val(data.enrollments);
                     $('#edit_enrollment_of').val(data.enrollment_of);
                     $('#edit_status').val(data.status);
+                    const campoRepeat = document.querySelector('input[name="repeat_when"][value="'+data.repeat_when+'"]');
+                    if(campoRepeat){
+                        if(campoRepeat.id == 'parcela'){
+                            $('#edit_repeat_when').val('enrollment');
+                            campoRepeat.checked = true;
+                        }else if(campoRepeat.id == 'unica'){
+                            $('#edit_repeat_when').val('unique');
+                            campoRepeat.checked = true;
+                        }else{
+                            $('#edit_repeat_when').val('fixed');
+                            campoRepeat.checked = true;
+                        }
+                        
+                        console.log(data);
+                    }
+
+                    
+
                 })
                 .catch(error => {
                     console.error('Erro:', error);
@@ -589,93 +611,6 @@
 
         
     });
-
-    /**ViaCEP - Cadastro*/
-    function limpa_formulário_cep() {
-        //Limpa valores do formulário de Create.
-        document.getElementById('street').value=("");
-        document.getElementById('neighborhood').value=("");
-        document.getElementById('city').value=("");
-        document.getElementById('stateUF').value=("");
-        
-        //Limpa valores do formulário de Update.
-        document.getElementById('edit_street').value=("");
-        document.getElementById('edit_neighborhood').value=("");
-        document.getElementById('edit_city').value=("");
-        document.getElementById('edit_state').value=("");
-        //document.getElementById('ibge').value=("");
-    }
-
-    function meu_callback(conteudo) {
-        if (!("erro" in conteudo)) {
-            //Atualiza os campos com os valores no form Create.
-            document.getElementById('street').value=(conteudo.logradouro);
-            document.getElementById('neighborhood').value=(conteudo.bairro);
-            document.getElementById('city').value=(conteudo.localidade);
-            document.getElementById('stateUF').value=(conteudo.uf);
-
-            //Atualiza os campos com os valores no form Update.
-            document.getElementById('edit_street').value=(conteudo.logradouro);
-            document.getElementById('edit_neighborhood').value=(conteudo.bairro);
-            document.getElementById('edit_city').value=(conteudo.localidade);
-            document.getElementById('edit_state').value=(conteudo.uf);
-            //document.getElementById('ibge').value=(conteudo.ibge);
-        } //end if.
-        else {
-            //CEP não Encontrado.
-            limpa_formulário_cep();
-            alert("CEP não encontrado.");
-        }
-    }
-
-    function pesquisacep(valor) {
-
-        //Nova variável "cep" somente com dígitos.
-        var cep = valor.replace(/\D/g, '');
-
-        //Verifica se campo cep possui valor informado.
-        if (cep != "") {
-
-            //Expressão regular para validar o CEP.
-            var validacep = /^[0-9]{8}$/;
-
-            //Valida o formato do CEP.
-            if(validacep.test(cep)) {
-
-                //Preenche os campos com "..." enquanto consulta webservice - form Create.
-                document.getElementById('street').value="...";
-                document.getElementById('neighborhood').value="...";
-                document.getElementById('city').value="...";
-                document.getElementById('stateUF').value="...";
-
-                //Preenche os campos com "..." enquanto consulta webservice - form Update.
-                document.getElementById('edit_street').value="...";
-                document.getElementById('edit_neighborhood').value="...";
-                document.getElementById('edit_city').value="...";
-                document.getElementById('edit_state').value="...";
-                //document.getElementById('ibge').value="...";
-
-                //Cria um elemento javascript.
-                var script = document.createElement('script');
-
-                //Sincroniza com o callback.
-                script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
-
-                //Insere script no documento e carrega o conteúdo.
-                document.body.appendChild(script);
-
-            } //end if.
-            else {
-                //cep é inválido.
-                limpa_formulário_cep();
-                alert("Formato de CEP inválido. Digite apenas números");
-            }
-        } //end if.
-        else {
-            //cep sem valor, limpa formulário.
-            limpa_formulário_cep();
-        }
-    };//Fim via cep
 
     
 </script>
