@@ -127,10 +127,10 @@
                             <tr>
                             <td>{{ $invoice->description }}</td>
                             <td>{{ $invoice->invoice_category_id }}</td>
-                            <td>{{ $invoice->type }}</td>
+                            <td>{{ $invoice->getType($invoice->type) }}</td>
                             <td>{{ $invoice->amount }}</td>
                             <td>{{ $invoice->due_at }}</td>
-                            <td>{{ $invoice->status }}</td>
+                            <td>{{ $invoice->getStatus($invoice->status) }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
                                         <a href="{{ route('invoices.show', ['invoice' => $invoice->id]) }}" class="btn btn-sm me-1 mb-1 mb-sm-0" title="Ver Registro"><i class="fa-solid fa-eye"></i></a>
@@ -243,11 +243,11 @@
 
                     <div class="row">
                         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                            <input type="radio" class="btn-check" name="type" id="type1" autocomplete="off" >
-                            <label class="btn btn-outline-success" for="type1"><i class="fa-solid fa-circle-up"></i> Entrada</label>
+                            <input type="radio" class="btn-check" name="type" id="income" value="income" autocomplete="off" >
+                            <label class="btn btn-outline-success" for="income"><i class="fa-solid fa-circle-up"></i> Entrada</label>
 
-                            <input type="radio" class="btn-check" name="type" id="type2" autocomplete="off">
-                            <label class="btn btn-outline-danger" for="type2"><i class="fa-solid fa-circle-down"></i> Saída</label>
+                            <input type="radio" class="btn-check" name="type" id="expense" value="expense" autocomplete="off">
+                            <label class="btn btn-outline-danger" for="expense"><i class="fa-solid fa-circle-down"></i> Saída</label>
                         </div>
 
                 </fieldset>

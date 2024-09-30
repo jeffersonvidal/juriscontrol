@@ -20,7 +20,8 @@ class InvoiceRequest extends FormRequest
         /**required|unique:posts|max:255 */
         return [
             'description' => 'required',
-            'amount' => 'required|regex:/^\d{1,3}(\.\d{3})*,\d{2}$/',
+            //'amount' => 'required|regex:/^\d{1,3}(\.\d{3})*,\d{2}$/',//valor monetário padrão brasileiro
+            'amount' => 'required',
             'due_at' => 'required',
             'wallet_id' => 'required',
             'invoice_category_id' => 'required',
@@ -42,7 +43,7 @@ class InvoiceRequest extends FormRequest
             'user_id.required' => 'Informe o usuário que está registrando esse lançamento!',
             'type.required' => 'Informe se esse lançamento é de Entrada ou Saída!',
             'amount.required' => 'O campo Valor é obrigatório.',
-            'amount.regex' => 'O campo valor deve estar no formato monetário brasileiro (ex: 1.234,56).',
+            //'amount.regex' => 'O campo valor deve estar no formato monetário brasileiro (ex: 1.234,56).',
             'due_at.required' => 'Informe o vencimento desse lançamento!',
             'repeat_when.required' => 'Informe se o lançamento é parcelado, pagamento único ou fixo!',
             'enrollments.integer' => 'O Parcelas deve ser um número inteiro.',
