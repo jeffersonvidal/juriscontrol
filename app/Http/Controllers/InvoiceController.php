@@ -194,15 +194,9 @@ class InvoiceController extends Controller
      */
     public function show(Invoice $invoice)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Invoice $invoice)
-    {
-        //
+        //$theInvoice = Invoice::find($invoice)->first();
+        //return response()->json($theInvoice);
+        return response()->json($invoice);
     }
 
     /**

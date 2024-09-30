@@ -136,15 +136,8 @@
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
                                         <a href="{{ route('invoices.show', ['invoice' => $invoice->id]) }}" class="btn btn-sm me-1 mb-1 mb-sm-0" title="Ver Registro"><i class="fa-solid fa-eye"></i></a>
-
-                                        <button class="text-decoration-none btn btn-sm " title="Novo Processo" data-id="{{ $invoice->id }}" >
-                                            <i class="fa-regular fa-file-lines"></i></button>
-                                        <button class="text-decoration-none btn btn-sm " title="Novo Caso" data-id="{{ $invoice->id }}" >
-                                            <i class="fa-solid fa-book"></i></button>
-                                        <button class="text-decoration-none btn btn-sm " title="Novo Endereço" data-id="{{ $invoice->id }}" >
-                                            <i class="fa-solid fa-earth-americas"></i></button>
-                                        <button class="text-decoration-none btn btn-sm " title="Timesheet - Atividades" data-id="" >
-                                        <i class="fa-regular fa-clock"></i></button>
+                                        <button class="text-decoration-none btn btn-sm " title="Dar Baixa / Pagar" data-id="" >
+                                        <i class="fa-solid fa-money-bill-1-wave"></i></button>
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $invoice->id }}" 
                                             data-description="{{ $invoice->description }}" data-wallet_id="{{ $invoice->wallet_id }}" data-id="{{ $invoice->id }}"
                                             data-invoice_category_id="{{ $invoice->invoice_category_id }}" data-invoice_of="{{ $invoice->invoice_of }}" data-type="{{ $invoice->type }}"
@@ -415,7 +408,6 @@
 <script>
     /**Add in database - store */
     $(document).ready(function(){
-        
         /** Cadastrar registro funcionando com sucesso */
         $('#createForm').on('submit', function(e) {
             e.preventDefault();
@@ -448,28 +440,25 @@
             // ['company_id', 'name','email','phone','rg',
             // 'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday'];
             if($(this).hasClass('editBtn')){
-                // var dados = [
-                //         { 
-                //             id: $(this).attr('data-id'), 
-                //             name: $(this).attr('data-name'), 
-                //             email: $(this).attr('data-email'), 
-                //             phone: $(this).attr('data-phone'), 
-                //             rg: $(this).attr('data-rg'), 
-                //             rg_expedidor: $(this).attr('data-rg_expedidor'), 
-                //             cpf: $(this).attr('data-cpf'), 
-                //             marital_status: $(this).attr('data-marital_status'), 
-                //             nationality: $(this).attr('data-nationality'), 
-                //             profession: $(this).attr('data-profession'), 
-                //             birthday: $(this).attr('data-birthday'), 
-                //             zipcode: $(this).attr('data-zipcode'), 
-                //             street: $(this).attr('data-street'), 
-                //             num: $(this).attr('data-num'), 
-                //             complement: $(this).attr('data-complement'), 
-                //             neighborhood: $(this).attr('data-neighborhood'), 
-                //             city: $(this).attr('data-city'), 
-                //             state: $(this).attr('data-state'), 
-                //         }
-                //     ];
+                var dados = [
+                        { 
+                            id: $(this).attr('data-description'), 
+                            wallet_id: $(this).attr('data-wallet_id'), 
+                            user_id: $(this).attr('data-user_id'), 
+                            company_id: $(this).attr('data-company_id'), 
+                            invoice_category_id: $(this).attr('data-invoice_category_id'), 
+                            invoice_of: $(this).attr('data-invoice_of'), 
+                            type: $(this).attr('data-type'), 
+                            amount: $(this).attr('data-amount'), 
+                            due_at: $(this).attr('data-due_at'), 
+                            repeat_when: $(this).attr('data-repeat_when'), 
+                            period: $(this).attr('data-period'), 
+                            enrollments: $(this).attr('data-enrollments'), 
+                            enrollment_of: $(this).attr('data-enrollment_of'), 
+                            status: $(this).attr('data-status'), 
+                        }
+
+                    ];
                     editRegistro($(this).attr('data-id'));
             }else if($(this).hasClass('deleteBtn')){
                 var dados = [
@@ -486,6 +475,7 @@
         function editRegistro(id) {
             let url = "{{ route('invoices.show', 'id') }}";
             url = url.replace('id', id);
+            //console.log(url);
             /**Preenche os campos do form de atualização*/
             $.get(url, function() {
                 fetch(url)
@@ -494,34 +484,29 @@
                     throw new Error('Erro na rede: ' + response.statusText);
                     }
                     return response.json();
+//                    console.log('Response: ' + response);
                 })
                 .then(data => {
+                    //console.log(data.description);
+                    //console.log(data[0]); //lista dados pessoais
                     /**console.log(data[0][0]['invoice']); //lista dados pessoais
-                     ** console.log(data[0][0]); //Lista dados do endereço */
+                    /** console.log(data[0][0]); //Lista dados do endereço */
                     /**Dados pessoais*/
-                    $('#edit_id').val(data[0][0]['invoice'].id);
-                    $('#edit_name').val(data[0][0]['invoice'].name);
-                    $('#edit_email').val(data[0][0]['invoice'].email);
-                    $('#edit_phone').val(data[0][0]['invoice'].phone);
-                    $('#edit_rg').val(data[0][0]['invoice'].rg);
-                    $('#edit_rg_expedidor').val(data[0][0]['invoice'].rg_expedidor);
-                    $('#edit_cpf').val(data[0][0]['invoice'].cpf);
-                    $('#edit_marital_status').val(data[0][0]['invoice'].marital_status);
-                    $('#edit_nationality').val(data[0][0]['invoice'].nationality);
-                    $('#edit_profession').val(data[0][0]['invoice'].profession);
-                    $('#edit_birthday').val(data[0][0]['invoice'].birthday);
-                    $('#edit_met_us').val(data[0][0]['invoice'].met_us);
-
-                    /**Endereço*/
-                    $('#edit_cep').val(data[0][0].zipcode);
-                    $('#edit_street').val(data[0][0].street);
-                    $('#edit_num').val(data[0][0].num);
-                    $('#edit_complement').val(data[0][0].complement);
-                    $('#edit_neighborhood').val(data[0][0].neighborhood);
-                    $('#edit_city').val(data[0][0].city);
-                    $('#edit_state').val(data[0][0].state);
-                    $('#edit_invoice_id').val(data[0][0].invoice_id);
-                    $('#edit_address_id').val(data[0][0].id);
+                    $('#edit_id').val(data.id);
+                    $('#edit_description').val(data.description);
+                    $('#edit_wallet_id').val(data.wallet_id);
+                    $('#edit_user_id').val(data.user_id);
+                    $('#edit_company_id').val(data.company_id);
+                    $('#edit_invoice_category_id').val(data.invoice_category_id);
+                    $('#edit_invoice_of').val(data.invoice_of);
+                    $('#edit_type').val(data.type);
+                    $('#edit_amount').val(data.amount);
+                    $('#edit_due_at').val(data.due_at);
+                    $('#edit_repeat_when').val(data.repeat_when);
+                    $('#edit_period').val(data.period);
+                    $('#edit_enrollments').val(data.enrollments);
+                    $('#edit_enrollment_of').val(data.enrollment_of);
+                    $('#edit_status').val(data.status);
                 })
                 .catch(error => {
                     console.error('Erro:', error);
