@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\InvoiceRequest;
 use App\Models\InvoiceCategory;
 use App\Models\Wallet;
+use Carbon\Carbon;
 use Exception;
 use HelpersAdm;
 use Illuminate\Http\Request;
@@ -15,24 +16,22 @@ use Illuminate\Support\Facades\DB;
 class InvoiceController extends Controller
 {
     private $helperAdm;
+    private $modelFunctions;
 
-    public function __construct(\HelpersAdm $helpersAdm){
+    public function __construct(\HelpersAdm $helpersAdm, Invoice $invoice){
         $this->helperAdm = $helpersAdm;
+        $this->modelFunctions = $invoice;
     }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        // $invoices = Invoice::where('company_id', auth()->user()->company_id)
-        // ->orderBy('id', 'DESC')->get();
-        
+        /**Pega todas as wallets da empresa */
         $wallets = Wallet::where('company_id', auth()->user()->company_id)
         ->orderBy('id', 'DESC')->get();
 
-        //Carrega a view
-        // return view('invoices.index', ['invoices' => $invoices, 'wallets' => $wallets]);
-
+        /**Pega todos os registros inclusive na busca personalizada */
         $invoices = Invoice::when($request->has('nome'), function ($whenQuery) use ($request){
             $whenQuery->where('description', 'like', '%' . $request->nome . '%');
         })
@@ -46,6 +45,32 @@ class InvoiceController extends Controller
         ->orderBy('created_at')
         ->get();
 
+        /**Somar receitas do mês corrente */
+        $mes = $this->modelFunctions->getCurrentNumberMonth();
+        $ano = $this->modelFunctions->getCurrentNumberYear();
+        $inicioMes = Carbon::create($ano, $mes, 1);
+        $fimMes = $inicioMes->copy()->endOfMonth();
+        $receitaMensal = Invoice::whereBetween('due_at', [$inicioMes, $fimMes])
+            ->where('type', 'income')->sum('amount');
+
+        /**Somar Despesas do mês corrente */
+        $despesaMensal = Invoice::whereBetween('due_at', [$inicioMes, $fimMes])
+            ->where('type', 'expense')->sum('amount');
+
+        /**Somar todas as despesas pagas */
+        $despesasTotal = Invoice::where('status', '=', 'paid')
+            ->where('type', 'expense')->sum('amount');
+
+        /**Somar todas as receitas pagas */
+        $receitasTotal = Invoice::where('status', '=', 'paid')
+            ->where('type', 'income')->sum('amount');
+        
+        /**Contabiliza saldo em caixa */
+        $saldoCaixa = ($receitasTotal - $despesasTotal);
+
+        
+
+        /**Pega as funções do helper */
         $helper = new HelpersAdm;
 
         //Carrega a view
@@ -56,6 +81,9 @@ class InvoiceController extends Controller
             'data_fim' => $request->data_fim,
             'wallets' => $wallets,
             'mesAtual' => $helper->getMonth(),
+            'receitaMes' => $receitaMensal,
+            'despesaMes' => $despesaMensal,
+            'saldoCaixa' => $saldoCaixa,
         ]);
     }
 

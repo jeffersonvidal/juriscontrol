@@ -21,10 +21,10 @@
                     <div class="card container text-center">
                         <div class="card-header text-bg-success p-3 row align-items-end">
                             <div class="col">
-                                <h5 class="card-title"><i class="fa-solid fa-circle-up"></i> Entrada [{{ $mesAtual }}]</h5>
+                                <h5 class="card-title"><i class="fa-solid fa-circle-up"></i> Receita [{{ $mesAtual }}]</h5>
                             </div>
                             <div class="col">
-                                <h5 class="card-title ms-auto">R$2.562,87</h5>
+                                <h5 class="card-title ms-auto">{{ 'R$' . number_format($receitaMes, 2, ',', '.') }}</h5>
                             </div>
                         </div>
                     </div>
@@ -33,10 +33,10 @@
                     <div class="card container text-center">
                         <div class="card-header text-bg-danger p-3 row align-items-end">
                             <div class="col">
-                                <h5 class="card-title"><i class="fa-solid fa-circle-down"></i> Saída [{{ $mesAtual }}]</h5>
+                                <h5 class="card-title"><i class="fa-solid fa-circle-down"></i> Despesa [{{ $mesAtual }}]</h5>
                             </div>
                             <div class="col">
-                                <h5 class="card-title ms-auto">R$2.562,87</h5>
+                                <h5 class="card-title ms-auto">{{ 'R$' . number_format($despesaMes, 2, ',', '.') }}</h5>
                             </div>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                                 <h5 class="card-title"><i class="fa-solid fa-sack-dollar"></i> Saldo/Caixa</h5>
                             </div>
                             <div class="col">
-                                <h5 class="card-title ms-auto">R$2.562,87</h5>
+                                <h5 class="card-title ms-auto">{{ 'R$' . number_format($saldoCaixa, 2, ',', '.') }}</h5>
                             </div>
                         </div>
                     </div>
@@ -115,6 +115,7 @@
                         <th>Categoria</th>
                         <th>Tipo</th>
                         <th>Valor</th>
+                        <th>Parcela</th>
                         <th>Vencimento</th>
                         <th>Status</th>
                         <th class="text-center">Ações</th>
@@ -126,10 +127,11 @@
                         @foreach ($invoices as $invoice)
                             <tr>
                             <td>{{ $invoice->description }}</td>
-                            <td>{{ $invoice->invoice_category_id }}</td>
+                            <td>{{ $invoice->getCategory($invoice->invoice_category_id) }}</td>
                             <td>{{ $invoice->getType($invoice->type) }}</td>
-                            <td>{{ $invoice->amount }}</td>
-                            <td>{{ $invoice->due_at }}</td>
+                            <td>{{ 'R$' . number_format($invoice->amount, 2, ',', '.') }}</td>
+                            <td class="text-center align-middle">{{ $invoice->enrollment_of }} / {{ $invoice->getEnrollments($invoice->description) }}</td>
+                            <td>{{ \Carbon\Carbon::parse($invoice->due_at)->format('d/m/Y') }}</td>
                             <td>{{ $invoice->getStatus($invoice->status) }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
@@ -233,21 +235,33 @@
                             <label class="btn btn-sm btn-outline-dark" for="parcela">Parcelas</label>
                         </div>
 
-                        <div class=" col-md-6 mb-3">
-                            <div class="form-check form-check-inline  mb-4">
+                        <div id="campoParcela" class=" col-md-6 mb-3">
+                            <div class="form-check form-check-inline mb-4">
                                 <label for="enrollments" class="form-label">Parcelas</label>
                                 <input type="number" disabled min="2" class="form-control" id="enrollments" name="enrollments" placeholder="2" value="{{ old('value') }}">
                             </div>
                         </div>
+
+                        <div id="campoPeriodo" class="col-md-6 mb-3" style="display:none;">
+                            <div class="form-check mb-4">
+                                <label for="period" class="form-label">Período</label>
+                                <select class="form-select" name="period" id="period">
+                                    <option value="" >Selecione o período</option>
+                                    <option value="month" >Mensal</option>
+                                    <option value="year" >Anual</option>
+                                </select>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="row">
                         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                             <input type="radio" class="btn-check" name="type" id="income" value="income" autocomplete="off" >
-                            <label class="btn btn-outline-success" for="income"><i class="fa-solid fa-circle-up"></i> Entrada</label>
+                            <label class="btn btn-outline-success" for="income"><i class="fa-solid fa-circle-up"></i> Receita</label>
 
                             <input type="radio" class="btn-check" name="type" id="expense" value="expense" autocomplete="off">
-                            <label class="btn btn-outline-danger" for="expense"><i class="fa-solid fa-circle-down"></i> Saída</label>
+                            <label class="btn btn-outline-danger" for="expense"><i class="fa-solid fa-circle-down"></i> Despesa</label>
                         </div>
 
                 </fieldset>
@@ -308,6 +322,7 @@
 <script>
     /**Add in database - store */
     $(document).ready(function(){
+        
         /** Cadastrar registro funcionando com sucesso */
         $('#createForm').on('submit', function(e) {
             e.preventDefault();

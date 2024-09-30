@@ -35,7 +35,7 @@ class HelpersAdm{
     $data = \Carbon\Carbon::now();
     $mes = $data->translatedFormat('M'); // Formato local abreviado do mês
     return ucfirst($mes);
-}
+  }
 
 
 } /**Fim classe Helper */

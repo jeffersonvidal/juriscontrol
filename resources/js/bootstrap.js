@@ -22,6 +22,19 @@ window.Swal = Swal;
 let parcelarFatura = document.querySelector('#parcela');
 let parcelarUnica = document.querySelector('#unica');
 let parcelarFixa = document.querySelector('#fixa');
+/**Se clicar em fixa oculta campo parcelas e mostra o período (mensal/anual) */
+document.querySelectorAll('input[name="repeat_when"]').forEach(function(radio) {
+  radio.addEventListener('change', function() {
+    if (document.querySelector('#fixa').checked) {
+      $('#campoParcela').hide('slow');
+      $('#campoPeriodo').show('slow');
+    } else {
+      $('#campoPeriodo').hide('slow');
+      $('#campoParcela').show('slow');
+    }
+  });
+});
+
 if(document.querySelector('#parcela')){
   parcelarFatura.addEventListener("click", () =>{
     /** Habilita campo de parcela em faturas */
@@ -37,11 +50,7 @@ if(document.querySelector('#parcela')){
     parcelarUnica.addEventListener("click", () =>{
       document.querySelector('#enrollments').disabled = true;
     });
-    
-    parcelarFixa.addEventListener("click", () =>{
-      document.querySelector('#enrollments').disabled = true;
-      document.querySelector('#enrollments').value = '';
-    });
+
   });
 }
 

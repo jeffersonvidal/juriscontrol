@@ -16,7 +16,7 @@ class WalletSeeder extends Seeder
         /**Company 1 */
         if(! Wallet::where("id","1")->first()){
             Wallet::create([
-                'name' => 'Nubank',
+                'name' => 'Nubank Escritório',
                 'agency' => '0001',
                 'current_account' => '4',
                 'balance' => '900',

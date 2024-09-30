@@ -14,20 +14,20 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->longText('description');
-            $table->integer('wallet_id');
-            $table->integer('user_id');
-            $table->integer('company_id');
-            $table->integer('customer_id')->nullable();
-            $table->integer('invoice_category_id');
+            $table->integer('wallet_id'); //id da carteira onde será lançada a fatura
+            $table->integer('user_id'); //id do usuário que cadastrou a fatura
+            $table->integer('company_id'); //id da empresa/escritório logado
+            $table->integer('customer_id')->nullable(); //id do cliente
+            $table->integer('invoice_category_id'); //id da categoria da fatura
             $table->integer('invoice_of')->nullable();
-            $table->string('type');
-            $table->double('amount');
-            $table->date('due_at');
-            $table->string('repeat_when');
-            $table->string('preiod')->nullable();
-            $table->integer('enrollments');
-            $table->integer('enrollment_of');
-            $table->string('status');
+            $table->string('type'); //receita (income) ou despesa (expense)
+            $table->double('amount'); //valor total da fatura
+            $table->date('due_at'); //data de vencimento
+            $table->string('repeat_when'); //se é unica, fixa ou parcelada
+            $table->string('preiod')->nullable(); //quando for fixa (mensal/anual)
+            $table->integer('enrollments'); //quantidade de parcelas
+            $table->integer('enrollment_of'); //número da parcela
+            $table->string('status'); //pago, não pago, atrasado
             $table->softDeletes();
             $table->timestamps();
         });
