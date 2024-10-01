@@ -202,9 +202,48 @@ class InvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Invoice $invoice)
+    public function update(InvoiceRequest $request, Invoice $invoice)
     {
-        //
+        //Validar o formulário
+        $request->validated();
+        
+
+        //garantir que salve nas duas tabelas do banco de dados
+        DB::beginTransaction();
+
+        try {
+            
+            
+            $editInvoice = Invoice::where('id', $invoice->id)
+            ->where('company_id', auth()->user()->company_id)->update([
+                'invoice_of' => $request->invoice_of,
+                'type' => $request->type,
+                'amount' => str_replace([".", ","], ["", "."], $request->amount),
+                'period' => ($request->period == null ? $request->period : "month"),
+                'enrollments' => ($request->enrollments ?: 1),
+                'enrollment_of' => 1,
+                'description' => $request->description,
+                'due_at' => $request->due_at,
+                'wallet_id' => $request->wallet_id,
+                'invoice_category_id' => $request->invoice_category_id,
+                'repeat_when' => $request->repeat_when,
+                'company_id' => $request->company_id,
+                'user_id' => auth()->user()->id,
+                'status' => "unpaid",
+            ]);
+
+            //comita depois de tudo ter sido salvo
+            DB::commit();
+
+            //Redireciona para outra página após cadastrar com sucesso
+            return response()->json( ['success' => 'Registro alterado com sucesso!']);
+        } catch (Exception $e) {
+            //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+            DB::rollBack();
+
+            //Redireciona para outra página se der erro
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -212,6 +251,23 @@ class InvoiceController extends Controller
      */
     public function destroy(Invoice $invoice)
     {
-        //
+        try {
+            //garantir que salve nas duas tabelas do banco de dados
+            DB::beginTransaction();
+
+            //$deleteUser = User::where('id', $user)->delete();
+            $deleteInvoice = Invoice::where('id', $invoice->id)
+            ->where('company_id', auth()->user()->company_id)->delete();
+
+            //comita depois de tudo ter sido salvo
+            DB::commit();
+
+            return response()->json(['success' => 'Registro excluído com sucesso!']);
+        } catch (Exception $e) {
+            //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+            DB::rollBack();
+
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 }

@@ -1,6 +1,12 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+    .btn-check {
+        pointer-events: auto; /* Garante que os radio buttons sejam clicáveis */
+    }
+</style>
+
 
 <div class="container-fluid px-4">
     <div class="mb-1 hstack gap-2">
@@ -132,7 +138,22 @@
                             <td>{{ 'R$' . number_format($invoice->amount, 2, ',', '.') }}</td>
                             <td class="text-center align-middle">{{ $invoice->enrollment_of }} / {{ $invoice->getEnrollments($invoice->description, $invoice->type) }}</td>
                             <td>{{ \Carbon\Carbon::parse($invoice->due_at)->format('d/m/Y') }}</td>
-                            <td>{{ $invoice->getStatus($invoice->status) }}</td>
+                            <td><span class="badge 
+                                   @php
+                                        $retorno = $invoice->getStatus($invoice->status, $invoice->id);
+                                        if($retorno == 'Não Pago'){
+                                            echo 'text-bg-light';
+                                        }
+                                        if($retorno == 'Pago'){
+                                            echo 'text-bg-success';
+                                        }
+                                        if($retorno == 'Atrasado'){
+                                            echo 'text-bg-warning';
+                                        }
+                                   @endphp ">
+                                {{ $invoice->getStatus($invoice->status, $invoice->id) }}
+                                </span>
+</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
                                         <a href="{{ route('invoices.show', ['invoice' => $invoice->id]) }}" class="btn btn-sm me-1 mb-1 mb-sm-0" title="Ver Registro"><i class="fa-solid fa-eye"></i></a>
@@ -215,7 +236,7 @@
                             <select class="form-select" name="invoice_category_id" id="invoice_category_id">
                                 <option value="" >Escolha uma</option>
                                 @foreach ($invoiceCategories as $invoiceCategory)
-                                    <option value="{{ $invoiceCategory->id }}" >{{ $invoiceCategory->name }}</option>
+                                    <option value="{{ $invoiceCategory->id }}" > {{ $invoiceCategory->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -286,7 +307,7 @@
 
 <!-- editModal -->
 <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Alterar Cliente</h1>
@@ -392,7 +413,7 @@
                 <div class="col-md-12">
                     <input type="hidden" class="form-control" id="edit_company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
                     <input type="hidden" class="form-control" id="edit_user_id" name="user_id" value="{{ auth()->user()->id }}">                 
-                    <input type="hidden" class="form-control" id="edit_invoice_id" name="id" value="">                 
+                    <input type="hidden" class="form-control" id="edit_id" name="id" value="">                 
                 </div>
                 
             
@@ -442,12 +463,11 @@
         /**Passa valores do registro para o formulário na modal de atualização */
         $('button').on('click', function() {
             /**Verifica se o botão tem a classe condicional para fazer algo */
-            // ['company_id', 'name','email','phone','rg',
-            // 'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday'];
             if($(this).hasClass('editBtn')){
                 var dados = [
                         { 
-                            id: $(this).attr('data-description'), 
+                            id: $(this).attr('data-id'), 
+                            description: $(this).attr('data-description'), 
                             wallet_id: $(this).attr('data-wallet_id'), 
                             user_id: $(this).attr('data-user_id'), 
                             company_id: $(this).attr('data-company_id'), 
@@ -489,7 +509,7 @@
                     throw new Error('Erro na rede: ' + response.statusText);
                     }
                     return response.json();
-//                    console.log('Response: ' + response);
+                    //console.log('Response: ' + response);
                 })
                 .then(data => {
                     //console.log(data.description);
@@ -504,27 +524,25 @@
                     $('#edit_company_id').val(data.company_id);
                     $('#edit_invoice_category_id').val(data.invoice_category_id);
                     $('#edit_invoice_of').val(data.invoice_of);
-                    $('#edit_type').val(data.type);
                     $('#edit_amount').val(data.amount);
                     $('#edit_due_at').val(data.due_at);
                     $('#edit_period').val(data.period);
                     $('#edit_enrollments').val(data.enrollments);
                     $('#edit_enrollment_of').val(data.enrollment_of);
                     $('#edit_status').val(data.status);
-                    const campoRepeat = document.querySelector('input[name="repeat_when"][value="'+data.repeat_when+'"]');
-                    if(campoRepeat){
-                        if(campoRepeat.id == 'parcela'){
-                            $('#edit_repeat_when').val('enrollment');
-                            campoRepeat.checked = true;
-                        }else if(campoRepeat.id == 'unica'){
-                            $('#edit_repeat_when').val('unique');
-                            campoRepeat.checked = true;
-                        }else{
-                            $('#edit_repeat_when').val('fixed');
-                            campoRepeat.checked = true;
-                        }
-                        
-                        console.log(data);
+                    /**Verifica repetição */
+                    if(data.repeat_when === 'fixed'){
+                        document.querySelector('#edit_fixa').checked = true;
+                    }else if(data.repeat_when === 'unique'){
+                        document.querySelector('#edit_unica').checked = true;
+                    }else{
+                        document.querySelector('#edit_parcela').checked = true;
+                    }
+                    /**Verifica Tipo */
+                    if(data.type === 'income'){
+                        document.querySelector('#edit_income').checked = true;
+                    }else{
+                        document.querySelector('#edit_expense').checked = true;
                     }
 
                     
@@ -554,7 +572,7 @@
                     $('#updateModal').modal('hide');
                     //$('#invoicesTable').DataTable().ajax.reload();
                     //Swal.fire('Success', 'Registro atualizado com sucesso', 'success');
-                    //console.log(response);
+                    console.log(response);
                     if(response){
                         Swal.fire('Pronto!', response.success, 'success');
                     }

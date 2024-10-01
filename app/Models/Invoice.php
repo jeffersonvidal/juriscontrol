@@ -22,13 +22,36 @@ class Invoice extends Model implements Auditable
     'invoice_category_id', 'invoice_of', 'type', 'amount', 'due_at', 'repeat_when', 'period', 
     'enrollments', 'enrollment_of', 'status'];
 
-    public function getStatus($status){
-        if($status == 'unpaid'){
-            return 'Não Pago';
-        }
-        if($status == 'paid'){
+    public function getStatus($status, $id){
+        $today = Carbon::now();
+        $checkInvoice = Invoice::find($id);
+        $dataInvoice = Carbon::parse($checkInvoice->due_at);
+
+        if($dataInvoice->lt($today) AND $status == 'paid'){
             return 'Pago';
         }
+
+        if($dataInvoice->lt($today) AND $status == 'unpaid'){
+            return 'Atrasado';
+        }else{
+            return 'Não Pago';
+        }
+
+        
+
+
+        // if($status == 'unpaid' & $checkInvoice = true){
+        //     return 'Atrasado';
+        // }else{
+        //     return 'Não Pago';
+        // }
+        // if($status == 'paid'){
+        //     return 'Pago';
+        // }
+
+        // if($status == 'unpaid'){
+        //     return 'Não Pago';
+        // }
     }
 
     public function getType($type){
