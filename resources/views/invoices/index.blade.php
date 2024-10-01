@@ -157,7 +157,14 @@
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
                                         <a href="{{ route('invoices.show', ['invoice' => $invoice->id]) }}" class="btn btn-sm me-1 mb-1 mb-sm-0" title="Ver Registro"><i class="fa-solid fa-eye"></i></a>
-                                        <button class="text-decoration-none btn btn-sm " title="Dar Baixa / Pagar" data-id="" >
+                                        <button class="text-decoration-none btn btn-sm paymentBtn" title="Dar Baixa / Pagar" 
+                                        data-description="{{ $invoice->description }}" data-wallet_id="{{ $invoice->wallet_id }}" data-id="{{ $invoice->id }}"
+                                        data-invoice_category_id="{{ $invoice->invoice_category_id }}" data-invoice_of="{{ $invoice->invoice_of }}" data-type="{{ $invoice->type }}"
+                                        data-amount="{{ $invoice->amount }}" data-due_at="{{ $invoice->due_at }}" 
+                                        data-unica="{{ $invoice->repeat_when }}" data-fixa="{{ $invoice->repeat_when }}" data-parcela="{{ $invoice->repeat_when }}"
+                                        data-period="{{ $invoice->period }}" data-enrollments="{{ $invoice->enrollments }}" data-enrollment_of="{{ $invoice->enrollment_of }}"
+                                        data-status="{{ $invoice->status }}" 
+                                        data-bs-toggle="modal" data-bs-target="#paymentModal">
                                         <i class="fa-solid fa-money-bill-1-wave"></i></button>
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $invoice->id }}" 
                                             data-description="{{ $invoice->description }}" data-wallet_id="{{ $invoice->wallet_id }}" data-id="{{ $invoice->id }}"
@@ -183,7 +190,7 @@
     </div><!--fim card -->
 
 <!-- addModal -->
-<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModa" aria-hidden="true">
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -427,6 +434,113 @@
   </div>
 </div><!-- fim editModal -->
 
+<!-- paymentModal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModal">Pagar ou Amortizar Conta</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+      <form id="paymentForm" class="row g-3">
+                @csrf
+
+                
+                <fieldset>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="description" class="form-label">Descrição</label>
+                            <input type="text" class="form-control" id="pay_description" name="description" value="{{ old('description') }}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="amount" class="form-label">Valor</label>
+                            <input type="text" class="form-control" id="pay_amount" name="amount" value="{{ old('amount') }}" disabled>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="due_at" class="form-label">Vencimento</label>
+                            <input type="date" class="form-control" id="pay_due_at" name="due_at" value="{{ old('due_at') }}" disabled>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="wallet_id" class="form-label">Carteira</label>
+                            <select class="form-select" name="pay_wallet_id" id="wallet_id">
+                                
+                                @foreach ($wallets as $wallet)
+                                    @if ($wallet->main = '1')
+                                    <option value="{{ $wallet->id }}" >{{ $wallet->name }}</option>
+                                    @else
+                                        <option value="" >Escolha um</option>
+                                    @endif
+                                    <option value="" >{{ $wallet->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="pay_day" class="form-label">Data do Pagamento</label>
+                            <input type="date" class="form-control" id="pay_day" name="pay_day" value="{{ old('pay_day') }}">
+                        </div>
+                    </div>
+                </fieldset>
+                
+                <fieldset>
+                    <div class="col-md-12 mb-3">
+                        <label for="amount_paid" class="form-label">Valor Pago</label>
+                        <input type="text" class="form-control" id="amount_paid" name="amount_paid" value="{{ old('amount_paid') }}">
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="pay_day" class="form-label">Forma de Pagamento</label>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        
+                        <div class="btn-group col-md-12 mb-3" role="group" aria-label="Basic radio toggle button group">
+                            <input type="radio" class="btn-check" name="method" id="pix" value="pix">
+                            <label class="btn btn-sm btn-outline-dark" for="pix">PIX</label>
+
+                            <input type="radio" class="btn-check" name="method" id="card" value="card">
+                            <label class="btn btn-sm btn-outline-dark" for="card">Cartão</label>
+
+                            <input type="radio" class="btn-check" name="method" id="money" value="money">
+                            <label class="btn btn-sm btn-outline-dark" for="money">Dinheiro</label>
+
+                            <input type="radio" class="btn-check" name="method" id="ted" value="ted">
+                            <label class="btn btn-sm btn-outline-dark" for="ted">TED</label>
+
+                            <input type="radio" class="btn-check" name="method" id="bank_slip" value="bank_slip">
+                            <label class="btn btn-sm btn-outline-dark" for="bank_slip">Boleto</label>
+                        </div>
+                    </div>
+                    
+
+                </fieldset>
+
+                
+                <div class="col-md-12">
+                    <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="user_id" name="user_id" value="{{ auth()->user()->id }}">                 
+                    <input type="hidden" class="form-control" id="invoice_id" name="user_id" value="">                 
+                </div>
+                
+            
+      </div><!--fim modal-body-->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-primary addButton">Lançar Pagamento <i class="fa-solid fa-sack-dollar"></i></button>
+      </div><!--fim modal-footer-->
+      </form><!--finalizando form aqui para garantir pegar a ação do botão de salvar-->
+    </div>
+  </div>
+</div><!-- fim addModal -->
+
 
 </div><!--fim container-fluid-->
 
@@ -492,6 +606,27 @@
                         }
                     ];
                     deleteRegistro($(this).attr('data-id'));
+            }else if($(this).hasClass('paymentBtn')){
+                var dados = [
+                        { 
+                            id: $(this).attr('data-id'), 
+                            description: $(this).attr('data-description'), 
+                            wallet_id: $(this).attr('data-wallet_id'), 
+                            user_id: $(this).attr('data-user_id'), 
+                            company_id: $(this).attr('data-company_id'), 
+                            invoice_category_id: $(this).attr('data-invoice_category_id'), 
+                            invoice_of: $(this).attr('data-invoice_of'), 
+                            type: $(this).attr('data-type'), 
+                            amount: $(this).attr('data-amount'), 
+                            due_at: $(this).attr('data-due_at'), 
+                            //repeat_when: $(this).attr('data-repeat_when'), 
+                            period: $(this).attr('data-period'), 
+                            enrollments: $(this).attr('data-enrollments'), 
+                            enrollment_of: $(this).attr('data-enrollment_of'), 
+                            status: $(this).attr('data-status'), 
+                        }
+                    ];
+                    pagarRegistro($(this).attr('data-id'));
             }
         });
             
@@ -626,6 +761,53 @@
                 }
             });
         }
+
+        /**Função que preenche os campos do formulário de atualização */
+        function pagarRegistro(id) {
+            let url = "{{ route('invoices.show', 'id') }}";
+            url = url.replace('id', id);
+            console.log(url);
+            /**Preenche os campos do form de atualização*/
+            $.get(url, function() {
+                fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                    throw new Error('Erro na rede: ' + response.statusText);
+                    }
+                    return response.json();
+                    //console.log('Response: ' + response);
+                })
+                .then(data => {
+                    //console.log(data.description);
+                    //console.log(data[0]); //lista dados pessoais
+                    /**console.log(data[0][0]['invoice']); //lista dados pessoais
+                    /** console.log(data[0][0]); //Lista dados do endereço */
+                    /**Dados pessoais*/
+                    $('#invoice_id').val(data.id);
+                    $('#pay_description').val(data.description);
+                    $('#pay_wallet_id').val(data.wallet_id);
+                    $('#pay_user_id').val(data.user_id);
+                    $('#pay_company_id').val(data.company_id);
+                    $('#pay_invoice_category_id').val(data.invoice_category_id);
+                    $('#pay_invoice_of').val(data.invoice_of);
+                    $('#pay_amount').val(data.amount);
+                    $('#pay_due_at').val(data.due_at);
+                    $('#pay_period').val(data.period);
+                    $('#pay_enrollments').val(data.enrollments);
+                    $('#pay_enrollment_of').val(data.enrollment_of);
+                    $('#pay_status').val(data.status);
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                });
+                
+                
+                $('#paymentModal').modal('show');
+            });
+            //console.log(url);
+            
+
+        }//Fim pagarRegistro()
 
         
     });

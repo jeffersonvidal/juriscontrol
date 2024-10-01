@@ -6,6 +6,7 @@ use App\Http\Controllers\ExternalOfficeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Models\ExternalOffice;
@@ -86,5 +87,9 @@ Route::group(['middleware' => 'auth'], function(){
   Route::post('/store-invoice', [InvoiceController::class, 'store'])->name('invoices.store'); //Salva novo registro no BD
   Route::put('/update-invoice/{invoice}', [InvoiceController::class, 'update'])->name('invoices.update'); //Atualiza um registro no BD
   Route::delete('/destroy-invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy'); //Exclui um registro no BD
-
+  
+  /**Rotas para Pagamentos */
+  Route::get('/index-payment', [PaymentController::class, 'index'])->name('payments.index'); //Listar todos os registros da tabela
+  Route::post('/store-payment', [PaymentController::class, 'store'])->name('payments.store'); //Salva novo registro no BD
+  
 }); //fim da restrição de acesso para quem não está logado no sistema
