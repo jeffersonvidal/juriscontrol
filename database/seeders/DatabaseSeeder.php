@@ -32,7 +32,6 @@ class DatabaseSeeder extends Seeder
             InvoiceSeeder::class,
             InvoiceCategorySeeder::class,
             CourtCaseSeeder::class,
-            PaymentRecordSeeder::class,
             SystemStatusSeeder::class,
             PrioritySeeder::class,
             ExternalOfficeSeeder::class,
