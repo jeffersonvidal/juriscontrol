@@ -458,8 +458,8 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="amount" class="form-label">Valor</label>
-                            <input type="text" class="form-control" id="pay_amount" name="amount" value="{{ old('amount') }}" disabled>
+                            <label for="amount_owed" class="form-label">Valor</label>
+                            <input type="text" class="form-control" id="pay_amount_owed" name="amount_owed" value="{{ old('amount_owed') }}" disabled>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="due_at" class="form-label">Vencimento</label>
@@ -470,7 +470,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="wallet_id" class="form-label">Carteira</label>
-                            <select class="form-select" name="pay_wallet_id" id="wallet_id">
+                            <select class="form-select" name="wallet_id" id="pay_wallet_id">
                                 
                                 @foreach ($wallets as $wallet)
                                     @if ($wallet->main = '1')
@@ -491,10 +491,17 @@
                 </fieldset>
                 
                 <fieldset>
-                    <div class="col-md-12 mb-3">
-                        <label for="amount_paid" class="form-label">Valor Pago</label>
-                        <input type="text" class="form-control" id="amount_paid" name="amount_paid" value="{{ old('amount_paid') }}">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="amount_paid" class="form-label">Valor Pago</label>
+                            <input type="text" class="form-control" id="amount_paid" name="amount_paid" value="{{ old('amount_paid') }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="enrollment_of" class="form-label">Parcela Nº</label>
+                            <input type="text" class="form-control" id="pay_enrollment_of" name="enrollment_of" value="{{ old('enrollment_of') }}" disabled>
+                        </div>
                     </div>
+                    
 
                     <div class="col-md-12">
                         <label for="pay_day" class="form-label">Forma de Pagamento</label>
@@ -527,7 +534,7 @@
                 <div class="col-md-12">
                     <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
                     <input type="hidden" class="form-control" id="user_id" name="user_id" value="{{ auth()->user()->id }}">                 
-                    <input type="hidden" class="form-control" id="invoice_id" name="user_id" value="">                 
+                    <input type="hidden" class="form-control" id="invoice_id" name="invoice_id" value="">                 
                 </div>
                 
             
@@ -617,7 +624,7 @@
                             invoice_category_id: $(this).attr('data-invoice_category_id'), 
                             invoice_of: $(this).attr('data-invoice_of'), 
                             type: $(this).attr('data-type'), 
-                            amount: $(this).attr('data-amount'), 
+                            amount_owed: $(this).attr('data-amount'), 
                             due_at: $(this).attr('data-due_at'), 
                             //repeat_when: $(this).attr('data-repeat_when'), 
                             period: $(this).attr('data-period'), 
@@ -790,7 +797,7 @@
                     $('#pay_company_id').val(data.company_id);
                     $('#pay_invoice_category_id').val(data.invoice_category_id);
                     $('#pay_invoice_of').val(data.invoice_of);
-                    $('#pay_amount').val(data.amount);
+                    $('#pay_amount_owed').val(data.amount);
                     $('#pay_due_at').val(data.due_at);
                     $('#pay_period').val(data.period);
                     $('#pay_enrollments').val(data.enrollments);
@@ -808,6 +815,36 @@
             
 
         }//Fim pagarRegistro()
+
+        /**Formulário para pagar fatura */
+        $('#paymentForm').on('submit', function(e) {
+            e.preventDefault();
+            var id = $('#edit_id').val();
+            $.ajax({
+                url: `/store-payment`,
+                method: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#paymentModal').modal('hide');
+                    //$('#invoicesTable').DataTable().ajax.reload();
+                    //Swal.fire('Success', 'Registro atualizado com sucesso', 'success');
+                    console.log(response);
+                    if(response){
+                        Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 2000); // 3000 milissegundos = 3 segundos
+                },
+                error: function(response) {
+                    //Swal.fire('Error', 'ERRO ao atualizar registro', 'error');
+                    console.log(response.responseJSON);
+                    if(response.responseJSON){
+                        Swal.fire('Erro!', response.responseJSON.message, 'error');
+                    }
+                }
+            });
+        });
 
         
     });

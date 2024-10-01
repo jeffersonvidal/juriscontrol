@@ -18,5 +18,9 @@ class Payment extends Model implements Auditable
 
     //Quais colunas para serem cadastradas
     protected $fillable = ['wallet_id', 'user_id', 'company_id', 'invoice_id', 'customer_id', 'method', 
-    'enrollment_of', 'amount_owed', 'amount_paid', 'amount_remaining'];
+    'enrollment_of', 'amount_owed', 'amount_paid', 'pay_day', 'amount_remaining', 'status'];
 }
+
+
+//     id, wallet_id, user_id, company_id, invoice_id, customer_id, method, enrollment_of,
+// amount_owed, amount_paid, pay_day, amount_remaining, status
