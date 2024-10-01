@@ -42,7 +42,7 @@ class InvoiceController extends Controller
             $whenQuery->where('due_at', '<=', \Carbon\Carbon::parse($request->data_fim)->format('Y-m-d'));
         })
         ->where('company_id', auth()->user()->company_id)
-        ->orderBy('created_at')
+        ->orderBy('created_at', 'DESC')
         ->get();
 
         /**Somar receitas do mês corrente */
