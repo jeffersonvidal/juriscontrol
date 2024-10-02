@@ -115,15 +115,14 @@
                 // amount_owed, amount_paid, pay_day, amount_remaining, status -->
                         <tr>
                         <th>Descrição</th>
-                        <th>Categoria</th>
                         <th>Tipo</th>
                         <th>Valor</th>
                         <th>Valor Pago</th>
                         <th>Valor Restante</th>
+                        <th>Pago Via</th>
                         <th>Parcela</th>
                         <th>Vencimento</th>
                         <th>Data Pagto</th>
-                        <th>Status</th>
                         <th class="text-center">Ações</th>
                         </tr>
                     </thead>
@@ -133,15 +132,14 @@
                         @foreach ($payments as $payment)
                             <tr>
                             <td>{{ $payment->getInvoice($payment->invoice_id)->description }}</td>
-                            <td>{{ $payment->getInvoiceCategory($payment->invoice_id)->name }}</td>
                             <td>{{ $payment->getInvoiceType($payment->invoice_id) }}</td>
                             <td>{{ 'R$' . number_format($payment->amount_owed, 2, ',', '.') }}</td>
                             <td>{{ 'R$' . number_format($payment->amount_paid, 2, ',', '.') }}</td>
                             <td>{{ 'R$' . number_format($payment->amount_remaining, 2, ',', '.') }}</td>
+                            <td>{{ $payment->getMethodPayment($payment->id) }}</td>
                             <td>{{ $payment->enrollment_of }} / {{ $payment->getInvoice($payment->invoice_id)->enrollments }}</td>
                             <td>{{ \Carbon\Carbon::parse($payment->getInvoice($payment->invoice_id)->due_at)->format('d/m/Y') }}</td>
                             <td>{{ \Carbon\Carbon::parse($payment->pay_day)->format('d/m/Y') }}</td>
-                            <td>{{ $payment->status }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
                                         

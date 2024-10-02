@@ -139,7 +139,7 @@ class PaymentController extends Controller
             DB::commit();
 
             //Redireciona para outra página após cadastrar com sucesso
-            return response()->json( ['success' => 'Registro cadastrado com sucesso!']);
+            return response()->json( ['success' => 'Pagamento lançado com sucesso!']);
         } catch (Exception $e) {
             //Desfazer a transação caso não consiga cadastrar com sucesso no BD
             DB::rollBack();
