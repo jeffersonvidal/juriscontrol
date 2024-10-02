@@ -52,6 +52,8 @@
                                     <span class="d-flex flex-row justify-content-center">
                                         <a href="{{ route('customers.show', ['customer' => $customer->id]) }}" class="btn btn-sm me-1 mb-1 mb-sm-0" title="Ver Registro"><i class="fa-solid fa-eye"></i></a>
 
+                                        <button class="text-decoration-none btn btn-sm " title="Ficha do Cliente" data-id="{{ $customer->id }}" >
+                                        <i class="fa-solid fa-id-card"></i></button>
                                         <button class="text-decoration-none btn btn-sm " title="Novo Processo" data-id="{{ $customer->id }}" >
                                             <i class="fa-regular fa-file-lines"></i></button>
                                         <button class="text-decoration-none btn btn-sm " title="Novo Caso" data-id="{{ $customer->id }}" >

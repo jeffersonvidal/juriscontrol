@@ -36,6 +36,27 @@ class InvoiceCategorySeeder extends Seeder
         }
         if(! InvoiceCategory::where("id","4")->first()){
             InvoiceCategory::create([
+                'name' => 'Honorários',
+                'value' => 'honorarios',
+                'company_id' => '1',
+            ]);
+        }
+        if(! InvoiceCategory::where("id","5")->first()){
+            InvoiceCategory::create([
+                'name' => 'Contrato',
+                'value' => 'contrato',
+                'company_id' => '1',
+            ]);
+        }
+        if(! InvoiceCategory::where("id","6")->first()){
+            InvoiceCategory::create([
+                'name' => 'Acordo',
+                'value' => 'acordo',
+                'company_id' => '1',
+            ]);
+        }
+        if(! InvoiceCategory::where("id","7")->first()){
+            InvoiceCategory::create([
                 'name' => 'Diversos',
                 'value' => 'diversos',
                 'company_id' => '1',

@@ -33,7 +33,6 @@ class PaymentRequest extends FormRequest
             'amount_owed' => 'required',
             'amount_paid' => 'required',
             'pay_day' => 'required',
-            'amount_remaining' => 'required',
             'status' => 'required',
         ];
     }
@@ -49,7 +48,6 @@ class PaymentRequest extends FormRequest
             'amount_owed.required' => 'Informe o valor devido!',
             'amount_paid.required' => 'Informe o valor pago!',
             'pay_day.required' => 'Informe o dia em que o pagamento foi realizado!',
-            'amount_remaining.required' => 'Informe o valor restante para esse pagamento!',
             'status.required' => 'Informe o Status do pagamento!',
         ] ;
     }

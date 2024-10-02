@@ -136,7 +136,7 @@
                             <td>{{ $invoice->getCategory($invoice->invoice_category_id) }}</td>
                             <td>{{ $invoice->getType($invoice->type) }}</td>
                             <td>{{ 'R$' . number_format($invoice->amount, 2, ',', '.') }}</td>
-                            <td class="text-center align-middle">{{ $invoice->enrollment_of }} / {{ $invoice->getEnrollments($invoice->description, $invoice->type) }}</td>
+                            <td class="text-center align-middle">{{ $invoice->enrollment_of }} / {{ $invoice->enrollments }}</td>
                             <td>{{ \Carbon\Carbon::parse($invoice->due_at)->format('d/m/Y') }}</td>
                             <td><span class="badge 
                                    @php
@@ -159,11 +159,10 @@
                                         <a href="{{ route('invoices.show', ['invoice' => $invoice->id]) }}" class="btn btn-sm me-1 mb-1 mb-sm-0" title="Ver Registro"><i class="fa-solid fa-eye"></i></a>
                                         <button class="text-decoration-none btn btn-sm paymentBtn" title="Dar Baixa / Pagar" 
                                         data-description="{{ $invoice->description }}" data-wallet_id="{{ $invoice->wallet_id }}" data-id="{{ $invoice->id }}"
-                                        data-invoice_category_id="{{ $invoice->invoice_category_id }}" data-invoice_of="{{ $invoice->invoice_of }}" data-type="{{ $invoice->type }}"
-                                        data-amount="{{ $invoice->amount }}" data-due_at="{{ $invoice->due_at }}" 
-                                        data-unica="{{ $invoice->repeat_when }}" data-fixa="{{ $invoice->repeat_when }}" data-parcela="{{ $invoice->repeat_when }}"
-                                        data-period="{{ $invoice->period }}" data-enrollments="{{ $invoice->enrollments }}" data-enrollment_of="{{ $invoice->enrollment_of }}"
-                                        data-status="{{ $invoice->status }}" 
+                                        data-invoice_category_id="{{ $invoice->invoice_category_id }}" data-invoice_of="{{ $invoice->invoice_of }}"
+                                        data-amount="{{ $invoice->amount }}" data-due_at="{{ $invoice->due_at }}" data-user_id="{{ auth()->user()->id }}"
+                                        data-enrollment_of="{{ $invoice->enrollment_of }}" data-pay_day=""
+                                        data-status="paid" data-amount_owed="{{ $invoice->amount }}" data-company_id="{{ $invoice->company_id }}"
                                         data-bs-toggle="modal" data-bs-target="#paymentModal">
                                         <i class="fa-solid fa-money-bill-1-wave"></i></button>
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $invoice->id }}" 
@@ -459,7 +458,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="amount_owed" class="form-label">Valor</label>
-                            <input type="text" class="form-control" id="pay_amount_owed" name="amount_owed" value="{{ old('amount_owed') }}" disabled>
+                            <input type="text" class="form-control" id="pay_amount_owed" name="amount_owed" value="{{ old('amount_owed') }}" readonly>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="due_at" class="form-label">Vencimento</label>
@@ -485,7 +484,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="pay_day" class="form-label">Data do Pagamento</label>
-                            <input type="date" class="form-control" id="pay_day" name="pay_day" value="{{ old('pay_day') }}">
+                            <input type="date" class="form-control" id="pay_pay_day" name="pay_day" value="{{ old('pay_day') }}">
                         </div>
                     </div>
                 </fieldset>
@@ -494,11 +493,11 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="amount_paid" class="form-label">Valor Pago</label>
-                            <input type="text" class="form-control" id="amount_paid" name="amount_paid" value="{{ old('amount_paid') }}">
+                            <input type="text" class="form-control" id="pay_amount_paid" name="amount_paid" value="{{ old('amount_paid') }}">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="enrollment_of" class="form-label">Parcela Nº</label>
-                            <input type="text" class="form-control" id="pay_enrollment_of" name="enrollment_of" value="{{ old('enrollment_of') }}" disabled>
+                            <input type="number" class="form-control" id="pay_enrollment_of" name="enrollment_of" value="{{ old('enrollment_of') }}" readonly>
                         </div>
                     </div>
                     
@@ -532,9 +531,10 @@
 
                 
                 <div class="col-md-12">
-                    <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
-                    <input type="hidden" class="form-control" id="user_id" name="user_id" value="{{ auth()->user()->id }}">                 
-                    <input type="hidden" class="form-control" id="invoice_id" name="invoice_id" value="">                 
+                    <input type="hidden" class="form-control" id="pay_company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="pay_user_id" name="user_id" value="{{ auth()->user()->id }}">                 
+                    <input type="hidden" class="form-control" id="pay_invoice_id" name="invoice_id" value="">                 
+                    <input type="hidden" class="form-control" id="pay_status" name="status" value="paid">                 
                 </div>
                 
             
@@ -582,6 +582,15 @@
 
         /**Atualiza registro no banco de dados*/
         /**Passa valores do registro para o formulário na modal de atualização */
+        function getCurrentDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Adiciona zero à esquerda se necessário
+            const day = String(today.getDate()).padStart(2, '0'); // Adiciona zero à esquerda se necessário
+            return `${year}-${month}-${day}`;
+        }
+        let hoje = getCurrentDate();
+        //$('#pay_pay_day').val(getCurrentDate());
         $('button').on('click', function() {
             /**Verifica se o botão tem a classe condicional para fazer algo */
             if($(this).hasClass('editBtn')){
@@ -614,26 +623,32 @@
                     ];
                     deleteRegistro($(this).attr('data-id'));
             }else if($(this).hasClass('paymentBtn')){
+                
                 var dados = [
                         { 
                             id: $(this).attr('data-id'), 
                             description: $(this).attr('data-description'), 
+                            due_at: $(this).attr('data-due_at'), 
+                            invoice_category_id: $(this).attr('data-invoice_category_id'), 
+
+                            /**PaymentForm data */
                             wallet_id: $(this).attr('data-wallet_id'), 
                             user_id: $(this).attr('data-user_id'), 
                             company_id: $(this).attr('data-company_id'), 
-                            invoice_category_id: $(this).attr('data-invoice_category_id'), 
-                            invoice_of: $(this).attr('data-invoice_of'), 
-                            type: $(this).attr('data-type'), 
-                            amount_owed: $(this).attr('data-amount'), 
-                            due_at: $(this).attr('data-due_at'), 
-                            //repeat_when: $(this).attr('data-repeat_when'), 
-                            period: $(this).attr('data-period'), 
-                            enrollments: $(this).attr('data-enrollments'), 
+                            amount_owed: $(this).attr('data-amount_owed'), 
                             enrollment_of: $(this).attr('data-enrollment_of'), 
                             status: $(this).attr('data-status'), 
+                            pay_day: $(this).attr('data-pay_day', hoje), 
+                            method: $(this).attr('data-method'), 
+
+    //                         'wallet_id', 'user_id', 'company_id', 'invoice_id', 'customer_id', 'method', 
+    // 'enrollment_of', 'amount_owed', 'amount_paid', 'pay_day', 'amount_remaining', 'status'
+
+
                         }
                     ];
-                    pagarRegistro($(this).attr('data-id'));
+                    //console.log(dados[0].enrollment_of);
+                    pagarRegistro(dados);
             }
         });
             
@@ -770,44 +785,47 @@
         }
 
         /**Função que preenche os campos do formulário de atualização */
-        function pagarRegistro(id) {
+        function pagarRegistro(dados) {
             let url = "{{ route('invoices.show', 'id') }}";
-            url = url.replace('id', id);
-            console.log(url);
+            url = url.replace('id', dados[0].id);
+            //console.log(url);
+            //console.log(dados);
             /**Preenche os campos do form de atualização*/
+            // Função para obter a data atual no formato YYYY-MM-DD
+            
             $.get(url, function() {
                 fetch(url)
                 .then(response => {
                     if (!response.ok) {
-                    throw new Error('Erro na rede: ' + response.statusText);
+                        throw new Error('Erro na rede: ' + response.statusText);
                     }
                     return response.json();
                     //console.log('Response: ' + response);
                 })
                 .then(data => {
-                    //console.log(data.description);
+                    //console.log(dados);
                     //console.log(data[0]); //lista dados pessoais
                     /**console.log(data[0][0]['invoice']); //lista dados pessoais
                     /** console.log(data[0][0]); //Lista dados do endereço */
                     /**Dados pessoais*/
-                    $('#invoice_id').val(data.id);
-                    $('#pay_description').val(data.description);
-                    $('#pay_wallet_id').val(data.wallet_id);
-                    $('#pay_user_id').val(data.user_id);
-                    $('#pay_company_id').val(data.company_id);
-                    $('#pay_invoice_category_id').val(data.invoice_category_id);
-                    $('#pay_invoice_of').val(data.invoice_of);
-                    $('#pay_amount_owed').val(data.amount);
-                    $('#pay_due_at').val(data.due_at);
-                    $('#pay_period').val(data.period);
-                    $('#pay_enrollments').val(data.enrollments);
+                    $('#pay_invoice_id').val(dados[0].id);
+                    $('#pay_description').val(dados[0].description);
+                    $('#pay_wallet_id').val(dados[0].wallet_id);
+                    $('#pay_user_id').val(dados[0].user_id);
+                    $('#pay_company_id').val(dados[0].company_id);
+                    $('#pay_invoice_category_id').val(dados[0].invoice_category_id);
+                    $('#pay_amount_owed').val(dados[0].amount_owed),
+                    $('#pay_due_at').val(dados[0].due_at);
+                    //$('#pay_pay_day').val(dados[0].pay_day[0].attributes[11]);
+                    $('#pay_pay_day').val(hoje);
                     $('#pay_enrollment_of').val(data.enrollment_of);
-                    $('#pay_status').val(data.status);
+                    $('#pay_status').val(dados[0].status);
+                    $('#method').val(dados[0].method);
+                    //console.log(hoje);
                 })
                 .catch(error => {
                     console.error('Erro:', error);
                 });
-                
                 
                 $('#paymentModal').modal('show');
             });
@@ -818,7 +836,10 @@
 
         /**Formulário para pagar fatura */
         $('#paymentForm').on('submit', function(e) {
+            const paymentForm =document.querySelector('#paymentForm');
+            const formData = new FormData(paymentForm);
             e.preventDefault();
+            console.log(formData);
             var id = $('#edit_id').val();
             $.ajax({
                 url: `/store-payment`,

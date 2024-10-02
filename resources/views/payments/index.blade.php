@@ -132,54 +132,28 @@
                     @if (count($payments) > 0)
                         @foreach ($payments as $payment)
                             <tr>
-                            <td>{{ $payment->description }}</td>
-                            <td>{{ $payment->getCategory($invoice->invoice_category_id) }}</td>
-                            <td>{{ $payment->getType($invoice->type) }}</td>
-                            <td>{{ 'R$' . number_format($payment->amount, 2, ',', '.') }}</td>
+                            <td>{{ $payment->getInvoice($payment->invoice_id)->description }}</td>
+                            <td>{{ $payment->getInvoiceCategory($payment->invoice_id)->name }}</td>
+                            <td>{{ $payment->getInvoiceType($payment->invoice_id) }}</td>
+                            <td>{{ 'R$' . number_format($payment->amount_owed, 2, ',', '.') }}</td>
                             <td>{{ 'R$' . number_format($payment->amount_paid, 2, ',', '.') }}</td>
                             <td>{{ 'R$' . number_format($payment->amount_remaining, 2, ',', '.') }}</td>
-                            <td class="text-center align-middle">{{ $invoice->enrollment_of }} / {{ $invoice->getEnrollments($invoice->description, $invoice->type) }}</td>
-                            <td>{{ \Carbon\Carbon::parse($invoice->due_at)->format('d/m/Y') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($invoice->pay_day)->format('d/m/Y') }}</td>
-                            <td><span class="badge 
-                                   @php
-                                        $retorno = $invoice->getStatus($invoice->status, $invoice->id);
-                                        if($retorno == 'Não Pago'){
-                                            echo 'text-bg-light';
-                                        }
-                                        if($retorno == 'Pago'){
-                                            echo 'text-bg-success';
-                                        }
-                                        if($retorno == 'Atrasado'){
-                                            echo 'text-bg-warning';
-                                        }
-                                   @endphp ">
-                                {{ $invoice->getStatus($invoice->status, $invoice->id) }}
-                                </span>
-</td>
+                            <td>{{ $payment->enrollment_of }} / {{ $payment->getInvoice($payment->invoice_id)->enrollments }}</td>
+                            <td>{{ \Carbon\Carbon::parse($payment->getInvoice($payment->invoice_id)->due_at)->format('d/m/Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($payment->pay_day)->format('d/m/Y') }}</td>
+                            <td>{{ $payment->status }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
-                                        <a href="{{ route('invoices.show', ['invoice' => $invoice->id]) }}" class="btn btn-sm me-1 mb-1 mb-sm-0" title="Ver Registro"><i class="fa-solid fa-eye"></i></a>
+                                        
                                         <button class="text-decoration-none btn btn-sm paymentBtn" title="Dar Baixa / Pagar" 
-                                        data-description="{{ $invoice->description }}" data-wallet_id="{{ $invoice->wallet_id }}" data-id="{{ $invoice->id }}"
-                                        data-invoice_category_id="{{ $invoice->invoice_category_id }}" data-invoice_of="{{ $invoice->invoice_of }}" data-type="{{ $invoice->type }}"
-                                        data-amount="{{ $invoice->amount }}" data-due_at="{{ $invoice->due_at }}" 
-                                        data-unica="{{ $invoice->repeat_when }}" data-fixa="{{ $invoice->repeat_when }}" data-parcela="{{ $invoice->repeat_when }}"
-                                        data-period="{{ $invoice->period }}" data-enrollments="{{ $invoice->enrollments }}" data-enrollment_of="{{ $invoice->enrollment_of }}"
-                                        data-status="{{ $invoice->status }}" 
+                                        
                                         data-bs-toggle="modal" data-bs-target="#paymentModal">
                                         <i class="fa-solid fa-money-bill-1-wave"></i></button>
-                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $invoice->id }}" 
-                                            data-description="{{ $invoice->description }}" data-wallet_id="{{ $invoice->wallet_id }}" data-id="{{ $invoice->id }}"
-                                            data-invoice_category_id="{{ $invoice->invoice_category_id }}" data-invoice_of="{{ $invoice->invoice_of }}" data-type="{{ $invoice->type }}"
-                                            data-amount="{{ $invoice->amount }}" data-due_at="{{ $invoice->due_at }}" 
-                                            data-unica="{{ $invoice->repeat_when }}" data-fixa="{{ $invoice->repeat_when }}" data-parcela="{{ $invoice->repeat_when }}"
-                                            data-period="{{ $invoice->period }}" data-enrollments="{{ $invoice->enrollments }}" data-enrollment_of="{{ $invoice->enrollment_of }}"
-                                            data-status="{{ $invoice->status }}" 
+                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro"  
+                                            
                                             data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
-                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $invoice->id }}" 
-                                            data-name="{{ $invoice->name }}" data-hexa_color_bg="{{ $invoice->hexa_color_bg }}" 
-                                            data-hexa_color_font="{{ $invoice->hexa_color_font }}" ><i class="fa-solid fa-trash"></i></button>
+                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro"  
+                                             ><i class="fa-solid fa-trash"></i></button>
                                     </span>
                                 </td>
                             </tr>
@@ -444,6 +418,7 @@
                     $('#pay_invoice_category_id').val(data.invoice_category_id);
                     $('#pay_invoice_of').val(data.invoice_of);
                     $('#pay_amount').val(data.amount);
+                    $('#pay_amount_owed').val(data.amount);
                     $('#pay_due_at').val(data.due_at);
                     $('#pay_period').val(data.period);
                     $('#pay_enrollments').val(data.enrollments);

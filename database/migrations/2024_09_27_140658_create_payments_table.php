@@ -24,7 +24,7 @@ return new class extends Migration
             $table->double('amount_paid'); //valor pago
             $table->date('pay_day'); //dia do pagamento
             $table->double('amount_remaining'); //valor restante em caso de abatimento do valor
-            $table->string('status'); //não pago, pago
+            $table->string('status'); //não pago (unpaid), pago (paid)
             $table->timestamps();
         });
     }

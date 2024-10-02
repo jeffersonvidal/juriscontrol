@@ -104,7 +104,7 @@ class PaymentController extends Controller
      */
     public function store(PaymentRequest $request)
     {
-        dd($request);
+        //dd($request);
         //Validar o formulário
         $request->validated();
         
@@ -113,68 +113,27 @@ class PaymentController extends Controller
         DB::beginTransaction();
 
         try {
-
-            $invoice = new Invoice;
-            $invoice->invoice_of = null;
-            $invoice->type = $request->type;
-            $invoice->amount = str_replace([".", ","], ["", "."], $request->amount);
-            //$invoice->amount = number_format($request->amount, 2, ',', '.');
-            $invoice->period = ($request->period == null ? $request->period : "month");
-            $invoice->enrollments = ($request->enrollments ?: 1);
-            $invoice->enrollment_of = 1;
-            $invoice->description = $request->description;
-            $invoice->due_at = $request->due_at;
-            $invoice->wallet_id = $request->wallet_id;
-            $invoice->invoice_category_id = $request->invoice_category_id;
-            $invoice->repeat_when = $request->repeat_when;
-            $invoice->company_id = $request->company_id;
-            $invoice->user_id = auth()->user()->id;
-            $invoice->status = "unpaid";
-
-            /** Verifica se a repetição é única */
-            if($request->repeat_when == "unique" || $request->repeat_when == "fixed"){
-                $enrollments = 1;
-                //Model da tabela - campos a serem salvos
-                $invoice->save();
-            }
-
-            /**Verifica se tem parcelas e já lança as parcelas no banco de dados */
-            if($request->repeat_when == "enrollment"){
-                
-                /**Em caso de parcelamento */
-                $vencimento = strtotime($request->due_at);
-                $enrollment_amount = ($request->amount / $request->enrollments);
-                
-                //Model da tabela - campos a serem salvos
-                $invoice->amount = $enrollment_amount;
-                $invoice->save();
-                
-                $invoiceOf = $invoice->id;
-                
-                /**Registra as parcelas */
-                for($enrollment = 1; $enrollment < $request->enrollments; $enrollment++){
-                    $parcela = (new Invoice());
-                    $parcela->type = ($request->repeat_when == "fixed" ? "fixed_$request->type" : "$request->type");
-                    //$parcela->period = ($request->period ?? "month");
-                    $parcela->enrollments = ($request->enrollments ?: 1);
-                    $parcela->description = $request->description;
-                    $parcela->wallet_id = $request->wallet_id;
-                    $parcela->invoice_category_id = $request->invoice_category_id;
-                    $parcela->repeat_when = $request->repeat_when;
-                    $parcela->company_id = $request->company_id;
-                    $parcela->user_id = auth()->user()->id;
-
-                    $vencimento = strtotime('+31 days', $vencimento);
-                    $parcela->invoice_of = $invoiceOf;
-                    //$vencimento = strtotime('+' .$enrollment. ' month', $vencimento);
-                    $parcela->due_at = date('Y-m-d', $vencimento);
-                    $parcela->status = (date($parcela->due_at) <= date("Y-m-d") ? "paid" : "unpaid");
-                    $parcela->amount = $enrollment_amount;
-                    $parcela->enrollment_of = $enrollment + 1;
-
-                    $parcela->save();
-                }
-            }
+            /**Calcula valor restante em caso de abatimento da conta */
+            $amount_remaining = ($request->amount_owed - $request->amount_paid);
+            /**Trata os dados para salvar no banco de dados */
+            $payment = new Payment;
+            $payment->amount_owed = str_replace([".", ","], ["", "."], $request->amount_owed);
+            $payment->wallet_id = $request->wallet_id;
+            $payment->pay_day = $request->pay_day;
+            $payment->amount_paid = str_replace([".", ","], ["", "."], $request->amount_paid);
+            $payment->enrollment_of = $request->enrollment_of;
+            $payment->method = $request->method;
+            $payment->company_id = $request->company_id;
+            $payment->user_id = auth()->user()->id;
+            $payment->invoice_id = $request->invoice_id;
+            $payment->status = $request->status;
+            $payment->amount_remaining = str_replace([".", ","], ["", "."], $amount_remaining);
+            $payment->save();  
+            
+            $editInvoice = Invoice::where('id', $payment->invoice_id)
+            ->where('company_id', auth()->user()->company_id)->update([
+                'status' => "paid",
+            ]);
 
             //comita depois de tudo ter sido salvo
             DB::commit();
