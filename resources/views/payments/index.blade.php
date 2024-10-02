@@ -25,7 +25,7 @@
             <div class="row align-items-center">
                 <div class="col">
                     <div class="card container text-center">
-                        <div class="card-header text-bg-success p-3 row align-items-end">
+                        <div class="card-header text-bg-primary p-3 row align-items-end">
                             <div class="col">
                                 <h5 class="card-title"><i class="fa-solid fa-circle-up"></i> Receita [{{ $mesAtual }}]</h5>
                             </div>
@@ -49,7 +49,7 @@
                 </div>
                 <div class="col">
                     <div class="card container text-center">
-                        <div class="card-header p-3 row align-items-end">
+                        <div class="card-header text-bg-<?php echo ($saldoCaixa <= 0 ? 'danger' : 'success')?> p-3 row align-items-end">
                             <div class="col">
                                 <h5 class="card-title"><i class="fa-solid fa-sack-dollar"></i> Saldo/Caixa</h5>
                             </div>

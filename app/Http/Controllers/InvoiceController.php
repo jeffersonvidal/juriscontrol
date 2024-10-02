@@ -42,6 +42,7 @@ class InvoiceController extends Controller
             $whenQuery->where('due_at', '<=', \Carbon\Carbon::parse($request->data_fim)->format('Y-m-d'));
         })
         ->where('company_id', auth()->user()->company_id)
+        ->where('status', '!=', 'paid')
         ->orderBy('due_at', 'ASC')
         ->get();
 
