@@ -335,10 +335,10 @@ id, wallet_id, user_id, company_id, invoice_id, customer_id, method, enrollment_
 amount_owed, amount_paid, amount_remaining
 
 **Petições
-status(iniciada, em andamento, concluído),
+customer_name, wallet_id, user_id, company_id, status(iniciada, em andamento, concluído),
 origem (escritórios), data recebimento, responsável, data entrega,
 tipo (RT, Contestação, Manifestação, RO, RR, ED, Análise de Sentença, Análise Processual, Análise de Caso),
-cliente, processo, tribunal, observações, valor, status (pago, pendente, atrasado)
+cliente, processo, tribunal, observações, valor, payment_status (pago, pendente, atrasado)
 
 **Audiências, Perícias, Reuniões
 status(aberto, concluído, cancelado, a receber), objeto (audiência, perícia, reunião, petição, diligência),

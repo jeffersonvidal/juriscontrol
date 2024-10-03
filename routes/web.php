@@ -3,6 +3,7 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExternalOfficeController;
+use App\Http\Controllers\ExternalPetitionController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\LoginController;
@@ -91,5 +92,12 @@ Route::group(['middleware' => 'auth'], function(){
   /**Rotas para Pagamentos */
   Route::get('/index-payment', [PaymentController::class, 'index'])->name('payments.index'); //Listar todos os registros da tabela
   Route::post('/store-payment', [PaymentController::class, 'store'])->name('payments.store'); //Salva novo registro no BD
+
+  /**Rotas de ExternalPetitions (Petições Externas) */
+  Route::get('/index-external-petition', [ExternalPetitionController::class, 'index'])->name('external-petitions.index'); //Listar todos os registros da tabela
+  Route::get('/show-external-petition/{externalPetition}', [ExternalPetitionController::class, 'show'])->name('external-petitions.show'); //Mostra detalhe de um registro
+  Route::post('/store-external-petition', [ExternalPetitionController::class, 'store'])->name('external-petitions.store'); //Salva novo registro no BD
+  Route::put('/update-external-petition/{externalPetition}', [ExternalPetitionController::class, 'update'])->name('external-petitions.update'); //Atualiza um registro no BD
+  Route::delete('/destroy-external-petition/{externalPetition}', [ExternalPetitionController::class, 'destroy'])->name('external-petitions.destroy'); //Exclui um registro no BD
   
 }); //fim da restrição de acesso para quem não está logado no sistema

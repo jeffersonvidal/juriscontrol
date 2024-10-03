@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+/**Responsável pela auditoria do sistema */
+use \OwenIt\Auditing\Auditable as AuditingAuditable;
+use OwenIt\Auditing\Contracts\Auditable;
+class ExternalPetition extends Model implements Auditable
+{
+    use HasFactory, AuditingAuditable;
+
+    //Table name
+    protected $table = 'external_petitions';
+
+    //Quais colunas para serem cadastradas
+    protected $fillable = ['wallet_id', 'user_id', 'company_id', 
+    'external_office_id', 'responsible', 'delivery_date', 'type', 
+    'customer_name', 'process_number', 'court', 'notes', 'amount', 
+    'status', 'payment_status'];
+
+    public function getResponsible($userId){
+        return User::where('id', $userId)
+        ->where('company_id', auth()->user()->company_id)->first();
+    }
+
+    public function getPaymentStatus($paymentStatus){
+        if($paymentStatus == 'paid'){
+            return 'Pago';
+        }
+        if($paymentStatus == 'pending'){
+            return 'Pendente';
+        }
+        if($paymentStatus == 'late'){
+            return 'Atrasado';
+        }
+    }
+}
+
+//     customer_name, wallet_id, user_id, company_id, status(iniciada(started), em andamento(in_progress), concluído(completed)),
+// origem (escritórios), data recebimento, responsável, data entrega,
+// tipo (RT, Contestação, Manifestação, RO, RR, ED, Análise de Sentença, Análise Processual, Análise de Caso),
+// cliente, processo, tribunal, observações, valor, payment_status (pago (paid), pendente(pending), atrasado(late))
