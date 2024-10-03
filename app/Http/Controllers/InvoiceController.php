@@ -168,7 +168,8 @@ class InvoiceController extends Controller
                     $parcela->invoice_of = $invoiceOf;
                     //$vencimento = strtotime('+' .$enrollment. ' month', $vencimento);
                     $parcela->due_at = date('Y-m-d', $vencimento);
-                    $parcela->status = (date($parcela->due_at) <= date("Y-m-d") ? "paid" : "unpaid");
+                    //$parcela->status = (date($parcela->due_at) <= date("Y-m-d") ? "paid" : "unpaid");
+                    $parcela->status = "unpaid";
                     $parcela->amount = $enrollment_amount;
                     $parcela->enrollment_of = $enrollment + 1;
 

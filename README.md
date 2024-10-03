@@ -334,4 +334,12 @@ method = card, cash, pix, ted
 id, wallet_id, user_id, company_id, invoice_id, customer_id, method, enrollment_of,
 amount_owed, amount_paid, amount_remaining
 
-**
+**Petições
+status(iniciada, em andamento, concluído),
+origem (escritórios), data recebimento, responsável, data entrega,
+tipo (RT, Contestação, Manifestação, RO, RR, ED, Análise de Sentença, Análise Processual, Análise de Caso),
+cliente, processo, tribunal, observações, valor, status (pago, pendente, atrasado)
+
+**Audiências, Perícias, Reuniões
+status(aberto, concluído, cancelado, a receber), objeto (audiência, perícia, reunião, petição, diligência),
+data acontecer, origem(escritórios), cliente, local, horario, tipo(inicial, conciliação, diligencia pericial, instrução, una, visita, encerramento instrução), responsável, processo, modalidade(online, presencial), cliente informado(sim, não), testemunhas informadas(sim, não), link, observações, valor, status(pago, pendente, atrasado)

@@ -121,6 +121,7 @@
                         <th>Categoria</th>
                         <th>Tipo</th>
                         <th>Valor</th>
+                        <th>Restante</th>
                         <th>Parcela</th>
                         <th>Vencimento</th>
                         <th>Status</th>
@@ -136,6 +137,7 @@
                             <td>{{ $invoice->getCategory($invoice->invoice_category_id) }}</td>
                             <td>{{ $invoice->getType($invoice->type) }}</td>
                             <td>{{ 'R$' . number_format($invoice->amount, 2, ',', '.') }}</td>
+                            <td>{{ 'R$' . number_format($invoice->getAmountRemaining($invoice->id), 2, ',', '.') }}</td>
                             <td class="text-center align-middle">{{ $invoice->enrollment_of }} / {{ $invoice->enrollments }}</td>
                             <td>{{ \Carbon\Carbon::parse($invoice->due_at)->format('d/m/Y') }}</td>
                             <td><span class="badge 
@@ -148,6 +150,9 @@
                                             echo 'text-bg-success';
                                         }
                                         if($retorno == 'Atrasado'){
+                                            echo 'text-bg-warning';
+                                        }
+                                        if($retorno == 'Parc. - Atras.'){
                                             echo 'text-bg-warning';
                                         }
                                    @endphp ">
@@ -286,7 +291,7 @@
                     <div class="row">
                         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                             <input type="radio" class="btn-check" name="type" id="income" value="income" autocomplete="off" >
-                            <label class="btn btn-outline-success" for="income"><i class="fa-solid fa-circle-up"></i> Receita</label>
+                            <label class="btn btn-outline-primary" for="income"><i class="fa-solid fa-circle-up"></i> Receita</label>
 
                             <input type="radio" class="btn-check" name="type" id="expense" value="expense" autocomplete="off">
                             <label class="btn btn-outline-danger" for="expense"><i class="fa-solid fa-circle-down"></i> Despesa</label>
@@ -407,7 +412,7 @@
                     <div class="row">
                         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                             <input type="radio" class="btn-check" name="type" id="edit_income" value="income" autocomplete="off" >
-                            <label class="btn btn-outline-success" for="income"><i class="fa-solid fa-circle-up"></i> Receita</label>
+                            <label class="btn btn-outline-primary" for="income"><i class="fa-solid fa-circle-up"></i> Receita</label>
 
                             <input type="radio" class="btn-check" name="type" id="edit_expense" value="expense" autocomplete="off">
                             <label class="btn btn-outline-danger" for="expense"><i class="fa-solid fa-circle-down"></i> Despesa</label>
@@ -815,6 +820,7 @@
                     $('#pay_company_id').val(dados[0].company_id);
                     $('#pay_invoice_category_id').val(dados[0].invoice_category_id);
                     $('#pay_amount_owed').val(dados[0].amount_owed),
+                    $('#pay_amount_paid').val(dados[0].amount_owed),
                     $('#pay_due_at').val(dados[0].due_at);
                     //$('#pay_pay_day').val(dados[0].pay_day[0].attributes[11]);
                     $('#pay_pay_day').val(hoje);

@@ -115,9 +115,11 @@ class PaymentController extends Controller
         try {
             /**Calcula valor restante em caso de abatimento da conta */
             $amount_remaining = ($request->amount_owed - $request->amount_paid);
+            $status = ($amount_remaining > 0) ? 'partial' : $request->status;
+            $amount_owed = ($amount_remaining > 0) ? str_replace([".", ","], ["", "."], $amount_remaining) : str_replace([".", ","], ["", "."], $request->amount_owed);
             /**Trata os dados para salvar no banco de dados */
             $payment = new Payment;
-            $payment->amount_owed = str_replace([".", ","], ["", "."], $request->amount_owed);
+            $payment->amount_owed = $request->amount_owed;
             $payment->wallet_id = $request->wallet_id;
             $payment->pay_day = $request->pay_day;
             $payment->amount_paid = str_replace([".", ","], ["", "."], $request->amount_paid);
@@ -129,10 +131,13 @@ class PaymentController extends Controller
             $payment->status = $request->status;
             $payment->amount_remaining = str_replace([".", ","], ["", "."], $amount_remaining);
             $payment->save();  
+
+            //dd($payment);
             
             $editInvoice = Invoice::where('id', $payment->invoice_id)
             ->where('company_id', auth()->user()->company_id)->update([
-                'status' => "paid",
+                'status' => $status,
+                'amount' => $amount_owed,
             ]);
 
             //comita depois de tudo ter sido salvo

@@ -34,10 +34,20 @@ class Invoice extends Model implements Auditable
 
         if($dataInvoice->lt($today) AND $status == 'unpaid'){
             return 'Atrasado';
+        }
+
+        if($dataInvoice->lt($today) AND $status == 'partial'){
+            return 'Parc. - Atras.';
         }else{
             return 'Não Pago';
         }
 
+    }
+//amount_remaining
+    public function getAmountRemaining($invoiceId){
+        $amountRemaining = Payment::where('invoice_id', $invoiceId)
+        ->where('company_id', auth()->user()->company_id)->first();
+        return ($amountRemaining == null) ? 0 : $amountRemaining->amount_remaining;
     }
 
     public function getType($type){
