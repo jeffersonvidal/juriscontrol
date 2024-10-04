@@ -43,7 +43,7 @@ class TypePetitionSeeder extends Seeder
         }
         if(! TypePetition::where("id","5")->first()){
             TypePetition::create([
-                'name' => 'RR - Recurso Repetitivo',
+                'name' => 'RR - Recurso de Revista',
                 'company_id' => '1',
                 'user_id' => '1',
             ]);

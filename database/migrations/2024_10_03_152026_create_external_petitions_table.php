@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('external_office_id'); //id do escritório externo
             $table->integer('responsible'); //id do usuário do sistema responsável por processar o registro
             $table->date('delivery_date'); //data de entrega da petição
-            $table->string('type'); //rt, contestação, manifestação, ro, rr, ed, análise de sentença, análise processual, análise de caso
+            $table->integer('type'); //rt, contestação, manifestação, ro, rr, ed, análise de sentença, análise processual, análise de caso
             $table->string('customer_name'); //nome do cliente da petição
             $table->string('process_number')->nullable(); //nº do processo
             $table->string('court')->nullable(); //tribunal

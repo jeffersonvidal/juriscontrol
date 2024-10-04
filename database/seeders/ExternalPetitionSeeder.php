@@ -19,13 +19,13 @@ class ExternalPetitionSeeder extends Seeder
                 'external_office_id' => '1',
                 'responsible' => '1',
                 'delivery_date' => '2024-11-02',
-                'type' => 'RT',
+                'type' => '1',
                 'customer_name' => fake()->name(),
                 'process_number' => '0000548-63.2024.5.10.0104',
                 'court' => 'TRT10',
                 'notes' => '',
                 'amount' => '200',
-                'status' => 'Iniciada',
+                'status' => 'completed',
                 'payment_status' => 'pending',
             ]);
         }
@@ -37,13 +37,13 @@ class ExternalPetitionSeeder extends Seeder
                 'external_office_id' => '2',
                 'responsible' => '1',
                 'delivery_date' => '2024-11-17',
-                'type' => 'RO',
+                'type' => '4',
                 'customer_name' => fake()->name(),
                 'process_number' => '0000548-63.2024.5.10.0485',
                 'court' => 'TRT10',
                 'notes' => '',
                 'amount' => '150',
-                'status' => 'Iniciada',
+                'status' => 'in_progress',
                 'payment_status' => 'pending',
             ]);
         }

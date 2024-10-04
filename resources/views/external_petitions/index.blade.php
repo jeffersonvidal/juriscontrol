@@ -49,9 +49,9 @@
                             <td>{{ $externalPetition->getExternalOffice($externalPetition->external_office_id)->name }}</td>
                             <td>{{ $externalPetition->customer_name }}</td>
                             <td>{{ $externalPetition->getResponsible($externalPetition->responsible)->name }}</td>
-                            <td>{{ $externalPetition->status }}</td>
+                            <td>{{ $externalPetition->getStatusPetition($externalPetition->id) }}</td>
                             <td>{{ \Carbon\Carbon::parse($externalPetition->delivery_date)->format('d/m/Y') }}</td>
-                            <td>{{ $externalPetition->type }}</td>
+                            <td>{{ $externalPetition->getTypePetition($externalPetition->type)->name }}</td>
                             <td>{{ $externalPetition->court }}</td>
                             <td>{{ 'R$' . number_format($externalPetition->amount, 2, ',', '.') }}</td>
                             <td>{{ $externalPetition->getPaymentStatus($externalPetition->payment_status) }}</td>
@@ -112,8 +112,8 @@ cliente, processo, tribunal, observações, valor, payment_status (pago (paid), 
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <label for="user_id" class="form-label">Responsável</label>
-                    <select class="form-select" name="user_id" id="user_id">
+                    <label for="responsible" class="form-label">Responsável</label>
+                    <select class="form-select" name="responsible" id="responsible">
                         <option value="" >Escolha um</option>
                         @foreach ($users as $user)
                             <option value="{{ $user->id }}" >{{ $user->name }}</option>
@@ -133,8 +133,8 @@ cliente, processo, tribunal, observações, valor, payment_status (pago (paid), 
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <label for="external_office_id" class="form-label">Tipo</label>
-                    <select class="form-select" name="external_office_id" id="external_office_id">
+                    <label for="type" class="form-label">Tipo</label>
+                    <select class="form-select" name="type" id="type">
                         <option value="" >Escolha um</option>
                         @foreach ($typePetitions as $typePetition)
                             <option value="{{ $typePetition->id }}" >{{ $typePetition->name }}</option>
@@ -190,7 +190,7 @@ cliente, processo, tribunal, observações, valor, payment_status (pago (paid), 
             event.preventDefault(); //não atualiza a página ao enviar os dados
 
             $.ajax({
-                url: "{{ route('external-offices.store') }}",
+                url: "{{ route('external-petitions.store') }}",
                 method: 'POST',
                 data: $(this).serialize(),
                 success: function(response) {

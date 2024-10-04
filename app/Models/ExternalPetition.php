@@ -32,6 +32,28 @@ class ExternalPetition extends Model implements Auditable
         return User::where('id', $userId)
         ->where('company_id', auth()->user()->company_id)->first();
     }
+    
+    /**Pega o tipo da petição */
+    public function getTypePetition($typePetitionId){
+        return TypePetition::where('id', $typePetitionId)
+        ->where('company_id', auth()->user()->company_id)->first();
+    }
+    
+    /**Pega o status da petição */
+    public function getStatusPetition($petitionId){
+        $statusPetition =  ExternalPetition::where('id', $petitionId)
+        ->where('company_id', auth()->user()->company_id)->first();
+
+        if($statusPetition->status == 'started'){
+            return 'Iniciada';
+        }
+        if($statusPetition->status == 'in_progress'){
+            return 'Em Andamento';
+        }
+        if($statusPetition->status == 'completed'){
+            return 'Concluído';
+        }
+    }
 
     /**Pega status de pagamento */
     public function getPaymentStatus($paymentStatus){
