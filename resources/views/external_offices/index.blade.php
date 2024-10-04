@@ -44,7 +44,7 @@
                             <tr>
                             <td>{{ $externalOffice->name }}</td>
                             <td>{{ $externalOffice->responsible }}</td>
-                            <td>{{ $externalOffice->phone }}</td>
+                            <td><span class="phone">{{ $externalOffice->phone }}</span></td>
                             <td>{{ $externalOffice->email }}</td>
                             <td>{{ $externalOffice->cnpj }}</td>
                                 <td>

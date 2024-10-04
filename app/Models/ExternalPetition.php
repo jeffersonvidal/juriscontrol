@@ -60,11 +60,8 @@ class ExternalPetition extends Model implements Auditable
         if($paymentStatus == 'paid'){
             return 'Pago';
         }
-        if($paymentStatus == 'pending'){
-            return 'Pendente';
-        }
-        if($paymentStatus == 'late'){
-            return 'Atrasado';
+        if($paymentStatus == 'unpaid'){
+            return 'Não Pago';
         }
     }
 }

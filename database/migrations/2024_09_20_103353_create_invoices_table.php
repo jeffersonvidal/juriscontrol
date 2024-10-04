@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->integer('external_petition_id')->nullable(); //id da petição do parceiro
+            $table->integer('external_audience_id')->nullable(); //id da audiencia do parceiro
             $table->longText('description');
             $table->integer('wallet_id'); //id da carteira onde será lançada a fatura
             $table->integer('user_id'); //id do usuário que cadastrou a fatura

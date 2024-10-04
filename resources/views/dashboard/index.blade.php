@@ -26,6 +26,66 @@
                         
     
                         <div class="row">
+                        <div class="card mb-4 border-light shadow-sm">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col">
+                    <div class="card container text-center">
+                        <div class="card-header text-bg-primary p-3 row align-items-end">
+                            <div class="col">
+                                <h5 class="card-title"><i class="fa-solid fa-circle-up"></i> Receita Semana</h5>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title ms-auto">{{ 'R$' . number_format($incomeWeek, 2, ',', '.') }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card container text-center">
+                        <div class="card-header text-bg-danger p-3 row align-items-end">
+                            <div class="col">
+                                <h5 class="card-title"><i class="fa-solid fa-circle-down"></i> Despesa Semana</h5>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title ms-auto">{{ 'R$' . number_format($expenseWeek, 2, ',', '.') }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card container text-center">
+                        <div class="card-header text-bg-<?php echo ($cashBalance <= 0 ? 'danger' : 'success')?> p-3 row align-items-end">
+                            <div class="col">
+                                <h5 class="card-title"><i class="fa-solid fa-sack-dollar"></i> Saldo/Caixa</h5>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title ms-auto">{{ 'R$' . number_format($cashBalance, 2, ',', '.') }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!--fim dirv.row-->
+        </div>
+    </div>
+                
+                        </div>
+                    </div>
+                    
+                </div><!-- fim visão geral do sistema -->
+
+                <!-- visão jurídico -->
+                <div class="card mb-4 shadow-sm border-light">
+                    <div class="card-header hstack gap-2">
+                        <i class="fa-solid fa-gavel"></i> <span>VISÃO GERAL - JURÍDICO</span>
+                    </div>
+    
+    
+                    <div class="card-body">
+                        <!-- componente de mensagens e alertas -->    
+                        
+    
+                        <div class="row">
                             <div class="col-xl-3 col-md-6 mb-4">
                                 <div class="card border border-4 border-primary border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
                                     <div class="card-body">
@@ -82,7 +142,7 @@
                         </div>
                     </div>
                     
-                </div><!-- fim visão geral do sistema -->
+                </div><!-- fim visão jurídico -->
 
         </div>
     

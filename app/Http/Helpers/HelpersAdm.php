@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Invoice;
 use Carbon\Carbon;
 
 class HelpersAdm{
@@ -35,6 +36,52 @@ class HelpersAdm{
     $data = \Carbon\Carbon::now();
     $mes = $data->translatedFormat('M'); // Formato local abreviado do mês
     return ucfirst($mes);
+  }
+
+  /**Retorna total de contas a receber na semana corrente */
+  public function getIncomeWeek(){
+    // Data de início da semana
+    $startOfWeek = Carbon::now()->startOfWeek();
+
+    // Data de fim da semana
+    $endOfWeek = Carbon::now()->endOfWeek();
+
+    // Soma dos registros da semana corrente
+    return Invoice::where('company_id', auth()->user()->company_id)
+      ->where('type','income')
+      ->whereBetween('due_at', [$startOfWeek, $endOfWeek])
+      ->sum('amount');
+  }
+
+  /**Retorna total de contas a pagar na semana corrente */
+  public function getExpenseWeek(){
+    // Data de início da semana
+    $startOfWeek = Carbon::now()->startOfWeek();
+
+    // Data de fim da semana
+    $endOfWeek = Carbon::now()->endOfWeek();
+
+    // Soma dos registros da semana corrente
+    return Invoice::where('company_id', auth()->user()->company_id)
+      ->where('type','expense')
+      ->whereBetween('due_at', [$startOfWeek, $endOfWeek])
+      ->sum('amount');
+  }
+
+  /**Pega Saldo do caixa */
+  public function getCashBalance(){
+    /**Somar todas as despesas pagas */
+    $despesasTotal = Invoice::where('status', '=', 'paid')
+    ->where('company_id', auth()->user()->company_id)
+    ->where('type', 'expense')->sum('amount');
+
+    /**Somar todas as receitas pagas */
+    $receitasTotal = Invoice::where('status', '=', 'paid')
+    ->where('company_id', auth()->user()->company_id)
+    ->where('type', 'income')->sum('amount');
+
+    /**Contabiliza saldo em caixa */
+    return ($receitasTotal - $despesasTotal);
   }
 
 

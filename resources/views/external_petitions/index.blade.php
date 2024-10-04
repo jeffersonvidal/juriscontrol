@@ -25,7 +25,6 @@
         </div><!--fim card-header-->
 
         <div class="card-body">
-            
             <table id="datatablesSimple" class="table table-striped table-hover">
             <thead>
                     <tr>

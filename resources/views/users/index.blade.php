@@ -48,7 +48,7 @@
                                 <td>{{ $user->email }}</td>
                                 <td><span class="cpf">{{ $user->cpf }}</span></td>
                                 <td><span class="phone">{{ $user->phone }}</span></td>
-                                <td>{{ $user->user_profile_id }}</td>
+                                <td>{{ $user->getUserProfile($user->user_profile_id)->profile }}</td>
                                 <td>{{ \Carbon\Carbon::parse($user->birthday)->format('d/m/Y') }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">

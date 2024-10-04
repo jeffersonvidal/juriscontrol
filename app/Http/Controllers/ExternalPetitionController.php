@@ -6,15 +6,22 @@ use App\Http\Requests\ExternalPetitionRequest;
 use App\Models\ExternalOffice;
 use App\Models\ExternalPetition;
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
 use App\Models\TypePetition;
 use App\Models\User;
 use App\Models\Wallet;
 use DB;
 use Exception;
+use HelpersAdm;
 use Illuminate\Http\Request;
 
 class ExternalPetitionController extends Controller
 {
+    private $helperAdm;
+
+    public function __construct(HelpersAdm $helpersAdm){
+        $this->helperAdm = $helpersAdm;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -72,8 +79,35 @@ class ExternalPetitionController extends Controller
             $externalPetition->notes = $request->notes;
             $externalPetition->amount = $request->amount;
             $externalPetition->status = 'started';
-            $externalPetition->payment_status = "pending";
+            $externalPetition->payment_status = "unpaid";
             $externalPetition->save();
+
+            /**Lançado como conta a receber */
+            $externalOffice = ExternalOffice::where('id',$externalPetition->type)
+            ->where('company_id', $externalPetition->company_id)->first();
+
+            $externalTypePetition = TypePetition::where('id',$externalPetition->external_office_id)
+            ->where('company_id', $externalPetition->company_id)->first();
+
+            //$description = $externalTypePetition->name . ' de ' . $externalOffice->name . '. Cliente: ' . $externalPetition->customer_name;
+            $description = $externalTypePetition->name . '. Cliente: ' . $externalPetition->customer_name;
+            $invoice = new Invoice;
+            $invoice->enrollment_of = '1';
+            $invoice->external_petition_id = $externalPetition->id;
+            $invoice->description = $description;
+            $invoice->wallet_id = $externalPetition->wallet_id;
+            $invoice->user_id = $externalPetition->user_id;
+            $invoice->company_id = $externalPetition->company_id;
+            $invoice->invoice_category_id = '7';
+            $invoice->type = 'income';
+            $invoice->amount = $externalPetition->amount;
+            $invoice->due_at = $externalPetition->delivery_date;
+            $invoice->repeat_when = 'unique';
+            $invoice->enrollments = '1';
+            $invoice->status = 'unpaid';
+            $invoice->save();
+
+            //dd($externalPetition, $invoice);
 
             //comita depois de tudo ter sido salvo
             DB::commit();

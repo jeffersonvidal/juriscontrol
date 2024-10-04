@@ -125,6 +125,7 @@
                         <th>Parcela</th>
                         <th>Vencimento</th>
                         <th>Status</th>
+                        <th>Parceiro</th>
                         <th class="text-center">Ações</th>
                         </tr>
                     </thead>
@@ -158,7 +159,8 @@
                                    @endphp ">
                                 {{ $invoice->getStatus($invoice->status, $invoice->id) }}
                                 </span>
-</td>
+                            </td>
+                                <td>{{ $invoice->getExternalOffice($invoice->id) }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
                                         <a href="{{ route('invoices.show', ['invoice' => $invoice->id]) }}" class="btn btn-sm me-1 mb-1 mb-sm-0" title="Ver Registro"><i class="fa-solid fa-eye"></i></a>

@@ -18,7 +18,7 @@ class Invoice extends Model implements Auditable
     protected $table = 'invoices';
 
     //Quais colunas para serem cadastradas
-    protected $fillable = ['description','wallet_id', 'user_id','company_id', 'customer_id',
+    protected $fillable = ['external_petition_id', 'external_audience_id', 'description','wallet_id', 'user_id','company_id', 'customer_id',
     'invoice_category_id', 'invoice_of', 'type', 'amount', 'due_at', 'repeat_when', 'period', 
     'enrollments', 'enrollment_of', 'status'];
 
@@ -90,5 +90,27 @@ class Invoice extends Model implements Auditable
         return Invoice::where('description', $invoice)
             ->where('type', $type)->count();
     }
+
+    /**Pega dados do escritório parceiro */
+    public function getExternalOffice($invoiceId){
+        $invoice = Invoice::where('id', $invoiceId)->first();
+        $externalPetition = '';
+        if($invoice->external_petition_id != 0 OR $invoice->external_petition_id != null){
+            $externalPetition = $invoice->external_petition_id;
+        }
+
+        if($externalPetition){
+            $petition = ExternalPetition::where('id', $externalPetition)
+            ->where('company_id', auth()->user()->company_id)->first();
+
+            $externalOffice = ExternalOffice::where('id', $petition->external_office_id)
+            ->where('company_id', auth()->user()->company_id)->first();
+
+            return ($externalOffice ? $externalOffice->name : 'Próprio');
+        }
+
+        return 'Próprio';
+    }
+
       
 }

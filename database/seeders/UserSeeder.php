@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         /**Company 1 */
         if(! User::where("id","1")->first()){
             User::create([
-                'name' => fake()->name(),
+                'name' => 'Jason Voorhees',
                 'company_id' => '1',
                 'email' => 'adm@adm.com',
                 'password' => Hash::make('123', ['rounds' => 12]),
@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
             User::create([
                 'name' => fake()->name(),
                 'company_id' => '2',
-                'email' => 'aaa@aaa.com',
+                'email' => 'user@email.com',
                 'password' => Hash::make('123', ['rounds' => 12]),
                 'user_profile_id' => '4',
                 'phone' => '61987654321',

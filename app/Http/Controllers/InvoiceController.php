@@ -116,6 +116,8 @@ class InvoiceController extends Controller
 
             $invoice = new Invoice;
             $invoice->invoice_of = null;
+            $invoice->external_petition_id = ($request->external_petition_id ?: null);
+            $invoice->external_audience_id = ($request->external_audience_id ?: null);
             $invoice->type = $request->type;
             $invoice->amount = str_replace([".", ","], ["", "."], $request->amount);
             //$invoice->amount = number_format($request->amount, 2, ',', '.');

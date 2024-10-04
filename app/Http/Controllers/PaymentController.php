@@ -163,19 +163,11 @@ class PaymentController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Payment $payment)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Payment $payment)
     {
-        //
+        //atualizar o status na fatura(invoice), petição e audiência de parceiros
     }
 
     /**
