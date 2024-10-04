@@ -26,7 +26,7 @@ class ExternalPetitionSeeder extends Seeder
                 'notes' => '',
                 'amount' => '200',
                 'status' => 'completed',
-                'payment_status' => 'pending',
+                'payment_status' => 'unpaid',
             ]);
         }
         if(! ExternalPetition::where("id","2")->first()){
@@ -44,7 +44,7 @@ class ExternalPetitionSeeder extends Seeder
                 'notes' => '',
                 'amount' => '150',
                 'status' => 'in_progress',
-                'payment_status' => 'pending',
+                'payment_status' => 'unpaid',
             ]);
         }
     }

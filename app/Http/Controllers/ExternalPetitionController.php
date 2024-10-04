@@ -128,23 +128,65 @@ class ExternalPetitionController extends Controller
      */
     public function show(ExternalPetition $externalPetition)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ExternalPetition $externalPetition)
-    {
-        //
+        $theExternalPetition = ExternalPetition::where('id', $externalPetition)->first();
+        //return response()->json($theLabel);
+        return response()->json($theExternalPetition);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ExternalPetition $externalPetition)
+    public function update(ExternalPetitionRequest $request, ExternalPetition $externalPetition, Invoice $invoice)
     {
-        //
+        //dd($request);
+        //Validar o formulário
+        $request->validated();
+
+        //garantir que salve nas duas tabelas do banco de dados
+        DB::beginTransaction();
+
+        try {
+
+            $externalPetition->wallet_id = $request->wallet_id;
+            $externalPetition->user_id = $request->user_id;
+            $externalPetition->company_id = $request->company_id;
+            $externalPetition->external_office_id = $request->external_office_id;
+            $externalPetition->responsible = $request->responsible;
+            $externalPetition->delivery_date = $request->delivery_date;
+            $externalPetition->type = $request->type;
+            $externalPetition->customer_name = $request->customer_name;
+            $externalPetition->process_number = $request->process_number;
+            $externalPetition->court = $request->court;
+            $externalPetition->notes = $request->notes;
+            $externalPetition->amount = $request->amount;
+            $externalPetition->status = $request->status;
+            $externalPetition->payment_status = $request->payment_status;
+            $externalPetition->update();
+
+            /**Atualizando status de pagamento em conta a receber */
+            if($externalPetition->payment_status == 'paid'){
+                $invoiceStatus = 'paid';
+            }
+
+            $updateInvoice = Invoice::where('external_petition_id', $externalPetition->id)
+            ->where('company_id', auth()->user()->company_id)->update([
+                'status' => ($externalPetition->payment_status ?: $invoiceStatus),
+            ]);
+
+            //dd($externalPetition, $updateInvoice);
+
+            //comita depois de tudo ter sido salvo
+            DB::commit();
+
+            //Redireciona para outra página após cadastrar com sucesso
+            return response()->json( ['success' => 'Registro cadastrado com sucesso!']);
+        } catch (Exception $e) {
+            //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+            DB::rollBack();
+
+            //Redireciona para outra página se der erro
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 
     /**
