@@ -22,11 +22,12 @@ return new class extends Migration
             $table->string('type'); //rt, contestação, manifestação, ro, rr, ed, análise de sentença, análise processual, análise de caso
             $table->string('customer_name'); //nome do cliente da petição
             $table->string('process_number')->nullable(); //nº do processo
-            $table->string('court'); //tribunal
+            $table->string('court')->nullable(); //tribunal
             $table->longText('notes')->nullable(); //observações
             $table->double('amount'); //valor cobrado
             $table->string('status')->default('started'); //iniciada, em andamento, concluído
             $table->string('payment_status')->default('pending');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

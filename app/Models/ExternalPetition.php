@@ -21,11 +21,19 @@ class ExternalPetition extends Model implements Auditable
     'customer_name', 'process_number', 'court', 'notes', 'amount', 
     'status', 'payment_status'];
 
+    /**pega o escritório responsável pela petição */
+    public function getExternalOffice($externalOfficeId){
+        return ExternalOffice::where('id', $externalOfficeId)
+        ->where('company_id', auth()->user()->company_id)->first();
+    }
+
+    /**Pega usuário responsável por processar petição */
     public function getResponsible($userId){
         return User::where('id', $userId)
         ->where('company_id', auth()->user()->company_id)->first();
     }
 
+    /**Pega status de pagamento */
     public function getPaymentStatus($paymentStatus){
         if($paymentStatus == 'paid'){
             return 'Pago';

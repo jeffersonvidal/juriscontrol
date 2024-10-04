@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             WalletSeeder::class,
             PaymentSeeder::class,
             ExternalPetitionSeeder::class,
+            TypePetitionSeeder::class,
         ]);
     }
 }

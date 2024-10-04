@@ -29,6 +29,7 @@
             <table id="datatablesSimple" class="table table-striped table-hover">
             <thead>
                     <tr>
+                      <th>Escritório</th>
                       <th>Cliente</th>
                       <th>Responsável</th>
                       <th>Status</th>
@@ -45,6 +46,7 @@
                     @if (count($externalPetitions) > 0)
                         @foreach ($externalPetitions as $externalPetition)
                             <tr>
+                            <td>{{ $externalPetition->getExternalOffice($externalPetition->external_office_id)->name }}</td>
                             <td>{{ $externalPetition->customer_name }}</td>
                             <td>{{ $externalPetition->getResponsible($externalPetition->responsible)->name }}</td>
                             <td>{{ $externalPetition->status }}</td>
@@ -73,12 +75,17 @@
         </div><!--fim card-body-->
     </div><!--fim card -->
 
+<!-- customer_name, wallet_id, user_id, company_id, status(iniciada(started), em andamento(in_progress), concluído(completed)),
+origem (escritórios), data recebimento, responsável, data entrega,
+tipo (RT, Contestação, Manifestação, RO, RR, ED, Análise de Sentença, Análise Processual, Análise de Caso),
+cliente, processo, tribunal, observações, valor, payment_status (pago (paid), pendente(pending), atrasado(late)) -->
+
 <!-- addModal -->
 <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Escritório Externo</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Petição de Parceiros</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -86,62 +93,79 @@
                 @csrf
                 <!-- @method('POST') -->
 
+                <div class="col-md-4 mb-3">
+                    <label for="external_office_id" class="form-label">Escritório</label>
+                    <select class="form-select" name="external_office_id" id="external_office_id">
+                        <option value="" >Escolha um</option>
+                        @foreach ($externalOffices as $externalOffice)
+                            <option value="{{ $externalOffice->id }}" >{{ $externalOffice->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="wallet_id" class="form-label">Carteira</label>
+                    <select class="form-select" name="wallet_id" id="wallet_id">
+                        <option value="" >Escolha uma</option>
+                        @foreach ($wallets as $wallet)
+                            <option value="{{ $wallet->id }}" >{{ $wallet->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="user_id" class="form-label">Responsável</label>
+                    <select class="form-select" name="user_id" id="user_id">
+                        <option value="" >Escolha um</option>
+                        @foreach ($users as $user)
+                            <option value="{{ $user->id }}" >{{ $user->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                
+
+                <div class="col-md-5">
+                    <label for="customer_name" class="form-label">Cliente</label>
+                    <input type="text" class="form-control" id="customer_name" name="customer_name" value="{{ old('customer_name') }}">
+                </div>
+            
+                <div class="col-md-3 mb-3">
+                    <label for="delivery_date" class="form-label">Data de Entrega</label>
+                    <input type="date" class="form-control" id="delivery_date" name="delivery_date" value="{{ old('delivery_date') }}">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label for="external_office_id" class="form-label">Tipo</label>
+                    <select class="form-select" name="external_office_id" id="external_office_id">
+                        <option value="" >Escolha um</option>
+                        @foreach ($typePetitions as $typePetition)
+                            <option value="{{ $typePetition->id }}" >{{ $typePetition->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            
                 <div class="col-md-6">
-                    <label for="name" class="form-label">Nome do Escritório</label>
-                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
-                    <span id="name_error" class="text-danger"></span>
-                </div>
-                <div class="col-md-6">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}">
-                    <span id="email_error" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="phone" class="form-label">Telefone</label>
-                    <input type="tel" class="form-control" id="phone" name="phone" value="{{ old('phone') }}">
+                    <label for="process_number" class="form-label">Processo</label>
+                    <input type="text" class="form-control" id="process_number" name="process_number" value="{{ old('process_number') }}">
                 </div>
             
-                <div class="col-md-4">
-                    <label for="cnpj" class="form-label">CNPJ</label>
-                    <input type="text" class="form-control" id="cnpj" name="cnpj" value="{{ old('cnpj') }}">
+                <div class="col-md-3">
+                    <label for="court" class="form-label">Tribunal</label>
+                    <input type="text" class="form-control" id="court" name="court" value="{{ old('court') }}">
                 </div>
             
-                <div class="col-md-4">
-                    <label for="responsible" class="form-label">Responsável</label>
-                    <input type="text" class="form-control" id="responsible" name="responsible" value="{{ old('responsible') }}">
+                <div class="col-md-3">
+                    <label for="amount" class="form-label">Valor Cobrado</label>
+                    <input type="text" class="form-control" id="amount" name="amount" value="{{ old('amount') }}">
                 </div>
-            
-
-                <fieldset>
-                    <legend>Dados Bancários</legend>
-
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label for="agency" class="form-label">Agência</label>
-                            <input type="text" class="form-control" id="agency" name="agency" value="{{ old('agency') }}">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="current_account" class="form-label">Conta Corrente</label>
-                            <input type="text" class="form-control" id="current_account" name="current_account" value="{{ old('current_account') }}">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="bank" class="form-label">Banco</label>
-                            <input type="text" class="form-control" id="bank" name="bank" value="{{ old('bank') }}">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="pix" class="form-label">Chave PIX</label>
-                            <input type="text" class="form-control" id="pix" name="pix" value="{{ old('pix') }}">
-                        </div> 
-                    </div>
-                </fieldset>
+                <div class="col-md-12">
+                    <label for="notes" class="form-label">Observações</label>
+                    <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                </div>
                 
                 
                 
                 <div class="col-md-12">
                     <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="user_id" name="user_id" value="{{ auth()->user()->id }}">                 
                 </div>
                 
             
