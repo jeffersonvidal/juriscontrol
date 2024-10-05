@@ -272,6 +272,32 @@
                     </select>
                 </div>
 
+                <div class="paymentMethod" style="display:none;">
+                    <div class="col-md-12">
+                        <label for="pay_day" class="form-label">Forma de Pagamento</label>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        
+                        <div class="btn-group col-md-12 mb-3" role="group" aria-label="Basic radio toggle button group">
+                            <input type="radio" class="btn-check" name="method" id="pix" value="pix">
+                            <label class="btn btn-sm btn-outline-dark" for="pix">PIX</label>
+
+                            <input type="radio" class="btn-check" name="method" id="card" value="card">
+                            <label class="btn btn-sm btn-outline-dark" for="card">Cartão</label>
+
+                            <input type="radio" class="btn-check" name="method" id="money" value="money">
+                            <label class="btn btn-sm btn-outline-dark" for="money">Dinheiro</label>
+
+                            <input type="radio" class="btn-check" name="method" id="ted" value="ted">
+                            <label class="btn btn-sm btn-outline-dark" for="ted">TED</label>
+
+                            <input type="radio" class="btn-check" name="method" id="bank_slip" value="bank_slip">
+                            <label class="btn btn-sm btn-outline-dark" for="bank_slip">Boleto</label>
+                        </div>
+                    </div>
+                </div><!--end paymentMethod-->
+
                 <div class="col-md-12">
                     <label for="notes" class="form-label">Observações</label>
                     <textarea class="form-control" id="edit_notes" name="notes" rows="3"></textarea>

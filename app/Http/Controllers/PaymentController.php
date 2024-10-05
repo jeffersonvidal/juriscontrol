@@ -18,10 +18,12 @@ class PaymentController extends Controller
 {
     private $helperAdm;
     private $modelFunctions;
+    private $modelPayment;
 
-    public function __construct(\HelpersAdm $helpersAdm, Invoice $invoice){
+    public function __construct(HelpersAdm $helpersAdm, Invoice $invoice, Payment $payment){
         $this->helperAdm = $helpersAdm;
         $this->modelFunctions = $invoice;
+        $this->modelPayment = $payment;
     }
     
     /**
@@ -41,6 +43,7 @@ class PaymentController extends Controller
             $whenQuery->where('pay_day', '<=', Carbon::parse($request->data_fim)->format('Y-m-d'));
         })
         ->where('company_id', auth()->user()->company_id)
+        ->where('status', 'paid')
         ->orderBy('created_at', 'DESC')
         ->get();
 

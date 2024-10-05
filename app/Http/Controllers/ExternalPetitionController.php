@@ -7,9 +7,11 @@ use App\Models\ExternalOffice;
 use App\Models\ExternalPetition;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\TypePetition;
 use App\Models\User;
 use App\Models\Wallet;
+use Carbon\Carbon;
 use DB;
 use Exception;
 use HelpersAdm;
@@ -28,7 +30,7 @@ class ExternalPetitionController extends Controller
     public function index()
     {
         $externalPetitions = ExternalPetition::where('company_id', auth()->user()->company_id)
-        ->orderBy('id', 'DESC')->get();
+        ->orderBy('payment_status', 'DESC')->get();
 
         $externalOffices = ExternalOffice::where('company_id', auth()->user()->company_id)
         ->orderBy('name', 'ASC')->get();
@@ -136,7 +138,7 @@ class ExternalPetitionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ExternalPetitionRequest $request, ExternalPetition $externalPetition, Invoice $invoice)
+    public function update(ExternalPetitionRequest $request, ExternalPetition $externalPetition, Invoice $invoice, Payment $payment)
     {
         //dd($request);
         //Validar o formulário
@@ -161,19 +163,43 @@ class ExternalPetitionController extends Controller
             $externalPetition->amount = $request->amount;
             $externalPetition->status = $request->status;
             $externalPetition->payment_status = $request->payment_status;
+
             $externalPetition->update();
 
             /**Atualizando status de pagamento em conta a receber */
             if($externalPetition->payment_status == 'paid'){
                 $invoiceStatus = 'paid';
+
+                //dd($externalPetition->company_id);
+
+                /**Pegando a invoice que será editada */
+                $editedInvoice = Invoice::where('external_petition_id', $externalPetition->id)
+                    ->where('company_id', $externalPetition->company_id)->first();
+                    //dd($editedInvoice);
+            
+                /**Alterando o status da invoice */
+                $updateInvoice = Invoice::where('external_petition_id', $externalPetition->id)
+                ->where('company_id', $externalPetition->company_id)->update([
+                    'status' => $externalPetition->payment_status,
+                ]);
+                
+                /**Registrando pagamento na tabela payments */
+                $payment = new Payment;
+                $payment->amount_owed = $externalPetition->amount;
+                $payment->wallet_id = $externalPetition->wallet_id;
+                $payment->pay_day = Carbon::now();
+                $payment->amount_paid = str_replace([".", ","], ["", "."], $externalPetition->amount);
+                $payment->enrollment_of = 1;
+                $payment->method = $request->method;
+                $payment->company_id = $externalPetition->company_id;
+                $payment->user_id = $externalPetition->user_id;
+                $payment->invoice_id = $editedInvoice->id;
+                $payment->status = $invoiceStatus;
+                $payment->amount_remaining = 0;
+                $payment->save(); 
             }
-
-            $updateInvoice = Invoice::where('external_petition_id', $externalPetition->id)
-            ->where('company_id', auth()->user()->company_id)->update([
-                'status' => ($externalPetition->payment_status ?: $invoiceStatus),
-            ]);
-
-            //dd($externalPetition, $updateInvoice);
+            
+//            dd($externalPetition);
 
             //comita depois de tudo ter sido salvo
             DB::commit();
@@ -194,6 +220,23 @@ class ExternalPetitionController extends Controller
      */
     public function destroy(ExternalPetition $externalPetition)
     {
-        //
+        try {
+            //garantir que salve nas duas tabelas do banco de dados
+            DB::beginTransaction();
+
+            //$deleteUser = User::where('id', $user)->delete();
+            $deleteExternalPeition = ExternalPetition::where('id', $externalPetition->id)
+            ->where('company_id', auth()->user()->company_id)->delete();
+
+            //comita depois de tudo ter sido salvo
+            DB::commit();
+
+            return response()->json(['success' => 'Registro excluído com sucesso - Doido!']);
+        } catch (Exception $e) {
+            //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+            DB::rollBack();
+
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 }

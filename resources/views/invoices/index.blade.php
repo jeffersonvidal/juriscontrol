@@ -648,10 +648,6 @@
                             pay_day: $(this).attr('data-pay_day', hoje), 
                             method: $(this).attr('data-method'), 
 
-    //                         'wallet_id', 'user_id', 'company_id', 'invoice_id', 'customer_id', 'method', 
-    // 'enrollment_of', 'amount_owed', 'amount_paid', 'pay_day', 'amount_remaining', 'status'
-
-
                         }
                     ];
                     //console.log(dados[0].enrollment_of);

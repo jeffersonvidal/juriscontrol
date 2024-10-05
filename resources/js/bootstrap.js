@@ -34,6 +34,7 @@ document.querySelectorAll('input[name="repeat_when"]').forEach(function(radio) {
     }
   });
 });
+
 /**UpdateForm - Se clicar em fixa oculta campo parcelas e mostra o período (mensal/anual) */
 document.querySelectorAll('input[name="repeat_when"]').forEach(function(radio) {
   radio.addEventListener('change', function() {
@@ -65,6 +66,18 @@ if(document.querySelector('#parcela')){
 
   });
 }
+
+/**UpdateForm - Se clicar em pago mostra os métodos de pagamento no form de ExternalPetitions */
+
+  $('#edit_payment_status').change(function() {
+    if ($(this).val() == 'paid') {
+      $('.paymentMethod').show('slow');
+    } else {
+      $('.paymentMethod').hide('slow');
+    }
+  });
+
+
 
 
 //Inputmask
