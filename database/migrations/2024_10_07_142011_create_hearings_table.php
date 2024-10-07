@@ -17,22 +17,22 @@ return new class extends Migration
             $table->integer('company_id');
             $table->integer('user_id');
             $table->integer('responsible');
-            $table->string('status'); //open(aberto), canceled(cancelado), completed(concluído)
+            $table->string('status')->default('open'); //open(aberto), canceled(cancelado), completed(concluído)
             $table->date('date_happen'); //data para acontecer
             $table->string('external_office_id'); //id do escritório parceiro
             $table->string('client'); //nome do cliente
             $table->string('local'); //local onde acontecerá
             $table->time('time_happen'); //horário que acontecerá
             $table->string('type'); //initial(inicial), conciliation(conciliação), expert_due_dilivence(diligencia pericial), instruction(instrução), una, visit(visita), instruction_closure(encerramento de instrução)
-            $table->string('process_num'); //nº do processo
-            $table->string('modality'); //modalidade (online, presencial)
-            $table->string('informed_client'); //cliente informado (s/n)
-            $table->string('informed_witnesses'); //testemunhas informadas (s/n)
-            $table->string('link'); //link das audiências em caso de online
-            $table->string('notes'); //observações
-            $table->string('amount'); //valor cobrado
-            $table->string(''); //
-            $table->string('payment_status'); //paid, unpaid
+            $table->string('process_num')->nullable(); //nº do processo
+            $table->string('modality'); //modalidade (online, in_person(presencial))
+            $table->string('informed_client')->default('n'); //cliente informado (s/n)
+            $table->string('informed_witnesses')->default('n'); //testemunhas informadas (s/n)
+            $table->string('link')->nullable(); //link das audiências em caso de online
+            $table->longText('notes')->nullable(); //observações
+            $table->double('amount')->default(0); //valor cobrado
+            $table->string('payment_status')->default('unpaid'); //paid, unpaid
+            $table->softDeletes();
             $table->timestamps();
         });
     }

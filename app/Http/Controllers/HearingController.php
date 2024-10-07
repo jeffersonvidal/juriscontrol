@@ -13,7 +13,11 @@ class HearingController extends Controller
      */
     public function index()
     {
-        //
+        $hearings = Hearing::where('company_id', auth()->user()->company_id)
+        ->orderBy('id', 'DESC')->get();
+
+        //Carrega a view
+        return view('hearings.index', ['hearings' => $hearings]);
     }
 
     /**

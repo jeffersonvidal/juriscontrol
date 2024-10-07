@@ -41,6 +41,7 @@ class DatabaseSeeder extends Seeder
             PaymentSeeder::class,
             ExternalPetitionSeeder::class,
             TypePetitionSeeder::class,
+            HearingSeeder::class,
         ]);
     }
 }

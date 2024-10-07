@@ -4,6 +4,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExternalOfficeController;
 use App\Http\Controllers\ExternalPetitionController;
+use App\Http\Controllers\HearingController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\LoginController;
@@ -99,5 +100,12 @@ Route::group(['middleware' => 'auth'], function(){
   Route::post('/store-external-petition', [ExternalPetitionController::class, 'store'])->name('external-petitions.store'); //Salva novo registro no BD
   Route::put('/update-external-petition/{externalPetition}', [ExternalPetitionController::class, 'update'])->name('external-petitions.update'); //Atualiza um registro no BD
   Route::delete('/destroy-external-petition/{externalPetition}', [ExternalPetitionController::class, 'destroy'])->name('external-petitions.destroy'); //Exclui um registro no BD
+
+  /**Rotas de Hearings (Audiências, Reuniões, Diligências) */
+  Route::get('/index-hearing', [HearingController::class, 'index'])->name('hearings.index'); //Listar todos os registros da tabela
+  Route::get('/show-hearing/{hearing}', [HearingController::class, 'show'])->name('hearings.show'); //Mostra detalhe de um registro
+  Route::post('/store-hearing', [HearingController::class, 'store'])->name('hearings.store'); //Salva novo registro no BD
+  Route::put('/update-hearing/{hearing}', [HearingController::class, 'update'])->name('hearings.update'); //Atualiza um registro no BD
+  Route::delete('/destroy-hearing/{hearing}', [HearingController::class, 'destroy'])->name('hearings.destroy'); //Exclui um registro no BD
   
 }); //fim da restrição de acesso para quem não está logado no sistema
