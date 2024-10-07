@@ -6,8 +6,8 @@
 * Repositório: https://github.com/jeffersonvidal/juriscontrol.git
 
 ### Sistemas que inspiram recursos
-* EasyJur
-* AdvBox
+* EasyJur (dashboard, movimentações, jurisprudencias(wescrapping))
+* AdvBox (taskscore, tarefas recorrentes)
 * easyvog
 * Astrea
 * Promad
@@ -343,3 +343,6 @@ cliente, processo, tribunal, observações, valor, payment_status (pago, pendent
 **Audiências, Perícias, Reuniões
 status(aberto, concluído, cancelado, a receber), objeto (audiência, perícia, reunião, petição, diligência),
 data acontecer, origem(escritórios), cliente, local, horario, tipo(inicial, conciliação, diligencia pericial, instrução, una, visita, encerramento instrução), responsável, processo, modalidade(online, presencial), cliente informado(sim, não), testemunhas informadas(sim, não), link, observações, valor, status(pago, pendente, atrasado)
+
+Tasks (tarefas para recurso taskscore)
+id, grupo, fase, pontuação, recorrente, agenda geral

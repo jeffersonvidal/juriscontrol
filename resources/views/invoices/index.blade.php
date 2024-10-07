@@ -223,7 +223,7 @@
                             <input type="text" class="form-control" id="amount" name="amount" value="{{ old('amount') }}">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="due_at" class="form-label">Vencimento</label>
+                            <label for="due_at" class="form-label">Vencimento 1ª Parcela</label>
                             <input type="date" class="form-control" id="due_at" name="due_at" value="{{ old('due_at') }}">
                         </div>
                         
