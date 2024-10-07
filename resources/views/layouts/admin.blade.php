@@ -131,7 +131,20 @@
                                 </nav>
                             </div>
 
-                        <!-- Gestão de RH-->
+                        <!-- Gestão de Configurações-->
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseConfig" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-gear"></i></div>
+                                Configurações
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                            <div class="collapse" id="collapseConfig" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="" title="Gestão de Funcionários">Tarefas Padrão</a>
+                                    <a class="nav-link" href="" title="Gestão de Funcionários">Configurações</a>
+                                </nav>
+                            </div>
+
+                        <!-- Gestão de Suporte-->
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSuporte" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-headset"></i></div>
                                 Suporte

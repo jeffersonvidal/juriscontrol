@@ -24,39 +24,6 @@
 
 <div class="container-fluid px-4">
 
-     <!--buscar entre datas-->
-     <div class="card mt-3 mb-4 border-light shadow">
-        <div class="card-header d-flex justify-content-between">
-            <span>Pesquisar em intervalo de datas</span>
-        </div>
-
-
-        <div class="card-body">
-            <form action="{{ route('invoices.index') }}">
-                <div class="row">
-                    <div class="col-md-4 col-sm-12">
-                        <label for="nome" class="form-label">Nome</label>
-                        <input class="form-control" type="text" name="nome" id="nome" value="" placeholder="Nome da fatura">
-                    </div>
-                    <div class="col-md-3 col-sm-12">
-                        <label for="data_inicio" class="form-label">Data Início</label>
-                        <input class="form-control" type="date" name="data_inicio" id="data_inicio" value="" placeholder="Nome da fatura">
-                    </div>
-                    <div class="col-md-3 col-sm-12">
-                        <label for="data_fim" class="form-label">Data Fim</label>
-                        <input class="form-control" type="date" name="data_fim" id="data_fim" value="" placeholder="Nome da fatura">
-                    </div>
-
-                    <div class="col-md-2 col-sm-12 mt-3 pt-4">
-                        <button type="submit" class="btn btn-info btn-sm">Pesquisar</button>
-                        <a href="{{ route('invoices.index') }}" class="btn btn-warning btn-sm">Limpar</a>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-  
-
     <div class="card mb-4 border-light shadow-sm">
         <div class="card-header hstack gap-2">
             <span>Listar todos os registros</span>
