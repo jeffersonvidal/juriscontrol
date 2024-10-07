@@ -310,39 +310,10 @@ Teste para fazer contratos dinamicamente fazendo replace de variáveis por valor
 @endphp
 ```
 
-Tabela de faturas (receita(income) e despesa(expense))
-
-Lançar tudo que entra e sai de pagamentos, informar valor, data de pagamento, se é fixo,
-mensal ou pagamento único, se é receita ou despesa.
-
-Quando for mensal/parcelado, informar qtde de parcelas. O sistema já fará o cálculo de todas
-as parcelas. Primeira parcela será considerada a data informada no sistema. Se for data retroativa
-o sistema considera que já foi paga
-
-**Carteira - Wallet
-
-id, name, agency, current_account, balance (saldo), company_id, type (personal/business), holder(titular), main(principal)
-
-**Faturas/Transações (invoices/transactions)
-
-id, description, wallet_id, user_id, company_id, customer_id, invoice_category_id, invoice_of,
-type, amount, due_at, repeat_when, preiod, enrollments, enrollment_of, status
-
-**Pagamentos (payments)
-method = card, cash, pix, ted
-
-id, wallet_id, user_id, company_id, invoice_id, customer_id, method, enrollment_of,
-amount_owed, amount_paid, amount_remaining
-
-**Petições
-customer_name, wallet_id, user_id, company_id, status(iniciada, em andamento, concluído),
-origem (escritórios), data recebimento, responsável, data entrega,
-tipo (RT, Contestação, Manifestação, RO, RR, ED, Análise de Sentença, Análise Processual, Análise de Caso),
-cliente, processo, tribunal, observações, valor, payment_status (pago, pendente, atrasado)
 
 **Audiências, Perícias, Reuniões
 status(aberto, concluído, cancelado, a receber), objeto (audiência, perícia, reunião, petição, diligência),
 data acontecer, origem(escritórios), cliente, local, horario, tipo(inicial, conciliação, diligencia pericial, instrução, una, visita, encerramento instrução), responsável, processo, modalidade(online, presencial), cliente informado(sim, não), testemunhas informadas(sim, não), link, observações, valor, status(pago, pendente, atrasado)
 
-Tasks (tarefas para recurso taskscore)
+Tasks Management (tarefas para recurso taskscore)
 id, grupo, fase, pontuação, recorrente, agenda geral
