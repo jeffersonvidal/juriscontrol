@@ -152,7 +152,6 @@
                     <label for="external_office_id" class="form-label">Escritório *</label>
                     <select id="external_office_id" name="external_office_id" class="form-select">
                         <option value="">Informe o Escritório</option>
-                        <option value="{{ auth()->user()->company_id }}">Próprio</option>
                         @foreach ($externalOffices as $externalOffice)
                             <option value="{{$externalOffice->id }}">{{$externalOffice->name }}</option>
                         @endforeach
@@ -316,7 +315,6 @@
                     <label for="external_office_id" class="form-label">Escritório *</label>
                     <select id="edit_external_office_id" name="external_office_id" class="form-select">
                         <option value="">Informe o Escritório</option>
-                        <option value="{{ auth()->user()->company_id }}">Próprio</option>
                         @foreach ($externalOffices as $externalOffice)
                             <option value="{{$externalOffice->id }}">{{$externalOffice->name }}</option>
                         @endforeach
