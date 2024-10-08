@@ -191,7 +191,7 @@
                     <input type="text" class="form-control" id="process_num" name="process_num" value="{{ old('process_num') }}">
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <label for="modality" class="form-label">Modalidade *</label>
                     <select id="modality" name="modality" class="form-select">
                         <option value="">Informe a Modalidade</option>
@@ -204,6 +204,15 @@
                     <input type="text" class="form-control" id="link" name="link" value="{{ old('link') }}">
                 </div>
                 <div class="col-md-4">
+                    <label for="wallet_id" class="form-label">Carteira *</label>
+                    <select id="wallet_id" name="wallet_id" class="form-select">
+                        <option value="">Informe a Carteira</option>
+                        @foreach ($wallets as $wallet)
+                            <option value="{{ $wallet->id }}">{{ $wallet->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
                     <label for="amount" class="form-label">Valor *</label>
                     <input type="text" class="form-control" id="amount" name="amount" value="{{ old('amount') }}">
                 </div>
@@ -362,7 +371,6 @@
                     <label for="amount" class="form-label">Valor *</label>
                     <input type="text" class="form-control" id="edit_amount" name="amount" value="{{ old('amount') }}">
                 </div>
-                
 
                 <div class="col-md-8 mt-5">
                     <div class="form-check form-switch form-check-inline">
@@ -382,6 +390,32 @@
                         <option value="unpaid">Não Pago</option>
                     </select>
                 </div>
+
+                <div class="paymentMethod" style="display:none;">
+                    <div class="col-md-12">
+                        <label for="pay_day" class="form-label">Forma de Pagamento</label>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        
+                        <div class="btn-group col-md-12 mb-3" role="group" aria-label="Basic radio toggle button group">
+                            <input type="radio" class="btn-check" name="method" id="pix" value="pix">
+                            <label class="btn btn-sm btn-outline-dark" for="pix">PIX</label>
+
+                            <input type="radio" class="btn-check" name="method" id="card" value="card">
+                            <label class="btn btn-sm btn-outline-dark" for="card">Cartão</label>
+
+                            <input type="radio" class="btn-check" name="method" id="money" value="money">
+                            <label class="btn btn-sm btn-outline-dark" for="money">Dinheiro</label>
+
+                            <input type="radio" class="btn-check" name="method" id="ted" value="ted">
+                            <label class="btn btn-sm btn-outline-dark" for="ted">TED</label>
+
+                            <input type="radio" class="btn-check" name="method" id="bank_slip" value="bank_slip">
+                            <label class="btn btn-sm btn-outline-dark" for="bank_slip">Boleto</label>
+                        </div>
+                    </div>
+                </div><!--end paymentMethod-->
 
                 <div class="col-md-12">
                     <label for="notes" class="form-label">Observações</label>

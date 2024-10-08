@@ -131,7 +131,7 @@
                     @if (count($payments) > 0)
                         @foreach ($payments as $payment)
                             <tr>
-                             <td>{{ $payment->getInvoice($payment->invoice_id)->description }}</td> 
+                             <td>{{ $payment->setHearingObject($payment->getInvoice($payment->invoice_id)->description) }}</td> 
                              <td>{{ $payment->getInvoiceType($payment->invoice_id) }}</td> 
                             <td>{{ 'R$' . number_format($payment->amount_owed, 2, ',', '.') }}</td>
                             <td>{{ 'R$' . number_format($payment->amount_paid, 2, ',', '.') }}</td>

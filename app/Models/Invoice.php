@@ -92,24 +92,18 @@ class Invoice extends Model implements Auditable
     }
 
     /**Pega dados do escritório parceiro */
-    public function getExternalOffice($invoiceId){
-        $invoice = Invoice::where('id', $invoiceId)->first();
-        $externalPetition = '';
-        if($invoice->external_petition_id != 0 OR $invoice->external_petition_id != null){
-            $externalPetition = $invoice->external_petition_id;
-        }
+    public function getExternalOffice($externalOfficeId){
+        $externalOffice = ExternalOffice::where('id', $externalOfficeId)
+        ->where('company_id', auth()->user()->company_id)->first();
 
-        if($externalPetition){
-            $petition = ExternalPetition::where('id', $externalPetition)
-            ->where('company_id', auth()->user()->company_id)->first();
+        return ($externalOffice ? $externalOffice->name : 'Próprio');
+    }
 
-            $externalOffice = ExternalOffice::where('id', $petition->external_office_id)
-            ->where('company_id', auth()->user()->company_id)->first();
-
-            return ($externalOffice ? $externalOffice->name : 'Próprio');
-        }
-
-        return 'Próprio';
+    /**Mostra o nome do objeto vindo de Hearings (audiencias) */
+    public function setHearingObject($description){
+        $objects = array('hearing', 'expertise', 'meeting', 'petition', 'diligence');
+        $alterar = array('Audiência', 'Perícia', 'Reunião', 'Petição', 'Diligência');
+        return str_replace($objects, $alterar, $description);
     }
 
       

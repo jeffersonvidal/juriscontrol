@@ -6,7 +6,11 @@ use App\Http\Requests\HearingRequest;
 use App\Models\ExternalOffice;
 use App\Models\Hearing;
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\User;
+use App\Models\Wallet;
+use Carbon\Carbon;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
@@ -27,12 +31,16 @@ class HearingController extends Controller
         $externalOffices = ExternalOffice::where('company_id', auth()->user()->company_id)
         ->orderBy('id', 'DESC')->get();
 
+        $wallets = Wallet::where('company_id', auth()->user()->company_id)
+        ->orderBy('id', 'DESC')->get();
+
 
         //Carrega a view
         return view('hearings.index', [
             'hearings' => $hearings,
             'users' => $users,
             'externalOffices' => $externalOffices,
+            'wallets' => $wallets,
         ]);
     }
 
@@ -56,6 +64,7 @@ class HearingController extends Controller
             $hearing->informed_witnesses = ($request->informed_witnesses ? 's' : 'n');
             $hearing->object = $request->object;
             $hearing->responsible = $request->responsible;
+            $hearing->wallet_id = $request->wallet_id;
             $hearing->status = ($request->status ?: 'unpaid');
             $hearing->date_happen = $request->date_happen;
             $hearing->time_happen = $request->time_happen;
@@ -66,14 +75,37 @@ class HearingController extends Controller
             $hearing->process_num = $request->process_num;
             $hearing->modality = $request->modality;
             $hearing->link = $request->link;
-            $hearing->payment_status = $request->payment_status;
+            $hearing->payment_status = ($request->payment_status ?: 'unpaid');
             $hearing->notes = $request->notes;
             $hearing->amount = str_replace([".", ","], ["", "."], $request->amount);
             $hearing->company_id = $request->company_id;
             $hearing->user_id = $request->user_id;
+            $hearing->external_office_id = $request->external_office_id;
             $hearing->save();
             //dd($hearing);
 
+            /**Lançado como conta a receber */
+            $description = $hearing->object . '. Cliente: ' . $hearing->client;
+            /**Calculando data de vencimento para pagamento */
+            $currentDate = Carbon::now();
+            $due_at = $currentDate->addDays(7);
+            
+            $invoice = new Invoice;
+            $invoice->enrollment_of = '1';
+            $invoice->external_audience_id = $hearing->id;
+            $invoice->description = $description;
+            $invoice->wallet_id = $hearing->wallet_id;
+            $invoice->user_id = $hearing->user_id;
+            $invoice->external_office_id = $hearing->external_office_id;
+            $invoice->company_id = $hearing->company_id;
+            $invoice->invoice_category_id = '8'; //audiência
+            $invoice->type = 'income';
+            $invoice->amount = $hearing->amount;
+            $invoice->due_at = $due_at->format('Y-m-d');
+            $invoice->repeat_when = 'unique';
+            $invoice->enrollments = '1';
+            $invoice->status = 'unpaid';
+            $invoice->save();
 
             //comita depois de tudo ter sido salvo
             DB::commit();
@@ -131,8 +163,42 @@ class HearingController extends Controller
             $hearing->amount = str_replace([".", ","], ["", "."], $request->amount);
             $hearing->company_id = $request->company_id;
             $hearing->user_id = $request->user_id;
+            $hearing->external_office_id = $request->external_office_id;
             $hearing->update();
             //dd($hearing);
+
+            /**Atualizando status de pagamento em conta a receber */
+            if($hearing->payment_status == 'paid'){
+                $invoiceStatus = 'paid';
+
+                //dd($hearing->company_id);
+
+                /**Pegando a invoice que será editada */
+                $editedInvoice = Invoice::where('external_audience_id', $hearing->id)
+                    ->where('company_id', $hearing->company_id)->first();
+                    //dd($editedInvoice);
+            
+                /**Alterando o status da invoice */
+                $updateInvoice = Invoice::where('external_audience_id', $hearing->id)
+                ->where('company_id', $hearing->company_id)->update([
+                    'status' => $hearing->payment_status,
+                ]);
+                
+                /**Registrando pagamento na tabela payments */
+                $payment = new Payment;
+                $payment->amount_owed = $hearing->amount;
+                $payment->wallet_id = $hearing->wallet_id;
+                $payment->pay_day = Carbon::now();
+                $payment->amount_paid = str_replace([".", ","], ["", "."], $hearing->amount);
+                $payment->enrollment_of = 1;
+                $payment->method = $request->method;
+                $payment->company_id = $hearing->company_id;
+                $payment->user_id = $hearing->user_id;
+                $payment->invoice_id = $editedInvoice->id;
+                $payment->status = $invoiceStatus;
+                $payment->amount_remaining = 0;
+                $payment->save(); 
+            }
 
 
             //comita depois de tudo ter sido salvo

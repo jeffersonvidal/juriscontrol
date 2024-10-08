@@ -134,7 +134,7 @@
                     @if (count($invoices) > 0)
                         @foreach ($invoices as $invoice)
                             <tr>
-                            <td>{{ $invoice->description }}</td>
+                            <td>{{ $invoice->setHearingObject($invoice->description) }}</td>
                             <td>{{ $invoice->getCategory($invoice->invoice_category_id) }}</td>
                             <td>{{ $invoice->getType($invoice->type) }}</td>
                             <td>{{ 'R$' . number_format($invoice->amount, 2, ',', '.') }}</td>
@@ -160,7 +160,7 @@
                                 {{ $invoice->getStatus($invoice->status, $invoice->id) }}
                                 </span>
                             </td>
-                                <td>{{ $invoice->getExternalOffice($invoice->id) }}</td>
+                                <td>{{ $invoice->getExternalOffice($invoice->external_office_id) }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
                                         <a href="{{ route('invoices.show', ['invoice' => $invoice->id]) }}" class="btn btn-sm me-1 mb-1 mb-sm-0" title="Ver Registro"><i class="fa-solid fa-eye"></i></a>

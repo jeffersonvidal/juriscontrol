@@ -19,6 +19,7 @@ class HearingSeeder extends Seeder
                 'company_id' => '1',
                 'user_id' => '1',
                 'responsible' => '1',
+                'wallet_id' => '1',
                 'status' => 'open',
                 'date_happen' => '2024-11-23',
                 'external_office_id' => '1',
@@ -34,6 +35,7 @@ class HearingSeeder extends Seeder
                 'notes' => '',
                 'amount' => '150',
                 'payment_status' => 'unpaid',
+                'method' => '',
             ]);
         }
     }

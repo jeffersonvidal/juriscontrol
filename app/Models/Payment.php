@@ -63,6 +63,13 @@ class Payment extends Model implements Auditable
         return InvoiceCategory::where('id', $categoryId)
         ->where('company_id', auth()->user()->company_id)->first();
     }
+
+    /**Mostra o nome do objeto vindo de Hearings (audiencias) */
+    public function setHearingObject($description){
+        $objects = array('hearing', 'expertise', 'meeting', 'petition', 'diligence');
+        $alterar = array('Audiência', 'Perícia', 'Reunião', 'Petição', 'Diligência');
+        return str_replace($objects, $alterar, $description);
+    }
 }
 
 

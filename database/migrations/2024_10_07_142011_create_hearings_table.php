@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('hearings', function (Blueprint $table) {
             $table->id();
             $table->string('object'); //hearing(audiência), expertise(perícia), meeting(reunião), petition(petição), diligence(diligência)
-            $table->integer('company_id');
-            $table->integer('user_id');
+            $table->integer('company_id'); //empresa logada no sistema
+            $table->integer('user_id'); //id de quem cadastra o registro no bd
+            $table->integer('wallet_id'); //carteira
             $table->integer('responsible');
             $table->string('status')->default('open'); //open(aberto), canceled(cancelado), completed(concluído)
             $table->date('date_happen'); //data para acontecer
@@ -32,6 +33,7 @@ return new class extends Migration
             $table->longText('notes')->nullable(); //observações
             $table->double('amount')->default(0); //valor cobrado
             $table->string('payment_status')->default('unpaid'); //paid, unpaid
+            $table->string('method')->nullable(); //pix, card, money, ted, boleto
             $table->softDeletes();
             $table->timestamps();
         });

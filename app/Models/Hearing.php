@@ -17,7 +17,7 @@ class Hearing extends Model implements Auditable
     protected $table = 'hearings';
 
     //Quais colunas para serem cadastradas
-    protected $fillable = ['object','company_id','user_id','responsible','status',
+    protected $fillable = ['object','company_id','user_id', 'wallet_id', 'method', 'responsible','status',
     'date_happen','time_happen','external_office_id','client','local','type',
     'process_num','modality','informed_client','informed_witnesses','link',
     'notes','amount','payment_status',];
