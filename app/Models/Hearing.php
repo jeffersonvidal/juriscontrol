@@ -69,7 +69,6 @@ class Hearing extends Model implements Auditable
         if($externalOffices){
             return $externalOffices->name;
         }
-        return 'Próprio';
     }
 
     /**Retorna o tipo (inicial, conciliação, diligência, instrução) */

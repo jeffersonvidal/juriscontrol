@@ -16,6 +16,20 @@ class ExternalOfficeSeeder extends Seeder
         if(! ExternalOffice::where("id","1")->first()){
             ExternalOffice::create([
                 'company_id' => '1',
+                'name' => 'Brandão Vidal',
+                'responsible' => 'Anna Vidal',
+                'phone' => '61981261073',
+                'email' => 'contato@brandaovidaladvogados.com.br',
+                'cnpj' => '55768652000162',
+                'pix' => '55768652000162',
+                'agency' => '',
+                'current_account' => '',
+                'bank' => 'Nubank',
+            ]);
+        }
+        if(! ExternalOffice::where("id","2")->first()){
+            ExternalOffice::create([
+                'company_id' => '1',
                 'name' => 'Wemerson Guimarães Adv',
                 'responsible' => 'Wemerson Guimarães',
                 'phone' => '61992903384',
@@ -27,7 +41,7 @@ class ExternalOfficeSeeder extends Seeder
                 'bank' => '',
             ]);
         }
-        if(! ExternalOffice::where("id","2")->first()){
+        if(! ExternalOffice::where("id","3")->first()){
             ExternalOffice::create([
                 'company_id' => '1',
                 'name' => 'Dias e Medeiros Adv',
@@ -41,7 +55,7 @@ class ExternalOfficeSeeder extends Seeder
                 'bank' => '',
             ]);
         }
-        if(! ExternalOffice::where("id","3")->first()){
+        if(! ExternalOffice::where("id","4")->first()){
             ExternalOffice::create([
                 'company_id' => '1',
                 'name' => 'Carrijo Belarmino',
