@@ -7,6 +7,7 @@ use App\Http\Controllers\ExternalPetitionController;
 use App\Http\Controllers\HearingController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LabelController;
+use App\Http\Controllers\LegalProcessController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TaskController;
@@ -108,5 +109,13 @@ Route::group(['middleware' => 'auth'], function(){
   Route::post('/store-hearing', [HearingController::class, 'store'])->name('hearings.store'); //Salva novo registro no BD
   Route::put('/update-hearing/{hearing}', [HearingController::class, 'update'])->name('hearings.update'); //Atualiza um registro no BD
   Route::delete('/destroy-hearing/{hearing}', [HearingController::class, 'destroy'])->name('hearings.destroy'); //Exclui um registro no BD
+
+  /**Rotas de Legal Processes (Processos Jurídicos) */
+  Route::get('/index-legal-process', [LegalProcessController::class, 'index'])->name('legal-processes.index'); //Listar todos os registros da tabela
+  Route::get('/show-legal-process/{legalProcess}', [LegalProcessController::class, 'show'])->name('legal-processes.show'); //Mostra detalhe de um registro
+  Route::post('/store-legal-process', [LegalProcessController::class, 'store'])->name('legal-processes.store'); //Salva novo registro no BD
+  Route::put('/update-legal-process/{legalProcess}', [LegalProcessController::class, 'update'])->name('legal-processes.update'); //Atualiza um registro no BD
+  Route::delete('/destroy-legal-process/{legalProcess}', [LegalProcessController::class, 'destroy'])->name('legal-processes.destroy'); //Exclui um registro no BD
+
   
 }); //fim da restrição de acesso para quem não está logado no sistema

@@ -122,6 +122,12 @@ document.addEventListener("DOMContentLoaded", function(){
   if(document.querySelector('#edit_cnpj')){
     cnpjMask.mask(document.querySelector('#edit_cnpj'));
   }
+
+  /**Máscara para numeroCNJ de processos */
+  var processNumberMask = new Inputmask("9999999-99.9999.9.99.9999");
+  if(document.querySelector('#numeroCNJ')){
+    processNumberMask.mask(document.querySelector('#numeroCNJ'));
+  }
   
 });
 

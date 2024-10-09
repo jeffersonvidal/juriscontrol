@@ -83,7 +83,7 @@
                                     <a class="nav-link" href="{{ route('tasks.index') }}" title="Gestão de Tarefas">Tarefas Diárias</a>
                                     <a class="nav-link" href="{{ route('external-petitions.index') }}" title="Petições de Parceiros">Petições Parceiros</a>
                                     <a class="nav-link" href="{{ route('hearings.index') }}" title="Audiências e Perícias de Parceiros">Audiências/Perícias</a>
-                                    <a class="nav-link" href="" title="Gestão de Processos">Processos</a>
+                                    <a class="nav-link" href="{{ route('legal-processes.index') }}" title="Gestão de Processos">Processos</a>
                                     <a class="nav-link" href="" title="Gestão de Casos e Consultivos">Casos e Consultivos</a>
                                     <a class="nav-link" href="{{ route('labels.index') }}" title="Gestão de Etiquestas do Sistema">Etiquetas</a>
                                     <a class="nav-link" href="" title="Gestão de Eventos">Eventos</a>
