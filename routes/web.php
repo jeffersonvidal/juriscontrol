@@ -65,6 +65,7 @@ Route::group(['middleware' => 'auth'], function(){
 
   /**Rotas de Clientes */
   Route::get('/index-customer', [CustomerController::class, 'index'])->name('customers.index'); //Listar todos os registros da tabela
+  Route::get('/index-history/{customer}', [CustomerController::class, 'history'])->name('customers.history'); //Listar todos os registros da tabela
   Route::get('/show-customer/{customer}', [CustomerController::class, 'show'])->name('customers.show'); //Mostra detalhe de um registro
   Route::post('/store-customer', [CustomerController::class, 'store'])->name('customers.store'); //Salva novo registro no BD
   Route::put('/update-customer/{customer}', [CustomerController::class, 'update'])->name('customers.update'); //Atualiza um registro no BD

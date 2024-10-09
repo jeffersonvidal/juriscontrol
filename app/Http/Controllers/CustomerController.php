@@ -30,6 +30,19 @@ class CustomerController extends Controller
         return view('customers.index', ['customers' => $customers, 'customersAddr' => $customersAddr]);
     }
 
+    public function history(Customer $customer){
+        $customerAddress = CustomerAddress::with('customer')
+            ->where('customer_id', $customer->id)
+            ->orderBy('created_at')
+            ->get();
+
+            //return view
+            return view('customers.history', [
+                'customer' => $customer,
+                'customerAddress' => $customerAddress, 
+            ]);
+    }
+
     /**Envia registros para popular tabela na index */
     public function getall()
     {

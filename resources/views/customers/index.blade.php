@@ -51,9 +51,8 @@
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
                                         <a href="{{ route('customers.show', ['customer' => $customer->id]) }}" class="btn btn-sm me-1 mb-1 mb-sm-0" title="Ver Registro"><i class="fa-solid fa-eye"></i></a>
+                                        <a href="{{ route('customers.history', ['customer' => $customer->id]) }}" class="btn btn-sm me-1 mb-1 mb-sm-0" title="Ver Histórico"><i class="fa-solid fa-id-card"></i></a>
 
-                                        <button class="text-decoration-none btn btn-sm " title="Ficha do Cliente" data-id="{{ $customer->id }}" >
-                                        <i class="fa-solid fa-id-card"></i></button>
                                         <button class="text-decoration-none btn btn-sm " title="Novo Processo" data-id="{{ $customer->id }}" >
                                             <i class="fa-regular fa-file-lines"></i></button>
                                         <button class="text-decoration-none btn btn-sm " title="Novo Caso" data-id="{{ $customer->id }}" >
@@ -63,7 +62,13 @@
                                         <button class="text-decoration-none btn btn-sm " title="Timesheet - Atividades" data-id="" >
                                         <i class="fa-regular fa-clock"></i></button>
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $customer->id }}" 
-                                            data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
+                                            data-name="{{ $customer->name }}" data-gdrive_folder_id="{{ $customer->gdrive_folder_id }}" data-email="{{ $customer->email }}" 
+                                            data-phone="{{ $customer->phone }}" data-rg="{{ $customer->rg }}" data-id="{{ $customer->id }}" 
+                                            data-rg_expedidor="{{ $customer->rg_expedidor }}" data-cpf="{{ $customer->cpf }}" data-marital_status="{{ $customer->marital_status }}" 
+                                            data-nationality="{{ $customer->nationality }}" data-profession="{{ $customer->profession }}" data-birthday="{{ $customer->birthday }}" 
+                                            data-met_us="{{ $customer->met_us }}" data-company_id="{{ $customer->company_id }}" 
+                                            data-bs-toggle="modal" data-bs-target="#updateModal">
+                                            <i class="fa-solid fa-pencil"></i></button>
                                         <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $customer->id }}" 
                                             data-name="{{ $customer->name }}" data-hexa_color_bg="{{ $customer->hexa_color_bg }}" 
                                             data-hexa_color_font="{{ $customer->hexa_color_font }}" ><i class="fa-solid fa-trash"></i></button>
@@ -306,9 +311,7 @@
                             </select>
                         </div>
                     </div>
-                    
-                    <!-- ['company_id', 'name','email','phone','rg',
-    'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday']; -->
+
                 </fieldset>
                 
                 <fieldset>
@@ -405,28 +408,29 @@
             // ['company_id', 'name','email','phone','rg',
             // 'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday'];
             if($(this).hasClass('editBtn')){
-                // var dados = [
-                //         { 
-                //             id: $(this).attr('data-id'), 
-                //             name: $(this).attr('data-name'), 
-                //             email: $(this).attr('data-email'), 
-                //             phone: $(this).attr('data-phone'), 
-                //             rg: $(this).attr('data-rg'), 
-                //             rg_expedidor: $(this).attr('data-rg_expedidor'), 
-                //             cpf: $(this).attr('data-cpf'), 
-                //             marital_status: $(this).attr('data-marital_status'), 
-                //             nationality: $(this).attr('data-nationality'), 
-                //             profession: $(this).attr('data-profession'), 
-                //             birthday: $(this).attr('data-birthday'), 
-                //             zipcode: $(this).attr('data-zipcode'), 
-                //             street: $(this).attr('data-street'), 
-                //             num: $(this).attr('data-num'), 
-                //             complement: $(this).attr('data-complement'), 
-                //             neighborhood: $(this).attr('data-neighborhood'), 
-                //             city: $(this).attr('data-city'), 
-                //             state: $(this).attr('data-state'), 
-                //         }
-                //     ];
+                var dados = [
+                        { 
+                            id: $(this).attr('data-id'), 
+                            name: $(this).attr('data-name'), 
+                            email: $(this).attr('data-email'), 
+                            phone: $(this).attr('data-phone'), 
+                            rg: $(this).attr('data-rg'), 
+                            rg_expedidor: $(this).attr('data-rg_expedidor'), 
+                            cpf: $(this).attr('data-cpf'), 
+                            marital_status: $(this).attr('data-marital_status'), 
+                            nationality: $(this).attr('data-nationality'), 
+                            profession: $(this).attr('data-profession'), 
+                            birthday: $(this).attr('data-birthday'), 
+                            zipcode: $(this).attr('data-zipcode'), 
+                            street: $(this).attr('data-street'), 
+                            num: $(this).attr('data-num'), 
+                            complement: $(this).attr('data-complement'), 
+                            neighborhood: $(this).attr('data-neighborhood'), 
+                            city: $(this).attr('data-city'), 
+                            state: $(this).attr('data-state'), 
+                        }
+                    ];
+                    
                     editRegistro($(this).attr('data-id'));
             }else if($(this).hasClass('deleteBtn')){
                 var dados = [
@@ -455,6 +459,7 @@
                 .then(data => {
                     /**console.log(data[0][0]['customer']); //lista dados pessoais
                      ** console.log(data[0][0]); //Lista dados do endereço */
+                     //console.log(data[0][0]['customer'].name);
                     /**Dados pessoais*/
                     $('#edit_id').val(data[0][0]['customer'].id);
                     $('#edit_name').val(data[0][0]['customer'].name);
