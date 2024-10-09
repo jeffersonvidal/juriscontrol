@@ -9,6 +9,8 @@ use DB;
 use Exception;
 use Illuminate\Http\Request;
 use HelpersAdm;
+use Google\Client as GoogleClient;
+use Google\Service\Drive;
 
 class ExternalOfficeController extends Controller
 {
@@ -53,6 +55,34 @@ class ExternalOfficeController extends Controller
             $externalOfficeData->bank = $request->bank;
             $externalOfficeData->company_id = $request->company_id;
             $externalOfficeData->save();
+
+            /**Configuração no Google Drive */
+            $client = new GoogleClient();
+            $client->setClientId(env('GOOGLE_DRIVE_CLIENT_ID'));
+            $client->setClientSecret(env('GOOGLE_DRIVE_CLIENT_SECRET'));
+            $client->refreshToken(env('GOOGLE_DRIVE_REFRESH_TOKEN'));
+            
+            $driveService = new Drive($client);
+
+            // Nome da pasta a ser criada
+            $folderName = strtoupper($externalOfficeData->name);
+            /**Pasta Pai (clientes) no drive */
+            $parentFolderId = env('GOOGLE_DRIVE_PARTNERS_FOLDER');
+
+            // Criar a pasta no Google Drive
+            $folderMetadata = new Drive\DriveFile(array(
+                'name' => $folderName,
+                'mimeType' => 'application/vnd.google-apps.folder',
+                'parents' => array($parentFolderId)
+            ));
+            
+            $folder = $driveService->files->create($folderMetadata, array(
+                'fields' => 'id'
+            ));
+
+            /**Atualiza o campo gdrive_folder_id na tabela de clientes */
+            $externalOfficeData->gdrive_folder_id = $folder->id;
+            $externalOfficeData->update();
 
             //comita depois de tudo ter sido salvo
             DB::commit();

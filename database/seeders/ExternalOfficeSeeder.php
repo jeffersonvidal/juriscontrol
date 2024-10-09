@@ -17,6 +17,7 @@ class ExternalOfficeSeeder extends Seeder
             ExternalOffice::create([
                 'company_id' => '1',
                 'name' => 'Brandão Vidal',
+                'gdrive_folder_id' => '',
                 'responsible' => 'Anna Vidal',
                 'phone' => '61981261073',
                 'email' => 'contato@brandaovidaladvogados.com.br',
@@ -31,6 +32,7 @@ class ExternalOfficeSeeder extends Seeder
             ExternalOffice::create([
                 'company_id' => '1',
                 'name' => 'Wemerson Guimarães Adv',
+                'gdrive_folder_id' => '17VMwQ2Z6LpqMFzkpPODUcq-WuxRIonEE',
                 'responsible' => 'Wemerson Guimarães',
                 'phone' => '61992903384',
                 'email' => 'wgadvogadobsb@gmail.com',
@@ -45,6 +47,7 @@ class ExternalOfficeSeeder extends Seeder
             ExternalOffice::create([
                 'company_id' => '1',
                 'name' => 'Dias e Medeiros Adv',
+                'gdrive_folder_id' => '1JZfwzgUuO3b_x2vIsJtzh9OzGJaTEIVQ',
                 'responsible' => 'Livia Carolina',
                 'phone' => '61991847266',
                 'email' => 'advocaciadiasmedeiros@gmail.com',
@@ -59,6 +62,7 @@ class ExternalOfficeSeeder extends Seeder
             ExternalOffice::create([
                 'company_id' => '1',
                 'name' => 'Carrijo Belarmino',
+                'gdrive_folder_id' => '115kU-sknzlWgY6sfhWVkHDg-9BfjMj5M',
                 'responsible' => 'Tatiele Carrijo',
                 'phone' => '61996066955',
                 'email' => 'contato@belarminoadvogados.com.br',

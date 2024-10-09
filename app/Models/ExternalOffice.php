@@ -16,7 +16,7 @@ class ExternalOffice extends Model implements Auditable
     protected $table = 'external_offices';
 
     //Quais colunas para serem cadastradas
-    protected $fillable = ['name','company_id', 'responsible','phone',
+    protected $fillable = ['name','company_id', 'gdrive_folder_id', 'responsible','phone',
             'email','cnpj','pix','agency','current_account','bank'];
 
     public function task(){

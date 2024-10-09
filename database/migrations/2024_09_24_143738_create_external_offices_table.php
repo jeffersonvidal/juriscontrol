@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('external_offices', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('gdrive_folder_id')->nullable();
             $table->integer('company_id');
             $table->string('responsible');
             $table->string('phone');
