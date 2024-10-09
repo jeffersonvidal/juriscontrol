@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('company_id');
             $table->string('name');
+            $table->string('gdrive_folder_id')->nullable();
             $table->string('email')->unique(); //remover unique no SaaS
             $table->string('phone');
             $table->string('rg');

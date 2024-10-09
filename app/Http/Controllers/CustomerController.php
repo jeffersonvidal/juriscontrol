@@ -9,6 +9,8 @@ use App\Models\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\CustomerAddress;
 use Exception;
+use Google\Client as GoogleClient;
+use Google\Service\Drive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -85,6 +87,34 @@ class CustomerController extends Controller
             //$customerAddress->customer_id = $customer->id;
             $customer->address()->save($customerAddress);
 
+            /**Configuração no Google Drive */
+            $client = new GoogleClient();
+            $client->setClientId(env('GOOGLE_DRIVE_CLIENT_ID'));
+            $client->setClientSecret(env('GOOGLE_DRIVE_CLIENT_SECRET'));
+            $client->refreshToken(env('GOOGLE_DRIVE_REFRESH_TOKEN'));
+            
+            $driveService = new Drive($client);
+
+            // Nome da pasta a ser criada
+            $folderName = strtoupper($customer->name);
+            /**Pasta Pai (clientes) no drive */
+            $parentFolderId = env('GOOGLE_DRIVE_CUSTOMERS_FOLDER');
+
+            // Criar a pasta no Google Drive
+            $folderMetadata = new Drive\DriveFile(array(
+                'name' => $folderName,
+                'mimeType' => 'application/vnd.google-apps.folder',
+                'parents' => array($parentFolderId)
+            ));
+            
+            $folder = $driveService->files->create($folderMetadata, array(
+                'fields' => 'id'
+            ));
+
+            /**Atualiza o campo gdrive_folder_id na tabela de clientes */
+            $customer->gdrive_folder_id = $folder->id;
+            $customer->update();
+
             //comita depois de tudo ter sido salvo
             DB::commit();
 
@@ -159,7 +189,7 @@ class CustomerController extends Controller
         return response()->json(null, 204);
     }
 
-    /**Próprio cliente preenche os dados em formulário fora do sistema */
+    /**Próprio cliente preenche os dados em formulário fora do sistema através de link enviado pelo whatsapp */
     public function createSelf(){
         //Carrega a view
         return view('customers.selfCreate');
@@ -200,6 +230,34 @@ class CustomerController extends Controller
             $customerAddress->state = $request->state;
             $customerAddress->company_id = $request->company_id;
             $customer->address()->save($customerAddress);
+
+            /**Configuração no Google Drive */
+            $client = new GoogleClient();
+            $client->setClientId(env('GOOGLE_DRIVE_CLIENT_ID'));
+            $client->setClientSecret(env('GOOGLE_DRIVE_CLIENT_SECRET'));
+            $client->refreshToken(env('GOOGLE_DRIVE_REFRESH_TOKEN'));
+            
+            $driveService = new Drive($client);
+
+            // Nome da pasta a ser criada
+            $folderName = strtoupper($customer->name);
+            /**Pasta Pai (clientes) no drive */
+            $parentFolderId = env('GOOGLE_DRIVE_CUSTOMERS_FOLDER');
+
+            // Criar a pasta no Google Drive
+            $folderMetadata = new Drive\DriveFile(array(
+                'name' => $folderName,
+                'mimeType' => 'application/vnd.google-apps.folder',
+                'parents' => array($parentFolderId)
+            ));
+            
+            $folder = $driveService->files->create($folderMetadata, array(
+                'fields' => 'id'
+            ));
+
+            /**Atualiza o campo gdrive_folder_id na tabela de clientes */
+            $customer->gdrive_folder_id = $folder->id;
+            $customer->update();
 
             //comita depois de tudo ter sido salvo
             DB::commit();

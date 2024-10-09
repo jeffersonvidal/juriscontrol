@@ -17,6 +17,7 @@ class CustomerSeeder extends Seeder
         if(! Customer::where("id","1")->first()){
             Customer::create([
                 'name' => fake()->name(),
+                'gdrive_folder_id' => '',
                 'company_id' => '1',
                 'email' => fake()->email(),
                 'phone' => '61987453241',
@@ -34,6 +35,7 @@ class CustomerSeeder extends Seeder
         if(! Customer::where("id","2")->first()){
             Customer::create([
                 'name' => fake()->name(),
+                'gdrive_folder_id' => '',
                 'company_id' => '2',
                 'email' => fake()->email(),
                 'phone' => '61987453241',
@@ -52,6 +54,7 @@ class CustomerSeeder extends Seeder
         if(! Customer::where("id","3")->first()){
             Customer::create([
                 'name' => fake()->name(),
+                'gdrive_folder_id' => '',
                 'company_id' => '1',
                 'email' => fake()->email(),
                 'phone' => '61987453241',
@@ -69,6 +72,7 @@ class CustomerSeeder extends Seeder
         if(! Customer::where("id","4")->first()){
             Customer::create([
                 'name' => fake()->name(),
+                'gdrive_folder_id' => '',
                 'company_id' => '2',
                 'email' => fake()->email(),
                 'phone' => '61987453241',

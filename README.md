@@ -202,6 +202,25 @@ php artisan vendor:publish --tag=laravel-pt-br-localization
 APP_LOCALE=pt_BR
 ```
 
+##Integrar com API Google
+###Google Drive
+https://console.cloud.google.com
+https://developers.google.com/oauthplayground
+
+Instalar Dependência Google/API Client
+```
+composer require google/apiclient
+```
+
+Instalar Dependência masbug/Flysystem Google Drive Ext
+```
+composer require masbug/flysystem-google-drive-ext
+```
+
+
+
+
+
 ## Módulos do Sistema
 
 []-  Gestão Adminsitrativa

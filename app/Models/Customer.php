@@ -17,7 +17,7 @@ class Customer extends Model implements Auditable
     protected $table = 'customers';
 
     //Quais colunas para serem cadastradas
-    protected $fillable = ['company_id', 'name','email','phone','rg',
+    protected $fillable = ['company_id', 'name','gdrive_folder_id', 'email','phone','rg',
     'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday', 'met_us'];
 
     /**Relacionamento com tabela endereço de cliente - customer_addresses */

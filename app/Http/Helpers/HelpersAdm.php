@@ -84,5 +84,10 @@ class HelpersAdm{
     return ($receitasTotal - $despesasTotal);
   }
 
+  /**Deixar tudo bem maiúsculo */
+  public function setUppercase($text){
+    return strtoupper($text);
+  }
+
 
 } /**Fim classe Helper */
