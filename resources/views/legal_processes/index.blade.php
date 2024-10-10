@@ -34,7 +34,8 @@
 
             <div class="row">
                 5407448-13.2024.8.09.0160 - Eduarda GO <br>
-                0000230-47.2024.5.10.0018 - Felipe DF
+                0000230-47.2024.5.10.0018 - Felipe DF <br>
+                0711397-94.2024.8.07.0004 - Jefferson
                 <form id="consultaCNJForm" class="row g-3">
                     @csrf
                     <div class="input-group">
@@ -74,23 +75,54 @@
                     var tramitacoesAccordion = $('#tramitacoes-accordion');
                         tramitacoesAccordion.empty();
 
+
                         response[0].hits.hits.forEach(function(tramitacao, index) {
                             let grau = '';
-                            if(tramitacao._source.grau == 'GI'){
+                            if(tramitacao._source.grau == 'G1'){
                                 grau = '1ª Instância';
+                            }else if(tramitacao._source.grau == 'G2'){
+                                grau = '2ª Instância';
+                            }else if(tramitacao._source.grau == 'JE'){
+                                grau = 'Juizado Especial';
                             }
                         var accordionItem = `
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="heading${index}">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">
-                                        Tramitação ${index + 1}: ${tramitacao._source.classe.nome}
+                                        Tramitação ${index + 1}: ${grau} - ${tramitacao._source.classe.nome} - ${tramitacao._source.orgaoJulgador.nome}
                                     </button>
                                 </h2>
                                 <div id="collapse${index}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" aria-labelledby="heading${index}" data-bs-parent="#tramitacoes-accordion">
                                     <div class="accordion-body">
-                                        ${tramitacao.observacao}
+                                        <div class="row align-items-start">
+                                            <div class="col">
+                                                <p><b>Tipo de processo: </b> ${tramitacao._source.classe.nome} ( ${tramitacao._source.classe.codigo} )</p>
+                                            </div>
+                                            <div class="col">
+                                                <p><b>Formato do processo: </b> ${tramitacao._source.formato.nome}</p>
+                                            </div>
+                                            <div class="col">
+                                                <p><b>Data de instauração nesta instância:</b> ${tramitacao._source.dataAjuizamento}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                
+                                Movimentos
+                                <div id="collapse${index}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" aria-labelledby="heading${index}" data-bs-parent="#tramitacoes-accordion">
+                                    <div class="accordion-body">
+                                        <div class="row align-items-start">
+                                            <div class="col">
+                                                <p><b>Data: </b> data aqui</p>
+                                            </div>
+                                            <div class="col">
+                                                <p><b>Nome:</b> nome aqui</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                
                             </div>
                         `;
                         tramitacoesAccordion.append(accordionItem);
@@ -119,21 +151,6 @@
         });
         
     });
-
-    /**Mostrar resultados vindos via json */
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     fetch('') /** url ex: /clientes*/
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             let clientesList = document.getElementById('clientes-list');
-    //             data.forEach(cliente => {
-    //                 let listItem = document.createElement('li');
-    //                 listItem.textContent = `Nome: ${cliente.nome}, Email: ${cliente.email}`;
-    //                 clientesList.appendChild(listItem);
-    //             });
-    //         })
-    //         .catch(error => console.error('Erro:', error));
-    // });
 
     
 </script>
