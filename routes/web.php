@@ -112,6 +112,7 @@ Route::group(['middleware' => 'auth'], function(){
 
   /**Rotas de Legal Processes (Processos Jurídicos) */
   Route::get('/index-legal-process', [LegalProcessController::class, 'index'])->name('legal-processes.index'); //Listar todos os registros da tabela
+  Route::get('/search-legal-process', [LegalProcessController::class, 'search'])->name('legal-processes.search'); //Mostra detalhe de um registro
   Route::get('/show-legal-process/{legalProcess}', [LegalProcessController::class, 'show'])->name('legal-processes.show'); //Mostra detalhe de um registro
   Route::post('/store-legal-process', [LegalProcessController::class, 'store'])->name('legal-processes.store'); //Salva novo registro no BD
   Route::put('/update-legal-process/{legalProcess}', [LegalProcessController::class, 'update'])->name('legal-processes.update'); //Atualiza um registro no BD

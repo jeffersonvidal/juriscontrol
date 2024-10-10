@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\ApicnjClass;
 use App\Models\LegalProcess;
 use App\Http\Controllers\Controller;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
 
 class LegalProcessController extends Controller
@@ -19,9 +22,46 @@ class LegalProcessController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function search(Request $request)
     {
-        //
+        $retornoValidacaoNumero = ApicnjClass::validarNumeroCnj($request);
+        //dd($request);
+
+        try {
+            if (isset($retornoValidacaoNumero['erro'])) {
+                echo $retornoValidacaoNumero['erro'];
+                //break;
+            };
+            
+            $retornoApi = apicnjClass::buscarTribunalApi($retornoValidacaoNumero);
+            
+            if (isset($retornoApi['erro'])) {
+                echo $retornoApi['erro'];
+                //break;
+            };
+            
+            $retornoDadosProcesso = apicnjClass::consomeApi($retornoApi);
+            //dd($retornoDadosProcesso);
+            
+            if (!empty($retornoDadosProcesso['erro'])) {
+                echo $retornoDadosProcesso['erro'];
+                //break;
+            };
+
+            //Redireciona para outra página após cadastrar com sucesso
+            //return response()->json( ['success' => 'Registro cadastrado com sucesso!']);
+            return response()->json($retornoDadosProcesso);
+            // return view('legal_processes.index',[
+            //     'retornoDadosProcesso' => $retornoDadosProcesso,
+            // ]);
+        } catch (Exception $e) {
+            //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+            //DB::rollBack();
+
+            //Redireciona para outra página se der erro
+            return response()->json(['error' => $e->getMessage()]);
+            
+        }
     }
 
     /**
@@ -29,7 +69,41 @@ class LegalProcessController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        $retornoValidacaoNumero = ApicnjClass::validarNumeroCnj($request);
+        //dd($request);
+
+        try {
+            if (isset($retornoValidacaoNumero['erro'])) {
+                echo $retornoValidacaoNumero['erro'];
+                //break;
+            };
+            
+            $retornoApi = apicnjClass::buscarTribunalApi($retornoValidacaoNumero);
+            
+            if (isset($retornoApi['erro'])) {
+                echo $retornoApi['erro'];
+                //break;
+            };
+            
+            $retornoDadosProcesso = apicnjClass::consomeApi($retornoApi);
+            //dd($retornoDadosProcesso);
+            
+            if (!empty($retornoDadosProcesso['erro'])) {
+                echo $retornoDadosProcesso['erro'];
+                //break;
+            };
+
+            //Redireciona para outra página após cadastrar com sucesso
+            //return response()->json( ['success' => 'Registro cadastrado com sucesso!']);
+            return response()->json($retornoDadosProcesso);
+            //return view('legal_processes.index', ['retornoDadosProcesso' => $retornoDadosProcesso]);
+        } catch (Exception $e) {
+            //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+            //DB::rollBack();
+
+            //Redireciona para outra página se der erro
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 
     /**
