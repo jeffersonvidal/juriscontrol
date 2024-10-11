@@ -13,7 +13,11 @@ class DocumentTemplateController extends Controller
      */
     public function index()
     {
-        //
+        $documents = DocumentTemplate::where('company_id', auth()->user()->company_id)
+        ->orderBy('id', 'DESC')->get();
+        return view('document_templates.index', [
+            'documents' => $documents,
+        ]);
     }
 
     /**

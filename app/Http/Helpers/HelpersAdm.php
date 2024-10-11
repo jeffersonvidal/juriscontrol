@@ -89,5 +89,29 @@ class HelpersAdm{
     return strtoupper($text);
   }
 
+  /**Retorna o cabeçalho de documentos com os dados do clietne */
+  public function mountClientHeaderDocs($dadosCliente, $enderecoCliente){
+    $variaveis = array('[[name]]','[[nationality]]','[[marital_status]]','[[profession]]',
+    '[[phone]]','[[email]]','[[rg]]','[[rg_expedidor]]','[[cpf]]','[[street]]','[[num]]',
+    '[[complement]]','[[neighborhood]]','[[city]]','[[state]]','[[zipcode]]');
+
+    $texto = "<strong>[[name]]</strong>, [[nationality]], [[nationality]], [[profession]], portador(a) do RG nº [[rg]] [[rg_expedidor]], 
+    inscrito(a) no CPF sob o nº [[cpf]], residente e domiciliado em [[street]] nº [[num]], 
+    [[complement]], [[neighborhood]], [[city]] - [[state]], CEP [[zipcode]], 
+    telefone: [[phone]], e-mail: [[email]]";
+
+    $camposDB = [
+      $dadosCliente->name = $this->setUppercase($dadosCliente->name),
+      $dadosCliente->nationality, $dadosCliente->marital_status, $dadosCliente->profession,
+      $dadosCliente->phone, $dadosCliente->email, $dadosCliente->rg, $dadosCliente->rg_expedidor, 
+      $dadosCliente->cpf,
+      $enderecoCliente->street, $enderecoCliente->num, $enderecoCliente->complement,
+      $enderecoCliente->neighborhood, $enderecoCliente->city,
+      $enderecoCliente->state, $enderecoCliente->zipcode,
+    ];
+
+    return str_replace($variaveis, $camposDB, $texto);
+  }
+
 
 } /**Fim classe Helper */

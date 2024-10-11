@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DocumentTemplateController;
 use App\Http\Controllers\ExternalOfficeController;
 use App\Http\Controllers\ExternalPetitionController;
 use App\Http\Controllers\HearingController;
@@ -117,6 +118,13 @@ Route::group(['middleware' => 'auth'], function(){
   Route::post('/store-legal-process', [LegalProcessController::class, 'store'])->name('legal-processes.store'); //Salva novo registro no BD
   Route::put('/update-legal-process/{legalProcess}', [LegalProcessController::class, 'update'])->name('legal-processes.update'); //Atualiza um registro no BD
   Route::delete('/destroy-legal-process/{legalProcess}', [LegalProcessController::class, 'destroy'])->name('legal-processes.destroy'); //Exclui um registro no BD
+
+  /**Rotas de Document Templates (Modelos de Documentos) */
+  Route::get('/index-document-templates', [DocumentTemplateController::class, 'index'])->name('document-templates.index'); //Listar todos os registros da tabela
+  Route::get('/show-document-templates/{documentTemplate}', [DocumentTemplateController::class, 'show'])->name('document-templates.show'); //Mostra detalhe de um registro
+  Route::post('/store-document-templates', [DocumentTemplateController::class, 'store'])->name('document-templates.store'); //Salva novo registro no BD
+  Route::put('/update-document-templates/{documentTemplate}', [DocumentTemplateController::class, 'update'])->name('document-templates.update'); //Atualiza um registro no BD
+  Route::delete('/destroy-document-templates/{documentTemplate}', [DocumentTemplateController::class, 'destroy'])->name('document-templates.destroy'); //Exclui um registro no BD
 
   
 }); //fim da restrição de acesso para quem não está logado no sistema

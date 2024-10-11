@@ -131,6 +131,13 @@ document.addEventListener("DOMContentLoaded", function(){
   
 });
 
+/**CKEditor em textarea */
+ClassicEditor
+  .create( document.querySelector( '#content' ) )
+  .catch( error => {
+  console.error( error );
+});
+
 
 
 import axios from 'axios';
