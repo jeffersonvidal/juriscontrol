@@ -132,11 +132,13 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 /**CKEditor em textarea */
-ClassicEditor
-  .create( document.querySelector( '#content' ) )
-  .catch( error => {
-  console.error( error );
-});
+if(document.querySelector('#content')){
+  ClassicEditor
+    .create( document.querySelector( '#content' ) )
+    .catch( error => {
+    console.error( error );
+  });
+}
 
 
 

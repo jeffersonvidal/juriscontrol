@@ -41,3 +41,7 @@
 .sb-sidenav-five .sb-sidenav-footer {
   background-color: #eeeded;
 }
+
+.ck-editor__editable_inline {
+  min-height: 300px;
+}

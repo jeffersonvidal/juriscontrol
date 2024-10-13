@@ -20,7 +20,7 @@
             <span>Listar todos os registros</span>
 
             <span class="ms-auto">
-                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createLabelModal"><i class="fa-solid fa-plus"></i> Cadastrar</button>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="fa-solid fa-plus"></i> Cadastrar</button>
             </span>
         </div><!--fim card-header-->
 
@@ -47,7 +47,7 @@
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $document->id }}" data-title="{{ $document->title }}" 
-                                            data-type="{{ $document->type }}" data-area="{{ $document->area }}" ><i class="fa-solid fa-pencil"></i></button>
+                                            data-content="{{ $document->content }}" data-type="{{ $document->type }}" data-area="{{ $document->area }}" ><i class="fa-solid fa-pencil"></i></button>
                                         <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $document->id }}" ><i class="fa-solid fa-trash"></i></button>
 
                                     </span>
@@ -63,37 +63,44 @@
     </div><!--fim card -->
 
 <!-- addModal -->
-<div class="modal fade" id="createLabelModal" tabindex="-1" aria-labelledby="createLabelModalLabel" aria-hidden="true">
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Modelo de Documento</h1>
+        <h1 class="modal-title fs-5" id="exampleModal">Cadastrar Modelo de Documento</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
-      <form id="createLabelForm" class="row g-3">
+      <form id="createForm" class="row g-3">
                 @csrf
 
                 
-                <div class="col-md-12 mb-3">
+                <div class="col-md-12 mb-2">
                     <label for="title" class="form-label">Título</label>
                     <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
                 </div>
                 <div class="col-md-12">
                     <label for="content" class="form-label">Conteúdo</label>
-                    <textarea class="form-control" id="content" name="content" rows="3">{{ old('content') }}</textarea>
+                    <textarea class="form-control" id="content" name="content" rows="50">{{ old('content') }}</textarea>
                 </div>
                 <div class="col-md-6">
                     <label for="type" class="form-label">Tipo</label>
                     <select id="type" name="type" class="form-select">
                         <option value="">Informe o tipo de documento</option>
+                        <option value="contract">Contrato</option>
+                        <option value="hypossufficiency_declaration">Declaração Hipossuficiência</option>
+                        <option value="power_of_attorney">Procuração</option>
                     </select>
                 </div>
                 <div class="col-md-6">
                     <label for="area" class="form-label">Área</label>
                     <select id="area" name="area" class="form-select">
                         <option value="">Informe a área do direito</option>
+                        <option value="civel">Civel</option>
+                        <option value="trabalhista">Trabalhista</option>
+                        <option value="criminal">Criminal</option>
+                        <option value="previdenciario">Previdenciário</option>
                     </select>
                 </div>
                 
@@ -114,40 +121,51 @@
 </div><!-- fim addModal -->
 
 <!-- editModal -->
-<div class="modal fade" id="updateLabelModal" tabindex="-1" aria-labelledby="updateLabelModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Alterar Etiqueta</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form id="updateLabelForm" class="row g-3">
+      <form id="updateForm" class="row g-3">
                 @csrf
                 <!-- @method('POST') -->
 
                 
-                <div class="col-md-12 mb-3">
-                    <label for="name" class="form-label">Nome</label>
-                    <input type="text" class="form-control" id="edit_name" name="name" value="{{ old('name') }}">
+                <div class="col-md-12 mb-2">
+                    <label for="title" class="form-label">Título</label>
+                    <input type="text" class="form-control" id="edit_title" name="title" value="{{ old('title') }}">
                 </div>
-                <div class="col-md-3 mb-3">
-                    <label for="hexa_color_bg" class="form-label">Cor de Fundo</label>
-                    <input type="color" class="form-control" id="edit_hexa_color_bg" name="hexa_color_bg" value="{{ old('hexa_color_bg') }}">
+                <div class="col-md-12">
+                    <label for="content" class="form-label">Conteúdo</label>
+                    <textarea class="form-control" id="edit_content" name="content" rows="50">{{ old('content') }}</textarea>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <label for="hexa_color_font" class="form-label">Cor do Texto</label>
-                    <input type="color" class="form-control" id="edit_hexa_color_font" name="hexa_color_font" value="{{ old('hexa_color_font') }}">
+                <div class="col-md-6">
+                    <label for="type" class="form-label">Tipo</label>
+                    <select id="edit_type" name="type" class="form-select">
+                        <option value="">Informe o tipo de documento</option>
+                        <option value="contract">Contrato</option>
+                        <option value="hypossufficiency_declaration">Declaração Hipossuficiência</option>
+                        <option value="power_of_attorney">Procuração</option>
+                    </select>
                 </div>
-
-                <div class="col-md-6 mb-3">
-                    <label for="hexa_color_font" class="form-label">Resultado</label>
-                    <br><span id="edit_resultado" class="badge rounded-pill"></span>
+                <div class="col-md-6">
+                    <label for="area" class="form-label">Área</label>
+                    <select id="edit_area" name="area" class="form-select">
+                        <option value="">Informe a área do direito</option>
+                        <option value="civel">Civel</option>
+                        <option value="trabalhista">Trabalhista</option>
+                        <option value="criminal">Criminal</option>
+                        <option value="previdenciario">Previdenciário</option>
+                    </select>
                 </div>
                 
-                <div class="col-md-12 mb-3">
-                    <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
-                    <input type="hidden" class="form-control" id="edit_label_id" name="id">                 
+                <div class="col-md-12">
+                    <input type="hidden" class="form-control" id="edit_company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="edit_author_id" name="author_id" value="{{ auth()->user()->id }}">                 
+                    <input type="hidden" class="form-control" id="edit_id" name="author_id" value="">                 
                 </div>
                 
             
@@ -170,41 +188,16 @@
 <script>
     /**Add in database - store */
     $(document).ready(function(){
-        /**Mostra exemplo em tempo real */
-        let inputName = document.querySelector('#name');
-        let inputBgColor = document.querySelector('#hexa_color_bg');
-        let inputFontColor = document.querySelector('#hexa_color_font');
-        let spanResultado = document.querySelector('#resultado');
-        let textoDigitado;
-        spanResultado.style.backgroundColor = inputBgColor.value;
-        spanResultado.style.color = 'white';
-
-        /**Manda para o span tudo que for digitado no campo name */
-        inputName.onkeyup = function(){
-            textoDigitado = inputName.value;
-            spanResultado.textContent = textoDigitado;
-            //console.log(textoDigitado);
-        }
-
-        /**Pega a cor de fundo escolhida e aplica no span */
-        inputBgColor.onchange = function(){
-            spanResultado.style.backgroundColor = inputBgColor.value;
-        }
-
-        /**Pega a cor da fonte escolhida e aplica no span */
-        inputFontColor.onchange = function(){
-            spanResultado.style.color = inputFontColor.value;
-        }
 
         /** Cadastrar registro funcionando com sucesso */
-        $('#createLabelForm').on('submit', function(e) {
+        $('#createForm').on('submit', function(e) {
             e.preventDefault();
             $.ajax({
-                url: '{{ route('labels.store') }}',
+                url: '{{ route('document-templates.store') }}',
                 method: 'POST',
                 data: $(this).serialize(),
                 success: function(response) {
-                    $('#createLabelModal').modal('hide');
+                    $('#createModal').modal('hide');
                     if(response){
                         Swal.fire('Pronto!', response.success, 'success');
                     }
@@ -222,31 +215,6 @@
         });
 
         /**Atualiza registro no banco de dados*/
-        /**Mostra exemplo em tempo real no formulário*/
-        let inputEditName = document.querySelector('#edit_name');
-        let inputEditBgColor = document.querySelector('#edit_hexa_color_bg');
-        let inputEditFontColor = document.querySelector('#edit_hexa_color_font');
-        let spanEditResultado = document.querySelector('#edit_resultado');
-        let textoEditDigitado;
-        spanEditResultado.style.backgroundColor = inputEditBgColor.value;
-        spanEditResultado.style.color = inputEditFontColor.value;
-        spanEditResultado.textContent = inputEditName.val;
-
-        /**Manda para o span tudo que for digitado no campo name */
-        inputEditName.onkeyup = function(){
-            textoEditDigitado = inputEditName.value;
-            spanEditResultado.textContent = textoEditDigitado;
-        }
-
-        /**Pega a cor de fundo escolhida e aplica no span */
-        inputEditBgColor.onchange = function(){
-            spanEditResultado.style.backgroundColor = inputEditBgColor.value;
-        }
-
-        /**Pega a cor da fonte escolhida e aplica no span */
-        inputEditFontColor.onchange = function(){
-            spanEditResultado.style.color = inputEditFontColor.value;
-        }
 
         /**Passa valores do registro para o formulário na modal de atualização */
         $('button').on('click', function() {
@@ -255,53 +223,100 @@
                 var dados = [
                         { 
                             id: $(this).attr('data-id'), 
-                            name: $(this).attr('data-name'), 
-                            hexa_color_bg: $(this).attr('data-hexa_color_bg'), 
-                            hexa_color_font: $(this).attr('data-hexa_color_font'), 
+                            title: $(this).attr('data-title'), 
+                            content: $(this).attr('data-content'), 
+                            type: $(this).attr('data-type'), 
+                            area: $(this).attr('data-area'), 
                         }
                     ];
-                    editLabel(dados);
+                    editRegistro(dados);
             }else if($(this).hasClass('deleteBtn')){
                 var dados = [
                         { 
                             id: $(this).attr('data-id'), 
-                            name: $(this).attr('data-name'), 
-                            hexa_color_bg: $(this).attr('data-hexa_color_bg'), 
-                            hexa_color_font: $(this).attr('data-hexa_color_font'), 
                         }
                     ];
-                    deleteLabel(dados);
+                    deleteRegistro(dados);
             }
         });
+
+        let editorInstance;
+        function initializeOrUpdateEditor(dados) {
+            if (editorInstance) {
+                // Se o editor já foi inicializado, apenas atualize o conteúdo
+                editorInstance.setData(dados);
+            } else {
+                // Inicialize o CKEditor e armazene a instância
+                ClassicEditor
+                    .create(document.querySelector('#edit_content'))
+                    .then(editor => {
+                        editorInstance = editor;
+                        editor.setData(dados);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+        }
+
+        function dataContentField(dados){
+            if (document.querySelector('#edit_content')) {
+                function initializeOrUpdateEditor(dados) {
+                    if (editorInstance) {
+                        // Se o editor já foi inicializado, apenas atualize o conteúdo
+                        editorInstance.setData(dados);
+                    } else {
+                        ClassicEditor
+                        .create(document.querySelector('#edit_content'))
+                        .then(editor => {
+                            // Define o conteúdo do editor com os dados do banco de dados
+                            editor.setData(dados);
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                    }
+                }
+            }
+        }
             
 
         /**Função que preenche os campos do formulário de atualização */
-        function editLabel(dados) {
-            let url = "{{ route('labels.show', 'id') }}";
+        function editRegistro(dados) {
+            let url = "{{ route('document-templates.show', 'id') }}";
             url = url.replace('id', dados[0].id);
+            //console.log(dados);
+            
             /**Preenche os campos do form de atualização*/
             $.get(url, function() {
-                $('#edit_label_id').val(dados[0].id);
-                $('#edit_name').val(dados[0].name);
-                $('#edit_hexa_color_bg').val(dados[0].hexa_color_bg);
-                $('#edit_hexa_color_font').val(dados[0].hexa_color_font);
-                $('#updateLabelModal').modal('show');
+                $('#edit_id').val(dados[0].id);
+                $('#edit_title').val(dados[0].title);
+                document.getElementById('edit_content').value = '';
+                dataContentField(dados[0].content);
+                //$('#edit_content').val(dados[0].content);
+                //document.getElementById('edit_content').value = dados[0].content;
+                $('#edit_type').val(dados[0].type);
+                $('#edit_area').val(dados[0].area);
+                $('#updateModal').modal('show');
             });
         }
 
+        
+
         /**Formulário de atualização de registro */
-        $('#updateLabelForm').on('submit', function(e) {
+        $('#updateForm').on('submit', function(e) {
             e.preventDefault();
-            var id = $('#edit_label_id').val();
+            var id = $('#edit_id').val();
             $.ajax({
-                url: `/update-label/${id}`,
+                url: `/update-document-templates/${id}`,
                 method: 'PUT',
                 data: $(this).serialize(),
                 success: function(response) {
-                    $('#updateLabelModal').modal('hide');
+                    $('#updateModal').modal('hide');
                     //$('#labelsTable').DataTable().ajax.reload();
                     //Swal.fire('Success', 'Registro atualizado com sucesso', 'success');
-                    console.log(response);
+                    // console.log(data);
+                    // console.log(response);
                     if(response){
                         Swal.fire('Pronto!', response.success, 'success');
                     }
@@ -311,7 +326,7 @@
                 },
                 error: function(response) {
                     //Swal.fire('Error', 'ERRO ao atualizar registro', 'error');
-                    console.log(response.responseJSON);
+                    //console.log(response.responseJSON);
                     if(response.responseJSON){
                         Swal.fire('Erro!', response.responseJSON.message, 'error');
                     }
@@ -321,7 +336,7 @@
 
 
         /**Exibe pergunta se deseja realmente excluir o registro */
-        function deleteLabel(dados) {
+        function deleteRegistro(dados) {
             Swal.fire({
                 title: 'Deseja realmente excluir esse registro?',
                 text: "Não será possível reverter essa operação posteriormente!",
@@ -339,7 +354,7 @@
                         }
                     });
                     $.ajax({
-                        url: `/destroy-label/${dados[0].id}`,
+                        url: `/destroy-document-templates/${dados[0].id}`,
                         method: 'DELETE',
                         success: function() {
                             //$('#labelsTable').DataTable().ajax.reload();
