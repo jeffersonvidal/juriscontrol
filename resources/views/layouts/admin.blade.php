@@ -87,7 +87,7 @@
                                     <a class="nav-link" href="{{ route('document-templates.index') }}" title="Modelos de Documentos">Modelos de Documentos</a>
                                     <a class="nav-link" href="" title="Gestão de Casos e Consultivos">Casos e Consultivos</a>
                                     <a class="nav-link" href="{{ route('labels.index') }}" title="Gestão de Etiquestas do Sistema">Etiquetas</a>
-                                    <a class="nav-link" href="" title="Gestão de Eventos">Eventos</a>
+                                    <a class="nav-link" href="{{ route('events.index') }}" title="Gestão de Agenda">Agenda</a>
                                 </nav>
                             </div>
 

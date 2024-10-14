@@ -101,17 +101,21 @@ class CustomerController extends Controller
             $customer->address()->save($customerAddress);
 
             /**Configuração no Google Drive */
+            $company = Company::where('id', auth()->user()->company_id)->first();
             $client = new GoogleClient();
-            $client->setClientId(env('GOOGLE_DRIVE_CLIENT_ID'));
-            $client->setClientSecret(env('GOOGLE_DRIVE_CLIENT_SECRET'));
-            $client->refreshToken(env('GOOGLE_DRIVE_REFRESH_TOKEN'));
+            // $client->setClientId(env('GOOGLE_DRIVE_CLIENT_ID'));
+            // $client->setClientSecret(env('GOOGLE_DRIVE_CLIENT_SECRET'));
+            // $client->refreshToken(env('GOOGLE_DRIVE_REFRESH_TOKEN'));
+            $client->setClientId($company->gdrive_client_id);
+            $client->setClientSecret($company->gdrive_client_secret);
+            $client->refreshToken($company->gdrive_refresh_token);
             
             $driveService = new Drive($client);
 
             // Nome da pasta a ser criada
             $folderName = strtoupper($customer->name);
             /**Pasta Pai (clientes) no drive */
-            $parentFolderId = env('GOOGLE_DRIVE_CUSTOMERS_FOLDER');
+            $parentFolderId = $company->gdrive_customers_folder;
 
             // Criar a pasta no Google Drive
             $folderMetadata = new Drive\DriveFile(array(
@@ -246,16 +250,16 @@ class CustomerController extends Controller
 
             /**Configuração no Google Drive */
             $client = new GoogleClient();
-            $client->setClientId(env('GOOGLE_DRIVE_CLIENT_ID'));
-            $client->setClientSecret(env('GOOGLE_DRIVE_CLIENT_SECRET'));
-            $client->refreshToken(env('GOOGLE_DRIVE_REFRESH_TOKEN'));
+            $client->setClientId($company->gdrive_client_id);
+            $client->setClientSecret($company->gdrive_client_secret);
+            $client->refreshToken($company->gdrive_refresh_token);
             
             $driveService = new Drive($client);
 
             // Nome da pasta a ser criada
             $folderName = strtoupper($customer->name);
             /**Pasta Pai (clientes) no drive */
-            $parentFolderId = env('GOOGLE_DRIVE_CUSTOMERS_FOLDER');
+            $parentFolderId = $company->gdrive_customers_folder;
 
             // Criar a pasta no Google Drive
             $folderMetadata = new Drive\DriveFile(array(

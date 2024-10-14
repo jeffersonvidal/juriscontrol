@@ -74,12 +74,6 @@ Route::group(['middleware' => 'auth'], function(){
   Route::delete('/destroy-customer/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy'); //Exclui um registro no BD
 
   /**Rotas de Escritórios Externos */
-  // Route::get('/index-external-office', [ExternalOfficeController::class, 'index'])->name('external-offices.index'); //Listar todos os registros da tabela
-  // Route::get('/show-external-office/{external-office}', [ExternalOfficeController::class, 'show'])->name('external-offices.show'); //Mostra detalhe de um registro
-  // Route::post('/store-external-office', [ExternalOfficeController::class, 'store'])->name('external-offices.store'); //Salva novo registro no BD
-  // Route::put('/update-external-office/{external-office}', [ExternalOfficeController::class, 'update'])->name('external-offices.update'); //Atualiza um registro no BD
-  // Route::delete('/destroy-external-office/{external-office}', [ExternalOfficeController::class, 'destroy'])->name('external-offices.destroy'); //Exclui um registro no BD
-  /**Rotas de Escritórios Externos */
   Route::get('/index-external-office', [ExternalOfficeController::class, 'index'])->name('external-offices.index'); //Listar todos os registros da tabela
   Route::get('/show-external-office/{externalOffice}', [ExternalOfficeController::class, 'show'])->name('external-offices.show'); //Mostra detalhe de um registro
   Route::post('/store-external-office', [ExternalOfficeController::class, 'store'])->name('external-offices.store'); //Salva novo registro no BD
@@ -125,6 +119,13 @@ Route::group(['middleware' => 'auth'], function(){
   Route::post('/store-document-templates', [DocumentTemplateController::class, 'store'])->name('document-templates.store'); //Salva novo registro no BD
   Route::put('/update-document-templates/{documentTemplate}', [DocumentTemplateController::class, 'update'])->name('document-templates.update'); //Atualiza um registro no BD
   Route::delete('/destroy-document-templates/{documentTemplate}', [DocumentTemplateController::class, 'destroy'])->name('document-templates.destroy'); //Exclui um registro no BD
+
+  /**Rotas de Calendar (Agenda integrado com Google Agenda) */
+  Route::get('/index-events', [DocumentTemplateController::class, 'index'])->name('events.index'); //Listar todos os registros da tabela
+  Route::get('/show-events/{event}', [DocumentTemplateController::class, 'show'])->name('events.show'); //Mostra detalhe de um registro
+  Route::post('/store-events', [DocumentTemplateController::class, 'store'])->name('events.store'); //Salva novo registro no BD
+  Route::put('/update-events/{event}', [DocumentTemplateController::class, 'update'])->name('events.update'); //Atualiza um registro no BD
+  Route::delete('/destroy-events/{event}', [DocumentTemplateController::class, 'destroy'])->name('events.destroy'); //Exclui um registro no BD
 
   
 }); //fim da restrição de acesso para quem não está logado no sistema
