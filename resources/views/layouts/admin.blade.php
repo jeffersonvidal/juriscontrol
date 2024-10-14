@@ -80,6 +80,7 @@
                         </a>
                             <div class="collapse" id="collapseJuridico" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="{{ route('events.index') }}" title="Gestão de Agenda">Agenda</a>
                                     <a class="nav-link" href="{{ route('tasks.index') }}" title="Gestão de Tarefas">Tarefas Diárias</a>
                                     <a class="nav-link" href="{{ route('external-petitions.index') }}" title="Petições de Parceiros">Petições Parceiros</a>
                                     <a class="nav-link" href="{{ route('hearings.index') }}" title="Audiências e Perícias de Parceiros">Audiências/Perícias</a>
@@ -87,7 +88,6 @@
                                     <a class="nav-link" href="{{ route('document-templates.index') }}" title="Modelos de Documentos">Modelos de Documentos</a>
                                     <a class="nav-link" href="" title="Gestão de Casos e Consultivos">Casos e Consultivos</a>
                                     <a class="nav-link" href="{{ route('labels.index') }}" title="Gestão de Etiquestas do Sistema">Etiquetas</a>
-                                    <a class="nav-link" href="{{ route('events.index') }}" title="Gestão de Agenda">Agenda</a>
                                 </nav>
                             </div>
 

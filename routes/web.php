@@ -3,6 +3,7 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentTemplateController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExternalOfficeController;
 use App\Http\Controllers\ExternalPetitionController;
 use App\Http\Controllers\HearingController;
@@ -121,11 +122,11 @@ Route::group(['middleware' => 'auth'], function(){
   Route::delete('/destroy-document-templates/{documentTemplate}', [DocumentTemplateController::class, 'destroy'])->name('document-templates.destroy'); //Exclui um registro no BD
 
   /**Rotas de Calendar (Agenda integrado com Google Agenda) */
-  Route::get('/index-events', [DocumentTemplateController::class, 'index'])->name('events.index'); //Listar todos os registros da tabela
-  Route::get('/show-events/{event}', [DocumentTemplateController::class, 'show'])->name('events.show'); //Mostra detalhe de um registro
-  Route::post('/store-events', [DocumentTemplateController::class, 'store'])->name('events.store'); //Salva novo registro no BD
-  Route::put('/update-events/{event}', [DocumentTemplateController::class, 'update'])->name('events.update'); //Atualiza um registro no BD
-  Route::delete('/destroy-events/{event}', [DocumentTemplateController::class, 'destroy'])->name('events.destroy'); //Exclui um registro no BD
+  Route::get('/index-events', [EventController::class, 'index'])->name('events.index'); //Listar todos os registros da tabela
+  Route::get('/show-events/{event}', [EventController::class, 'show'])->name('events.show'); //Mostra detalhe de um registro
+  Route::post('/store-events', [EventController::class, 'store'])->name('events.store'); //Salva novo registro no BD
+  Route::put('/update-events/{event}', [EventController::class, 'update'])->name('events.update'); //Atualiza um registro no BD
+  Route::delete('/destroy-events/{event}', [EventController::class, 'destroy'])->name('events.destroy'); //Exclui um registro no BD
 
   
 }); //fim da restrição de acesso para quem não está logado no sistema
