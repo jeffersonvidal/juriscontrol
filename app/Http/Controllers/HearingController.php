@@ -88,7 +88,10 @@ class HearingController extends Controller
             $description = $hearing->object . '. Cliente: ' . $hearing->client;
             /**Calculando data de vencimento para pagamento */
             $currentDate = Carbon::now();
-            $due_at = $currentDate->addDays(7);
+            $date_happen = $request->date_happen;
+            $carbonDate = Carbon::createFromFormat('Y-m-d', $date_happen);
+            $addSevenDays = $carbonDate->addDays(7);
+            $due_at = $addSevenDays->format('Y-m-d');
             
             $invoice = new Invoice;
             $invoice->enrollment_of = '1';
@@ -101,7 +104,7 @@ class HearingController extends Controller
             $invoice->invoice_category_id = '8'; //audiência
             $invoice->type = 'income';
             $invoice->amount = $hearing->amount;
-            $invoice->due_at = $due_at->format('Y-m-d');
+            $invoice->due_at = $due_at;
             $invoice->repeat_when = 'unique';
             $invoice->enrollments = '1';
             $invoice->status = 'unpaid';

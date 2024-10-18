@@ -16,7 +16,7 @@ class CompanySeeder extends Seeder
         if(! Company::where("id","1")->first()){
             Company::create([
                 'fantasy_name' => 'Brandão Vidal Advogados',
-                'corporate_reason' => 'Brandão Vidal Adv',
+                'corporate_reason' => 'Brandão Vidal Sociedade Individual De Advocacia',
                 'email' => 'contato@brandaovidaladvogados.com.br',
                 'cnpj' => '55768652000162',
                 'phone' => '61981261073',
