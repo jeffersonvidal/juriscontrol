@@ -63,6 +63,9 @@ class DashboardController extends Controller
             'expenseWeek' => $this->helperAdm->getExpenseWeek(),
             'cashBalance' => $this->helperAdm->getCashBalance(),
             'invoices' => $chartData,
+            'hearingsToday' => $this->helperAdm->getHearingToday(),
+            'tasksToday' => $this->helperAdm->getTaskToday(),
+            'lateTasks' => $this->helperAdm->getLateTasks(),
         ]);
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Hearing;
 use App\Models\Invoice;
+use App\Models\Task;
 use Carbon\Carbon;
 
 class HelpersAdm{
@@ -111,6 +113,40 @@ class HelpersAdm{
     ];
 
     return str_replace($variaveis, $camposDB, $texto);
+  }
+
+  /**Dashboard */
+  /**Retorna total de audiências para o dia corrente */
+  public function getHearingToday(){
+    // Data de início da semana
+    $isToday = Carbon::now()->format('Y-m-d');
+
+    // Soma dos registros da semana corrente
+    return Hearing::where('company_id', auth()->user()->company_id)
+      ->whereDate('date_happen', '=', $isToday)
+      ->count();
+  }
+
+  /**Retorna total de tarefas para o dia corrente */
+  public function getTaskToday(){
+    // Data de início da semana
+    $isToday = Carbon::now()->format('Y-m-d');
+
+    // Soma dos registros da semana corrente
+    return Task::where('company_id', auth()->user()->company_id)
+      ->whereDate('end_date', '=', $isToday)
+      ->count();
+  }
+
+  /**Retorna total de tarefas atrasadas */
+  public function getLateTasks(){
+    // Data de início da semana
+    $isToday = Carbon::now()->format('Y-m-d');
+
+    // Soma dos registros da semana corrente
+    return Task::where('company_id', auth()->user()->company_id)
+      ->whereDate('end_date', '<', $isToday)
+      ->count();
   }
 
 
