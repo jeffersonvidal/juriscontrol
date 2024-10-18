@@ -14,65 +14,69 @@
     <div class="row">
         <div class="col-md-12">
 
-                <!-- visão geral do sistema -->
-                <div class="card mb-4 shadow-sm border-light">
-                    <div class="card-header hstack gap-2">
-                        <i class="fa-solid fa-gavel"></i> <span>VISÃO GERAL - JURÍDICO</span>
-                    </div>
-    
-    
-                    <div class="card-body">
-                        <!-- componente de mensagens e alertas -->    
+            <!-- visão geral do sistema -->
+            <div class="card mb-4 shadow-sm border-light">
+                <div class="card-header hstack gap-2">
+                    <i class="fa-solid fa-gavel"></i> <span>VISÃO GERAL - FINANCEIRO</span>
+                </div>
+
+
+                <div class="card-body">
+                    <!-- componente de mensagens e alertas -->    
                         
     
-                        <div class="row">
+                    <div class="row">
                         <div class="card mb-4 border-light shadow-sm">
-        <div class="card-body">
-            <div class="row align-items-center">
-                <div class="col">
-                    <div class="card container text-center">
-                        <div class="card-header text-bg-primary p-3 row align-items-end">
-                            <div class="col">
-                                <h5 class="card-title"><i class="fa-solid fa-circle-up"></i> Receita Semana</h5>
-                            </div>
-                            <div class="col">
-                                <h5 class="card-title ms-auto">{{ 'R$' . number_format($incomeWeek, 2, ',', '.') }}</h5>
-                            </div>
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <div class="card container text-center">
+                                            <div class="card-header text-bg-primary p-3 row align-items-end">
+                                                <div class="col">
+                                                    <h5 class="card-title"><i class="fa-solid fa-circle-up"></i> Receita Semana</h5>
+                                                </div>
+                                                <div class="col">
+                                                    <h5 class="card-title ms-auto">{{ 'R$' . number_format($incomeWeek, 2, ',', '.') }}</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="card container text-center">
+                                            <div class="card-header text-bg-danger p-3 row align-items-end">
+                                                <div class="col">
+                                                    <h5 class="card-title"><i class="fa-solid fa-circle-down"></i> Despesa Semana</h5>
+                                                </div>
+                                                <div class="col">
+                                                    <h5 class="card-title ms-auto">{{ 'R$' . number_format($expenseWeek, 2, ',', '.') }}</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="card container text-center">
+                                            <div class="card-header text-bg-<?php echo ($cashBalance <= 0 ? 'danger' : 'success')?> p-3 row align-items-end">
+                                                <div class="col">
+                                                    <h5 class="card-title"><i class="fa-solid fa-sack-dollar"></i> Saldo/Caixa</h5>
+                                                </div>
+                                                <div class="col">
+                                                    <h5 class="card-title ms-auto">{{ 'R$' . number_format($cashBalance, 2, ',', '.') }}</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!--fim dirv.row-->
+                                
+                                <!--Gráfico Receita vs Despesas -->
+                                <div id="chart_div" style="width: 100%; height: 500px;"></div>
+
+
+                            </div><!--fim div card-->
                         </div>
-                    </div>
+                    </div><!--FIM ROW -->
                 </div>
-                <div class="col">
-                    <div class="card container text-center">
-                        <div class="card-header text-bg-danger p-3 row align-items-end">
-                            <div class="col">
-                                <h5 class="card-title"><i class="fa-solid fa-circle-down"></i> Despesa Semana</h5>
-                            </div>
-                            <div class="col">
-                                <h5 class="card-title ms-auto">{{ 'R$' . number_format($expenseWeek, 2, ',', '.') }}</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card container text-center">
-                        <div class="card-header text-bg-<?php echo ($cashBalance <= 0 ? 'danger' : 'success')?> p-3 row align-items-end">
-                            <div class="col">
-                                <h5 class="card-title"><i class="fa-solid fa-sack-dollar"></i> Saldo/Caixa</h5>
-                            </div>
-                            <div class="col">
-                                <h5 class="card-title ms-auto">{{ 'R$' . number_format($cashBalance, 2, ',', '.') }}</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div><!--fim dirv.row-->
-        </div>
-    </div>
-                
-                        </div>
-                    </div>
                     
-                </div><!-- fim visão geral do sistema -->
+            </div><!-- fim visão geral do sistema -->
 
                 <!-- visão jurídico -->
                 <div class="card mb-4 shadow-sm border-light">
@@ -151,6 +155,30 @@
 
 
 </div><!-- fim container-->
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Mês', 'Receitas', 'Despesas'],
+                @foreach($invoices as $row)
+                    ['{{ $row['month'] }}', {{ $row['income'] }}, {{ $row['expense'] }}],
+                @endforeach
+            ]);
+
+            var options = {
+                title: 'Receita vs Despesas',
+                hAxis: {title: 'Meses', titleTextStyle: {color: '#333'}},
+                vAxis: {minValue: 0}
+            };
+
+            var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+      }
+    </script>
 
 
     
