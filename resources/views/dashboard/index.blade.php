@@ -33,7 +33,7 @@
                                             <div class="card container text-center">
                                                 <div class="card-header text-bg-primary p-3 row align-items-end">
                                                     <div class="col">
-                                                        <h5 class="card-title"><i class="fa-solid fa-circle-up"></i> Rec. Semana</h5>
+                                                        <h5 class="card-title"><i class="fa-solid fa-circle-up"></i> Semana</h5>
                                                     </div>
                                                     <div class="col">
                                                         <h5 class="card-title ms-auto">{{ 'R$' . number_format($incomeWeek, 2, ',', '.') }}</h5>
@@ -45,7 +45,7 @@
                                             <div class="card container text-center">
                                                 <div class="card-header text-bg-danger p-3 row align-items-end">
                                                     <div class="col">
-                                                        <h5 class="card-title"><i class="fa-solid fa-circle-down"></i> Des. Semana</h5>
+                                                        <h5 class="card-title"><i class="fa-solid fa-circle-down"></i> Semana</h5>
                                                     </div>
                                                     <div class="col">
                                                         <h5 class="card-title ms-auto">{{ 'R$' . number_format($expenseWeek, 2, ',', '.') }}</h5>
@@ -79,7 +79,7 @@
                         <!-- Resumo jurídico do dia -->
                         <div class="col-md-4">
                             <div class="row">
-                                <h4>Responsabilidades Para Hoje</h4>
+                                <h4>Compromissos Para Hoje</h4>
 
                                 <div class="col mb-4">
                                     <div class="card border border-4 border-dark border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
@@ -134,7 +134,69 @@
                                     </div>
                                 </div>
                                 
-                            </div>
+                            </div><!--fim compromissos para hoje -->
+
+                            <hr>
+
+                            <div class="row">
+                                <h4>Compromissos Para Amanhã</h4>
+
+                                <div class="col mb-4">
+                                    <div class="card border border-4 border-dark border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2 text-lg-center">
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                        Audiências</div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>{{ $getTomorowHearing }}</h3></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col mb-4">
+                                    <div class="card border border-4 border-dark border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2 text-lg-center">
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                        Tarefas</div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>{{ $getTomorowTask }}</h3></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col mb-4">
+                                    <div class="card border border-4 <?php echo ($lateTasks > 0 ? 'border-danger' : 'border-dark')?> <?php echo ($lateTasks > 0 ? 'text-bg-danger' : '')?> border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2 text-lg-center">
+                                                    <div class="text-xs font-weight-bold <?php echo ($lateTasks > 0 ? 'text-light' : 'text-primary')?> text-uppercase mb-1">
+                                                        Petições</div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>{{ $getTomorowExternalPetition }}</h3></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col mb-4">
+                                    <div class="card border border-4 border-dark border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2 text-lg-center">
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                        Consultivos</div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>32</h3></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div><!--Responsabilidades para amanhã-->
+
+                            
                         </div><!-- fim col-md-4 - Resumo jurídico do dia -->
 
 

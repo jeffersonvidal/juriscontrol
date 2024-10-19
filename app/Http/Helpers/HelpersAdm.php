@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ExternalPetition;
 use App\Models\Hearing;
 use App\Models\Invoice;
 use App\Models\Task;
@@ -146,6 +147,39 @@ class HelpersAdm{
     // Soma dos registros da semana corrente
     return Task::where('company_id', auth()->user()->company_id)
       ->whereDate('end_date', '<', $isToday)
+      ->count();
+  }
+
+  /**Retorna qtd audiências de amanhã */
+  public function getTomorowHearing(){
+    $isToday = Carbon::now();
+    $addOneDay = $isToday->addDays(1);
+    $tomorowDay = $addOneDay->format('Y-m-d');
+    // Soma dos registros da semana corrente
+    return Hearing::where('company_id', auth()->user()->company_id)
+      ->whereDate('date_happen', '=', $tomorowDay)
+      ->count();
+  }
+
+  /**Retorna qtd tarefas de amanhã */
+  public function getTomorowTask(){
+    $isToday = Carbon::now();
+    $addOneDay = $isToday->addDays(1);
+    $tomorowDay = $addOneDay->format('Y-m-d');
+    // Soma dos registros da semana corrente
+    return Task::where('company_id', auth()->user()->company_id)
+      ->whereDate('end_date', '=', $tomorowDay)
+      ->count();
+  }
+
+  /**Retorna qtd petições de amanhã */
+  public function getTomorowExternalPetition(){
+    $isToday = Carbon::now();
+    $addOneDay = $isToday->addDays(1);
+    $tomorowDay = $addOneDay->format('Y-m-d');
+    // Soma dos registros da semana corrente
+    return ExternalPetition::where('company_id', auth()->user()->company_id)
+      ->whereDate('delivery_date', '=', $tomorowDay)
       ->count();
   }
 

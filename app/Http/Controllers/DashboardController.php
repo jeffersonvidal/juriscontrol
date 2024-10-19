@@ -21,7 +21,7 @@ class DashboardController extends Controller
 
         // Consulta para obter os dados de receitas e despesas por mês
         $invoices = Invoice::select(
-            DB::raw("MONTHNAME(created_at) as month_name"),
+            DB::raw("MONTHNAME(due_at) as month_name"),
             DB::raw("type"),
             DB::raw("SUM(amount) as total")
         )
@@ -66,6 +66,9 @@ class DashboardController extends Controller
             'hearingsToday' => $this->helperAdm->getHearingToday(),
             'tasksToday' => $this->helperAdm->getTaskToday(),
             'lateTasks' => $this->helperAdm->getLateTasks(),
+            'getTomorowHearing' => $this->helperAdm->getTomorowHearing(),
+            'getTomorowTask' => $this->helperAdm->getTomorowTask(),
+            'getTomorowExternalPetition' => $this->helperAdm->getTomorowExternalPetition(),
         ]);
     }
 }
