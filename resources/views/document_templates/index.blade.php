@@ -239,12 +239,13 @@
                     deleteRegistro(dados);
             }
         });
-            
 
         /**Função que preenche os campos do formulário de atualização */
         function editRegistro(dados) {
             let url = "{{ route('document-templates.show', 'id') }}";
             url = url.replace('id', dados[0].id);
+            initCKEditorOnce();
+
             /**Preenche os campos do form de atualização*/
             $.get(url, function() {
                 initCKEditorOnce();
@@ -277,6 +278,9 @@
         $('#updateForm').on('submit', function(e) {
             e.preventDefault();
             var id = $('#edit_id').val();
+            if (document.querySelector('#edit_content').ckeditorInstance) {
+                document.querySelector('#edit_content').ckeditorInstance.updateSourceElement();
+            }
             $.ajax({
                 url: `/update-document-templates/${id}`,
                 method: 'PUT',
