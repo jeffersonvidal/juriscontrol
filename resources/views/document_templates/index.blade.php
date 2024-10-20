@@ -188,7 +188,6 @@
 <script>
     /**Add in database - store */
     $(document).ready(function(){
-
         /** Cadastrar registro funcionando com sucesso */
         $('#createForm').on('submit', function(e) {
             e.preventDefault();
@@ -222,14 +221,15 @@
             if($(this).hasClass('editBtn')){
                 var dados = [
                         { 
-                            id: $(this).attr('data-id'), 
-                            title: $(this).attr('data-title'), 
-                            content: $(this).attr('data-content'), 
-                            type: $(this).attr('data-type'), 
-                            area: $(this).attr('data-area'), 
+                            id: $(this).attr('data-id'),
+                            title: $(this).attr('data-title'),
+                            content: $(this).attr('data-content'),
+                            type: $(this).attr('data-type'),
+                            area: $(this).attr('data-area'),
                         }
                     ];
                     editRegistro(dados);
+
             }else if($(this).hasClass('deleteBtn')){
                 var dados = [
                         { 
@@ -239,69 +239,39 @@
                     deleteRegistro(dados);
             }
         });
-
-        let editorInstance;
-        function initializeOrUpdateEditor(dados) {
-            if (editorInstance) {
-                // Se o editor já foi inicializado, apenas atualize o conteúdo
-                editorInstance.setData(dados);
-            } else {
-                // Inicialize o CKEditor e armazene a instância
-                ClassicEditor
-                    .create(document.querySelector('#edit_content'))
-                    .then(editor => {
-                        editorInstance = editor;
-                        editor.setData(dados);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-            }
-        }
-
-        function dataContentField(dados){
-            if (document.querySelector('#edit_content')) {
-                function initializeOrUpdateEditor(dados) {
-                    if (editorInstance) {
-                        // Se o editor já foi inicializado, apenas atualize o conteúdo
-                        editorInstance.setData(dados);
-                    } else {
-                        ClassicEditor
-                        .create(document.querySelector('#edit_content'))
-                        .then(editor => {
-                            // Define o conteúdo do editor com os dados do banco de dados
-                            editor.setData(dados);
-                        })
-                        .catch(error => {
-                            console.error(error);
-                        });
-                    }
-                }
-            }
-        }
             
 
         /**Função que preenche os campos do formulário de atualização */
         function editRegistro(dados) {
             let url = "{{ route('document-templates.show', 'id') }}";
             url = url.replace('id', dados[0].id);
-            //console.log(dados);
-            
             /**Preenche os campos do form de atualização*/
             $.get(url, function() {
+                initCKEditorOnce();
                 $('#edit_id').val(dados[0].id);
                 $('#edit_title').val(dados[0].title);
-                document.getElementById('edit_content').value = '';
-                dataContentField(dados[0].content);
-                //$('#edit_content').val(dados[0].content);
                 //document.getElementById('edit_content').value = dados[0].content;
+                document.querySelector('#edit_content').ckeditorInstance.setData(dados[0].content);
                 $('#edit_type').val(dados[0].type);
                 $('#edit_area').val(dados[0].area);
                 $('#updateModal').modal('show');
             });
         }
 
-        
+        // Função para inicializar o CKEditor apenas uma vez
+        function initCKEditorOnce() {
+            if (document.querySelector('#edit_content').ckeditorInstance === undefined) {
+                ClassicEditor
+                .create(document.querySelector('#edit_content'))
+                .then(editor => {
+                    document.querySelector('#edit_content').ckeditorInstance = editor;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+            }
+        }
+
 
         /**Formulário de atualização de registro */
         $('#updateForm').on('submit', function(e) {
@@ -333,6 +303,7 @@
                 }
             });
         });
+
 
 
         /**Exibe pergunta se deseja realmente excluir o registro */

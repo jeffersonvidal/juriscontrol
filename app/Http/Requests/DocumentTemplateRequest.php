@@ -31,7 +31,7 @@ class DocumentTemplateRequest extends FormRequest
     public function messages(): array{
         return [
             'title.required' => 'Campo Título é obrigatório!',
-            'content.required' => 'Campo Conteúdo de Fundo é obrigatório!',
+            'content.required' => 'Campo Conteúdo é obrigatório!',
             'type.required' => 'Campo Tipo é obrigatório!',
             'area.required' => 'Campo Área é obrigatório!',
             'author_id.required' => 'Informe quem está cadastrando esse registro!',
