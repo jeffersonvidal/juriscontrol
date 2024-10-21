@@ -25,7 +25,7 @@
                 <div class="card-body">
                     <!-- componente de mensagens e alertas -->    
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-8"><!-- financeiro + gráfico -->
                             <div class="card mb-4 border-light shadow-sm">
                                 <div class="card-body">
                                     <div class="row align-items-center">
@@ -168,11 +168,11 @@
                                     </div>
                                 </div>
                                 <div class="col mb-4">
-                                    <div class="card border border-4 <?php echo ($lateTasks > 0 ? 'border-danger' : 'border-dark')?> <?php echo ($lateTasks > 0 ? 'text-bg-danger' : '')?> border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
+                                    <div class="card border border-4 <?php echo ($getTomorowExternalPetition > 0 ? 'border-danger' : 'border-dark')?> <?php echo ($getTomorowExternalPetition > 0 ? 'text-bg-danger' : '')?> border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
                                         <div class="card-body">
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col mr-2 text-lg-center">
-                                                    <div class="text-xs font-weight-bold <?php echo ($lateTasks > 0 ? 'text-light' : 'text-primary')?> text-uppercase mb-1">
+                                                    <div class="text-xs font-weight-bold <?php echo ($getTomorowExternalPetition > 0 ? 'text-light' : 'text-primary')?> text-uppercase mb-1">
                                                         Petições</div>
                                                     <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>{{ $getTomorowExternalPetition }}</h3></div>
                                                 </div>
