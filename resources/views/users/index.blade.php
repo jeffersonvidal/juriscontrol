@@ -195,7 +195,7 @@
                 <div class="col-md-6">
                     <label for="user_profile_id" class="form-label">Perfil do Usuário</label>
                     <select id="edit_user_profile_id" name="user_profile_id" class="form-select">
-                        <option disabled>Informe o Perfil do Usuário</option>
+                        <option value="">Informe o Perfil do Usuário</option>
                         <option value="1">Estagiário</option>
                         <option value="2">Advogado</option>
                         <option value="3">Financeiro</option>

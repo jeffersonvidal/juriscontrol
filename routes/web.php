@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerAddressController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentTemplateController;
@@ -73,6 +74,13 @@ Route::group(['middleware' => 'auth'], function(){
   Route::post('/store-customer', [CustomerController::class, 'store'])->name('customers.store'); //Salva novo registro no BD
   Route::put('/update-customer/{customer}', [CustomerController::class, 'update'])->name('customers.update'); //Atualiza um registro no BD
   Route::delete('/destroy-customer/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy'); //Exclui um registro no BD
+
+  /**Rotas de Endereços de Clientes */
+  Route::get('/index-customer-address', [CustomerAddressController::class, 'index'])->name('customer-addresses.index'); //Listar todos os registros da tabela
+  Route::get('/show-customer-address/{customerAddress}', [CustomerAddressController::class, 'show'])->name('customer-addresses.show'); //Mostra detalhe de um registro
+  Route::post('/store-customer-address', [CustomerAddressController::class, 'store'])->name('customer-addresses.store'); //Salva novo registro no BD
+  Route::put('/update-customer-address/{customerAddress}', [CustomerAddressController::class, 'update'])->name('customer-addresses.update'); //Atualiza um registro no BD
+  Route::delete('/destroy-customer-address/{customerAddress}', [CustomerAddressController::class, 'destroy'])->name('customer-addresses.destroy'); //Exclui um registro no BD
 
   /**Rotas de Escritórios Externos */
   Route::get('/index-external-office', [ExternalOfficeController::class, 'index'])->name('external-offices.index'); //Listar todos os registros da tabela

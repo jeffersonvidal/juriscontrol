@@ -50,15 +50,9 @@
                             <td>{{ $customer->cpf }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
-                                        <a href="{{ route('customers.show', ['customer' => $customer->id]) }}" class="btn btn-sm me-1 mb-1 mb-sm-0" title="Ver Registro"><i class="fa-solid fa-eye"></i></a>
                                         <a href="{{ route('customers.history', ['customer' => $customer->id]) }}" class="btn btn-sm me-1 mb-1 mb-sm-0" title="Ver Histórico"><i class="fa-solid fa-id-card"></i></a>
+                                        <a href="https://drive.google.com/drive/folders/{{ $customer->gdrive_folder_id }}" title="Pasta do Cliente no Google Drive" class="btn btn-sm me-1 mb-1 mb-sm-0" target="_blank" ><i class="fa-brands fa-google-drive"></i></a>
 
-                                        <button class="text-decoration-none btn btn-sm " title="Novo Processo" data-id="{{ $customer->id }}" >
-                                            <i class="fa-regular fa-file-lines"></i></button>
-                                        <button class="text-decoration-none btn btn-sm " title="Novo Caso" data-id="{{ $customer->id }}" >
-                                            <i class="fa-solid fa-book"></i></button>
-                                        <button class="text-decoration-none btn btn-sm " title="Novo Endereço" data-id="{{ $customer->id }}" >
-                                            <i class="fa-solid fa-earth-americas"></i></button>
                                         <button class="text-decoration-none btn btn-sm " title="Timesheet - Atividades" data-id="" >
                                         <i class="fa-regular fa-clock"></i></button>
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $customer->id }}" 

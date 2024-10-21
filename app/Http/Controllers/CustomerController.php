@@ -33,8 +33,7 @@ class CustomerController extends Controller
     public function history(Customer $customer){
         $customerAddress = CustomerAddress::with('customer')
             ->where('customer_id', $customer->id)
-            ->orderBy('created_at')
-            ->get();
+            ->orderBy('main',  'DESC')->get();
 
             //return view
             return view('customers.history', [

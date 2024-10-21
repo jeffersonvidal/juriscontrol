@@ -21,7 +21,7 @@
             <span class="d-flex float-end">
                 <a class="btn btn-icon-split btn-secondary btn-sm me-1 mb-1 mb-sm-0" href="{{ route('customers.index') }}" title="Cadastrar Novo Processo"><i class="fa-regular fa-file-lines"></i> Novo Processo</a>
                 <a href="" class="btn btn-secondary btn-sm me-1 mb-1 mb-sm-0" title="Cadastrar Novo Consultivo"><i class="fa-solid fa-book"></i> Novo Consultivo</a>
-                <a class="btn btn-secondary btn-sm me-1 mb-1 mb-sm-0" href="{{ route('customers.index') }}" title="Cadastrar Novo Endereço"><i class="fa-solid fa-earth-americas"></i> Novo Endereço</a>
+                <button class="btn btn-sm btn-secondary btn-sm me-1 mb-1 mb-sm-0" data-bs-toggle="modal" data-bs-target="#createAddressesModal"><i class="fa-solid fa-earth-americas"></i> Novo Endereço</button>
                 <form action="" method="post">
                     @csrf
                     @method('delete')
@@ -29,9 +29,6 @@
                 </form>
             </span><!-- fim Botões de gestão do cliente -->
 
-            <span class="ms-auto">
-                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="fa-solid fa-plus"></i> Cadastrar</button>
-            </span>
         </div><!--fim card-header-->
 
         <div class="card-body">
@@ -76,6 +73,7 @@
 
                     <hr>
 
+
                     <fieldset>
                         <legend>Endereço(s)</legend>
 
@@ -90,13 +88,31 @@
                                     <div class="row">
                                         <div class="col-md-4"><strong>Cidade:</strong> {{ $address->city }} - UF: {{ $address->uf }}.</div> 
                                         <div class="col-md-4"><strong>CEP:</strong> {{ $address->zipcode }}</div>
+                                        <div class="col-md-12">
+                                        @php
+                                            if($address->main == 1){
+                                                echo '<span class="badge text-bg-primary">
+                                                            Principal
+                                                        </span>';
+                                            }
+                                        @endphp
+                                        </div>
                                     </div>
                                 </div>
-                                <form action="" method="post">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="submit" class="btn btn-secondary btn-sm me-1 mb-1 mb-sm-0 float-end" onclick="return confirm('Tem certeza que deseja APAGAR este registro?')" title="Excluir Endereço"><i class="fa-solid fa-trash-can"></i> Excluir Endereço</button>
-                                </form>
+                                
+                                
+                                <span class="d-flex flex-row justify-content-center ms-auto">
+                                    <button class="text-decoration-none btn btn-sm me-1 mb-1 mb-sm-0 editAddressBtn" title="Alterar Endereço" data-id="{{ $address->id }}" 
+                                    data-customer_id="{{ $address->customer_id }}" data-company_id="{{ $address->company_id }}" 
+                                    data-zipcode="{{ $address->zipcode }}" data-street="{{ $address->street }}" 
+                                    data-neighborhood="{{ $address->neighborhood }}" data-num="{{ $address->num }}" 
+                                    data-city="{{ $address->city }}" data-state="{{ $address->state }}" 
+                                    data-addrmain="{{ $address->main }}" data-complement="{{ $address->complement }}" 
+                                    data-bs-toggle="modal" data-bs-target="#updateAddressModal">
+                                        <i class="fa-solid fa-pencil"></i></button>
+                                    <button class="text-decoration-none btn btn-sm me-1 mb-1 mb-sm-0 text-danger deleteAddressBtn" title="Excluir Endereço" 
+                                        data-id="{{ $address->id }}"  ><i class="fa-solid fa-trash"></i></button>
+                                </span>
                             </div>
                             
                             @empty
@@ -198,11 +214,427 @@
         </div><!--fim card-body-->
     </div><!--fim card -->
 
+<!-- addressModal -->
+<div class="modal fade" id="createAddressesModal" tabindex="-1" aria-labelledby="createAddressesModal" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Endereço</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+      <form id="createAddressForm" class="row g-3">
+                @csrf
+
+                
+                <fieldset>
+                    <legend>Endereço</legend>
+                    <div class="row">
+                        <div class="col-md-2 mb-3">
+                            <label for="cep" class="form-label">CEP (Apenas nº)</label>
+                            <input onblur="pesquisacep(this.value);" type="text" class="form-control" id="zipcode" name="zipcode" placeholder="99999999" value="{{ old('zipcode') }}">
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label for="street" class="form-label">Rua</label>
+                            <input type="text" class="form-control" id="street" name="street" value="{{ old('street') }}">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="num" class="form-label">Número</label>
+                            <input type="text" class="form-control" id="num" name="num" value="{{ old('num') }}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="complement" class="form-label">Complemento</label>
+                            <input type="text" class="form-control" id="complement" name="complement" value="{{ old('complement') }}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label for="neighborhood" class="form-label">Bairro</label>
+                            <input type="text" class="form-control" id="neighborhood" name="neighborhood" value="{{ old('neighborhood') }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="city" class="form-label">Cidade</label>
+                            <input type="text" class="form-control" id="city" name="city" value="{{ old('city') }}">
+                        </div>
+                        <div class="col-md-1 mb-3">
+                            <label for="state" class="form-label">UF</label>
+                            <input type="text" class="form-control" id="stateUF" name="state" max="2" value="{{ old('state') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="main" class="form-label">Principal?</label>
+                            <select id="edit_main" name="main" class="form-select">
+                                <option value="1">Sim</option>
+                                <option value="0">Não</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                
+                <div class="col-md-12">
+                    <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="customer_id" name="customer_id" value="{{ $customer->id }}">                 
+                </div>
+                
+            
+      </div><!--fim modal-body-->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-primary addButton">Cadastrar <i class="fa-solid fa-paper-plane"></i></button>
+      </div><!--fim modal-footer-->
+      </form><!--finalizando form aqui para garantir pegar a ação do botão de salvar-->
+    </div>
+  </div>
+</div><!-- fim addressModal -->
+
+<!-- editModal -->
+<div class="modal fade" id="updateAddressModal" tabindex="-1" aria-labelledby="updateAddressModal" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Alterar Cliente</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <form id="updateAddressForm" class="row g-3">
+                @csrf
+                
+                <fieldset>
+                    <legend>Endereço</legend>
+                    <div class="row">
+                        <div class="col-md-2 mb-3">
+                            <label for="cep" class="form-label">CEP (Apenas nº)</label>
+                            <input onblur="pesquisacep(this.value);" type="text" class="form-control" id="edit_zipcode" name="zipcode" placeholder="99999999" value="{{ old('zipcode') }}">
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label for="street" class="form-label">Rua</label>
+                            <input type="text" class="form-control" id="edit_street" name="street" value="{{ old('street') }}">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="num" class="form-label">Número</label>
+                            <input type="text" class="form-control" id="edit_num" name="num" value="{{ old('num') }}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="complement" class="form-label">Complemento</label>
+                            <input type="text" class="form-control" id="edit_complement" name="complement" value="{{ old('complement') }}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label for="neighborhood" class="form-label">Bairro</label>
+                            <input type="text" class="form-control" id="edit_neighborhood" name="neighborhood" value="{{ old('neighborhood') }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="city" class="form-label">Cidade</label>
+                            <input type="text" class="form-control" id="edit_city" name="city" value="{{ old('city') }}">
+                        </div>
+                        <div class="col-md-1 mb-3">
+                            <label for="state" class="form-label">UF</label>
+                            <input type="text" class="form-control" id="edit_stateUF" name="state" max="2" value="{{ old('state') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="main" class="form-label">Principal?</label>
+                            <select id="edit_principal" name="main" class="form-select">
+                                <option value="1">Sim</option>
+                                <option value="0">Não</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </fieldset>
+                
+                <div class="col-md-12">
+                    <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="edit_id" name="id">                 
+                    <input type="hidden" class="form-control" id="edit_customer_id" name="customer_id" value="">                 
+                </div>
+                
+            
+      </div><!--fim modal-body-->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-primary editButton">Salvar Alterações <i class="fa-solid fa-paper-plane"></i></button>
+      </div><!--fim modal-footer-->
+      </form><!--finalizando form aqui para garantir pegar a ação do botão de salvar-->
+    </div>
+  </div>
+</div><!-- fim editAddressModal -->
 
 
 
 </div><!--fim container-fluid-->
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    /**Add in database - store */
+    $(document).ready(function(){
+        /** Cadastrar registro funcionando com sucesso */
+        $('#createAddressForm').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '{{ route('customer-addresses.store') }}',
+                method: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#createAddressModal').modal('hide');
+                    if(response){
+                        Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 2000); // 3000 milissegundos = 3 segundos
+                },
+                error: function(response) {
+                    console.log(response.responseJSON);
+                    if(response.responseJSON){
+                        Swal.fire('Erro!', response.responseJSON.message, 'error');
+                    }
+                }
+            });
+        });
+
+        /**Atualiza registro no banco de dados*/
+        /**Passa valores do registro para o formulário na modal de atualização */
+        $('button').on('click', function() {
+            /**Verifica se o botão tem a classe condicional para fazer algo */
+            // ['company_id', 'name','email','phone','rg',
+            // 'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday'];
+            if($(this).hasClass('editAddressBtn')){
+                var dados = [
+                        { 
+                            id: $(this).attr('data-id'), 
+                            zipcode: $(this).attr('data-zipcode'), 
+                            street: $(this).attr('data-street'), 
+                            num: $(this).attr('data-num'), 
+                            complement: $(this).attr('data-complement'), 
+                            neighborhood: $(this).attr('data-neighborhood'), 
+                            city: $(this).attr('data-city'), 
+                            state: $(this).attr('data-state'), 
+                            company_id: $(this).attr('data-company_id'), 
+                            customer_id: $(this).attr('data-customer_id'), 
+                            main: $(this).attr('data-addrmain'), 
+                        }
+                    ];
+                    //console.log(dados[0]);
+                    editAddress(dados);
+            }else if($(this).hasClass('deleteAddressBtn')){
+                var dados = [
+                        { 
+                            id: $(this).attr('data-id'), 
+                        }
+                    ];
+                    deleteAddress($(this).attr('data-id'));
+            }
+        });
+            
+
+        /**Função que preenche os campos do formulário de atualização */
+        function editAddress(dados) {
+            let id = dados[0].id;
+            let url = "{{ route('customers.show', 'id') }}";
+            url = url.replace('id', id);
+            /**Preenche os campos do form de atualização*/
+            $.get(url, function() {
+                fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                    throw new Error('Erro na rede: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    /**console.log(data[0][0]['customer']); //lista dados pessoais
+                     ** console.log(data[0][0]); //Lista dados do endereço */
+                     //console.log(data[0][0]['customer'].name);
+
+                    /**Endereço*/
+                    $('#edit_zipcode').val(dados[0].zipcode);
+                    $('#edit_street').val(dados[0].street);
+                    $('#edit_num').val(dados[0].num);
+                    $('#edit_complement').val(dados[0].complement);
+                    $('#edit_neighborhood').val(dados[0].neighborhood);
+                    $('#edit_city').val(dados[0].city);
+                    $('#edit_stateUF').val(dados[0].state);
+                    $('#edit_company_id').val(dados[0].company_id);
+                    $('#edit_customer_id').val(dados[0].customer_id);
+                    $('#edit_id').val(dados[0].id);
+                    $('#edit_principal').val(dados[0].main);
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                });
+                
+                
+                $('#updateAddressModal').modal('show');
+            });
+            //console.log(url);
+            
+
+        }//Fim aditRegistro()
+
+        /**Formulário de atualização de registro */
+        $('#updateAddressForm').on('submit', function(e) {
+            e.preventDefault();
+            var id = $('#edit_id').val();
+            $.ajax({
+                url: `/update-customer-address/${id}`,
+                method: 'PUT',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#updateAddressModal').modal('hide');
+                    //$('#customersTable').DataTable().ajax.reload();
+                    //Swal.fire('Success', 'Registro atualizado com sucesso', 'success');
+                    //console.log(response);
+                    if(response){
+                        Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 2000); // 3000 milissegundos = 3 segundos
+                },
+                error: function(response) {
+                    //Swal.fire('Error', 'ERRO ao atualizar registro', 'error');
+                    console.log(response.responseJSON);
+                    if(response.responseJSON){
+                        Swal.fire('Erro!', response.responseJSON.message, 'error');
+                    }
+                }
+            });
+        });
+
+
+        /**Exibe pergunta se deseja realmente excluir o registro */
+        function deleteAddress(id) {
+            Swal.fire({
+                title: 'Deseja realmente excluir esse registro?',
+                text: "Não será possível reverter essa operação posteriormente!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim! Excluir!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    });
+                    $.ajax({
+                        url: `/destroy-customer-address/${id}`,
+                        method: 'DELETE',
+                        success: function() {
+                            //$('#customersTable').DataTable().ajax.reload();
+                            Swal.fire('Pronto!', 'Registro excluído.', 'success');
+                            setTimeout(function() {
+                                location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                            }, 2000); // 3000 milissegundos = 3 segundos
+                        },
+                        error: function() {
+                            Swal.fire('Erro!', 'ERRO ao excluir registro', 'error');
+                        }
+                    });
+                }
+            });
+        }
+
+        
+    });
+
+    /**ViaCEP - Cadastro*/
+    function limpa_formulário_cep() {
+        //Limpa valores do formulário de Create.
+        document.getElementById('street').value=("");
+        document.getElementById('neighborhood').value=("");
+        document.getElementById('city').value=("");
+        document.getElementById('stateUF').value=("");
+        
+        //Limpa valores do formulário de Update.
+        document.getElementById('edit_street').value=("");
+        document.getElementById('edit_neighborhood').value=("");
+        document.getElementById('edit_city').value=("");
+        document.getElementById('edit_stateUF').value=("");
+        //document.getElementById('ibge').value=("");
+    }
+
+    function meu_callback(conteudo) {
+        if (!("erro" in conteudo)) {
+            //Atualiza os campos com os valores no form Create.
+            document.getElementById('street').value=(conteudo.logradouro);
+            document.getElementById('neighborhood').value=(conteudo.bairro);
+            document.getElementById('city').value=(conteudo.localidade);
+            document.getElementById('stateUF').value=(conteudo.uf);
+
+            //Atualiza os campos com os valores no form Update.
+            document.getElementById('edit_street').value=(conteudo.logradouro);
+            document.getElementById('edit_neighborhood').value=(conteudo.bairro);
+            document.getElementById('edit_city').value=(conteudo.localidade);
+            document.getElementById('edit_stateUF').value=(conteudo.uf);
+            //document.getElementById('ibge').value=(conteudo.ibge);
+        } //end if.
+        else {
+            //CEP não Encontrado.
+            limpa_formulário_cep();
+            alert("CEP não encontrado.");
+        }
+    }
+
+    function pesquisacep(valor) {
+
+        //Nova variável "cep" somente com dígitos.
+        var cep = valor.replace(/\D/g, '');
+
+        //Verifica se campo cep possui valor informado.
+        if (cep != "") {
+
+            //Expressão regular para validar o CEP.
+            var validacep = /^[0-9]{8}$/;
+
+            //Valida o formato do CEP.
+            if(validacep.test(cep)) {
+
+                //Preenche os campos com "..." enquanto consulta webservice - form Create.
+                document.getElementById('street').value="...";
+                document.getElementById('neighborhood').value="...";
+                document.getElementById('city').value="...";
+                document.getElementById('stateUF').value="...";
+
+                //Preenche os campos com "..." enquanto consulta webservice - form Update.
+                document.getElementById('edit_street').value="...";
+                document.getElementById('edit_neighborhood').value="...";
+                document.getElementById('edit_city').value="...";
+                document.getElementById('edit_stateUF').value="...";
+                //document.getElementById('ibge').value="...";
+
+                //Cria um elemento javascript.
+                var script = document.createElement('script');
+
+                //Sincroniza com o callback.
+                script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
+
+                //Insere script no documento e carrega o conteúdo.
+                document.body.appendChild(script);
+
+            } //end if.
+            else {
+                //cep é inválido.
+                limpa_formulário_cep();
+                alert("Formato de CEP inválido. Digite apenas números");
+            }
+        } //end if.
+        else {
+            //cep sem valor, limpa formulário.
+            limpa_formulário_cep();
+        }
+    };//Fim via cep
+
+    
+</script>
 
 
 @endsection

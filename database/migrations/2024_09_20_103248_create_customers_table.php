@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('marital_status');
             $table->string('nationality');
             $table->string('profession');
-            $table->date('birthday');
+            $table->date('birthday')->nullable();
             $table->string('met_us'); //no conheceu
             $table->softDeletes();
             $table->timestamps();
