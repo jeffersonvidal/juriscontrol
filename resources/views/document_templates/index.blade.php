@@ -125,7 +125,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Alterar Etiqueta</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Alterar Modelo de Documento</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -183,8 +183,8 @@
 </div><!--fim container-fluid-->
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-{{-- CKEditor CDN --}}
-<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+<script src="https://cdn.tiny.cloud/1/f0hn7yp6hoepuf9q4glhvc0ta67w6ereck2x2gaki1oh5zbr/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- <script src="https://cdn.tiny.cloud/1/f0hn7yp6hoepuf9q4glhvc0ta67w6ereck2x2gaki1oh5zbr/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script> -->
 <script>
     /**Add in database - store */
     $(document).ready(function(){
@@ -240,38 +240,50 @@
             }
         });
 
+        // Função para inicializar o CKEditor apenas uma vez
+        function initTinyMCEOnce(content) {
+            if (!tinymce.get('edit_content')) {
+                tinymce.init({
+                    selector: '#edit_content',
+                    plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                    toolbar_mode: 'floating',
+                    toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat',
+                    height: 300,
+                    setup: function (editor) {
+                        editor.on('init', function () {
+                            editor.setContent(content);
+                        });
+                    }
+                });
+            } else {
+                tinymce.get('edit_content').setContent(content);
+            }
+        }
+
         /**Função que preenche os campos do formulário de atualização */
         function editRegistro(dados) {
             let url = "{{ route('document-templates.show', 'id') }}";
             url = url.replace('id', dados[0].id);
-            initCKEditorOnce();
 
             /**Preenche os campos do form de atualização*/
             $.get(url, function() {
-                initCKEditorOnce();
+                // Verificar se dados[0].content existe
+                if (dados[0] && dados[0].content) {
+                    initTinyMCEOnce(dados[0].content);
+                } else {
+                    console.error('O conteúdo não está definido.');
+                }
                 $('#edit_id').val(dados[0].id);
                 $('#edit_title').val(dados[0].title);
-                //document.getElementById('edit_content').value = dados[0].content;
-                document.querySelector('#edit_content').ckeditorInstance.setData(dados[0].content);
                 $('#edit_type').val(dados[0].type);
                 $('#edit_area').val(dados[0].area);
                 $('#updateModal').modal('show');
             });
         }
 
-        // Função para inicializar o CKEditor apenas uma vez
-        function initCKEditorOnce() {
-            if (document.querySelector('#edit_content').ckeditorInstance === undefined) {
-                ClassicEditor
-                .create(document.querySelector('#edit_content'))
-                .then(editor => {
-                    document.querySelector('#edit_content').ckeditorInstance = editor;
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-            }
-        }
+        
+
+        
 
 
         /**Formulário de atualização de registro */
