@@ -61,7 +61,7 @@
             </table>
         </div><!--fim card-body-->
     </div><!--fim card -->
-
+    
 <!-- addModal -->
 <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -245,7 +245,8 @@
             if (!tinymce.get('edit_content')) {
                 tinymce.init({
                     selector: '#edit_content',
-                    plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                    language: 'pt_BR',
+                    plugins: 'autolink lists link image charmap preview anchor pagebreak',
                     toolbar_mode: 'floating',
                     toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat',
                     height: 300,
@@ -280,10 +281,6 @@
                 $('#updateModal').modal('show');
             });
         }
-
-        
-
-        
 
 
         /**Formulário de atualização de registro */
