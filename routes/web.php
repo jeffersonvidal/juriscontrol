@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerAddressController;
+use App\Http\Controllers\CustomerContractController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentTemplateController;
@@ -81,6 +82,13 @@ Route::group(['middleware' => 'auth'], function(){
   Route::post('/store-customer-address', [CustomerAddressController::class, 'store'])->name('customer-addresses.store'); //Salva novo registro no BD
   Route::put('/update-customer-address/{customerAddress}', [CustomerAddressController::class, 'update'])->name('customer-addresses.update'); //Atualiza um registro no BD
   Route::delete('/destroy-customer-address/{customerAddress}', [CustomerAddressController::class, 'destroy'])->name('customer-addresses.destroy'); //Exclui um registro no BD
+
+  /**Rotas de Documentos de Clientes */
+  Route::get('/index-customer-contract', [CustomerContractController::class, 'index'])->name('customer-contracts.index'); //Listar todos os registros da tabela
+  Route::get('/show-customer-contract/{customerContract}', [CustomerContractController::class, 'show'])->name('customer-contracts.show'); //Mostra detalhe de um registro
+  Route::post('/store-customer-contract', [CustomerContractController::class, 'store'])->name('customer-contracts.store'); //Salva novo registro no BD
+  Route::put('/update-customer-contract/{customerContract}', [CustomerContractController::class, 'update'])->name('customer-contracts.update'); //Atualiza um registro no BD
+  Route::delete('/destroy-customer-contract/{customerContract}', [CustomerContractController::class, 'destroy'])->name('customer-contracts.destroy'); //Exclui um registro no BD
 
   /**Rotas de Escritórios Externos */
   Route::get('/index-external-office', [ExternalOfficeController::class, 'index'])->name('external-offices.index'); //Listar todos os registros da tabela

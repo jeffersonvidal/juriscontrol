@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\DocumentTemplate;
 use App\Models\ExternalPetition;
 use App\Models\Hearing;
 use App\Models\Invoice;
@@ -182,6 +183,8 @@ class HelpersAdm{
       ->whereDate('delivery_date', '=', $tomorowDay)
       ->count();
   }
+
+  
 
 
 } /**Fim classe Helper */

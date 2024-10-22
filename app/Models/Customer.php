@@ -33,4 +33,19 @@ class Customer extends Model implements Auditable
         return CustomerAddress::where('customer_id', $customer)->first();
     }
 
+    /**Retorna tipos dos modelos de documentos */
+  public function getTypeDocumentTemplate($documentId){
+    $documentTemplates = DocumentTemplate::find('id', $documentId);
+    
+    if($documentTemplates->type == 'contract'){
+      return 'Contrato';
+    }
+    if($documentTemplates->type == 'hypossufficiency_declaration'){
+      return 'Declaração de Hipossuficiência';
+    }
+    if($documentTemplates->type == 'power_of_attorney'){
+      return 'Procuração';
+    }
+  }
+
 }

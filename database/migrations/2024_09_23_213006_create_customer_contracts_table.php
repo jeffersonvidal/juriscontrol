@@ -16,8 +16,9 @@ return new class extends Migration
             $table->integer('company_id');
             $table->integer('customer_id');
             $table->string('title');
-            $table->string('type');
             $table->longText('content');
+            $table->string('type');
+            $table->string('area');
             $table->softDeletes();
             $table->timestamps();
         });

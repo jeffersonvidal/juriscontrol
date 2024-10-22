@@ -97,10 +97,16 @@
                     <label for="area" class="form-label">Área</label>
                     <select id="area" name="area" class="form-select">
                         <option value="">Informe a área do direito</option>
-                        <option value="civel">Civel</option>
-                        <option value="trabalhista">Trabalhista</option>
-                        <option value="criminal">Criminal</option>
+                        <option value="geral">Geral</option>
+                        <option value="ambiental">Ambiental</option>
+                        <option value="civil">Civil</option>
+                        <option value="complience">Complience</option>
+                        <option value="condominio">Condomínio</option>
+                        <option value="digital">Digital</option>
+                        <option value="penal">Penal</option>
                         <option value="previdenciario">Previdenciário</option>
+                        <option value="trabalhista">Trabalhista</option>
+                        <option value="tributario">Tributário</option>
                     </select>
                 </div>
                 
@@ -154,11 +160,17 @@
                 <div class="col-md-6">
                     <label for="area" class="form-label">Área</label>
                     <select id="edit_area" name="area" class="form-select">
-                        <option value="">Informe a área do direito</option>
-                        <option value="civel">Civel</option>
-                        <option value="trabalhista">Trabalhista</option>
-                        <option value="criminal">Criminal</option>
+                    <option value="">Informe a área do direito</option>
+                        <option value="geral">Geral</option>
+                        <option value="ambiental">Ambiental</option>
+                        <option value="civil">Civil</option>
+                        <option value="complience">Complience</option>
+                        <option value="condominio">Condomínio</option>
+                        <option value="digital">Digital</option>
+                        <option value="penal">Penal</option>
                         <option value="previdenciario">Previdenciário</option>
+                        <option value="trabalhista">Trabalhista</option>
+                        <option value="tributario">Tributário</option>
                     </select>
                 </div>
                 
@@ -246,11 +258,9 @@
                 tinymce.init({
                     selector: '#edit_content',
                     language: 'pt_BR',
-                    plugins: [
-        // Core editing features
-        'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-        'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'mentions', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
-        ],
+                    plugins: ['anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+                        'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'mentions', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
+                        ],
                     toolbar_mode: 'floating',
                     toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
                     height: 300,

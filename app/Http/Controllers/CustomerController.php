@@ -8,9 +8,11 @@ use App\Models\Company;
 use App\Models\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\CustomerAddress;
+use App\Models\DocumentTemplate;
 use Exception;
 use Google\Client as GoogleClient;
 use Google\Service\Drive;
+use HelpersAdm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -31,14 +33,23 @@ class CustomerController extends Controller
     }
 
     public function history(Customer $customer){
+        /**Retorna endereço do cliente */
         $customerAddress = CustomerAddress::with('customer')
             ->where('customer_id', $customer->id)
             ->orderBy('main',  'DESC')->get();
+        /**Retorna Documentos */
+        $documentTemplates = DocumentTemplate::where('company_id', auth()->user()->company_id)
+        ->orderBy('id', 'DESC')->get();
+
+        /**Helper Adm */
+        $helper = new HelpersAdm;
 
             //return view
             return view('customers.history', [
                 'customer' => $customer,
                 'customerAddress' => $customerAddress, 
+                'documentTemplates' => $documentTemplates, 
+                'helper' => $helper,
             ]);
     }
 

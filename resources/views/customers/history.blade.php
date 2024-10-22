@@ -19,6 +19,7 @@
         <div class="card-header hstack gap-2">
             <!-- Botões de gestão do cliente -->
             <span class="d-flex float-end">
+            <button class="text-decoration-none btn btn-secondary btn-sm me-1 mb-1 mb-sm-0" data-bs-toggle="modal" data-bs-target="#listDocumentModal" title="Novo Documento" ><i class="fa-solid fa-file-signature"></i> Novo Documento</button>
                 <a class="btn btn-icon-split btn-secondary btn-sm me-1 mb-1 mb-sm-0" href="{{ route('customers.index') }}" title="Cadastrar Novo Processo"><i class="fa-regular fa-file-lines"></i> Novo Processo</a>
                 <a href="" class="btn btn-secondary btn-sm me-1 mb-1 mb-sm-0" title="Cadastrar Novo Consultivo"><i class="fa-solid fa-book"></i> Novo Consultivo</a>
                 <button class="btn btn-sm btn-secondary btn-sm me-1 mb-1 mb-sm-0" data-bs-toggle="modal" data-bs-target="#createAddressesModal"><i class="fa-solid fa-earth-americas"></i> Novo Endereço</button>
@@ -38,6 +39,9 @@
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
                   <button class="nav-link active" id="pills-dadosPessoais-tab" data-bs-toggle="pill" data-bs-target="#pills-dadosPessoais" type="button" role="tab" aria-controls="pills-dadosPessoais" aria-selected="true"><i class="fa-regular fa-user"></i> Dados Pessoais</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-documentos-tab" data-bs-toggle="pill" data-bs-target="#pills-documentos" type="button" role="tab" aria-controls="pills-documentos" aria-selected="false"><i class="fa-solid fa-file-signature"></i> Documentos</button>
                 </li>
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" id="pills-processos-tab" data-bs-toggle="pill" data-bs-target="#pills-processos" type="button" role="tab" aria-controls="pills-processos" aria-selected="false"><i class="fa-regular fa-file-lines"></i> Processos</button>
@@ -127,6 +131,37 @@
 
                 </div><!-- fim Dados Pessoais -->
                 
+                <!-- Documentos -->
+                <div class="tab-pane fade" id="pills-documentos" role="tabpanel" aria-labelledby="pills-documentos-tab" tabindex="0">
+                    <fieldset>
+                        <legend>Lista de Documentos</legend>
+                    </fieldset>
+
+                    <table id="datatablesSimple" class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                              <th>Nome Documento</th>
+                              <th>Tipo</th>
+                              <th>Área</th>
+                              <th class="text-center">Ações</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                                <tr>
+                                    <td>Nome da parte contrária</td>
+                                    <td>5407448-13.2024.8.09.0160</td>
+                                    <td>05/2024</td>
+                                    <td>
+                                        <span class="d-flex flex-row justify-content-center">
+                                            <a href="" class="btn btn-info btn-sm me-1 mb-1 mb-sm-0" title="Ver Registro"><i class="fa-solid fa-eye"></i></a>
+                                        </span>
+                                        
+                                    </td>
+                                </tr>                           
+                          </tbody>
+                    </table>
+                </div><!-- fim Documentos -->
+                
                 <!-- Processos -->
                 <div class="tab-pane fade" id="pills-processos" role="tabpanel" aria-labelledby="pills-processos-tab" tabindex="0">
                     <fieldset>
@@ -214,6 +249,7 @@
         </div><!--fim card-body-->
     </div><!--fim card -->
 
+<!-- TRATAMENTO DE ENDEREÇO -->
 <!-- addressModal -->
 <div class="modal fade" id="createAddressesModal" tabindex="-1" aria-labelledby="createAddressesModal" aria-hidden="true">
   <div class="modal-dialog modal-xl">
@@ -364,15 +400,130 @@
   </div>
 </div><!-- fim editAddressModal -->
 
+<!-- TRATAMENTO DE DOCUMENTOS -->
+ <!-- listDocumentModal -->
+<div class="modal fade" id="listDocumentModal" tabindex="-1" aria-labelledby="listDocumentModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModal">Listar Modelos de Documentos</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+      <table id="datatablesSimple" class="table table-striped table-hover">
+                <thead>
+                        <tr>
+                        <th>Título</th>
+                        <th>Tipo</th>
+                        <th>Área</th>
+                        <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {{-- puxando registros do banco de dados --}}
+                    @if (count($documentTemplates) > 0)
+                        @foreach ($documentTemplates as $document)
+                        {{  dd($document->content }}
+                            <tr>
+                            <td>{{ $document->title }}</td>
+                            <td>{{ $document->type }}</td>
+                            <td>{{ $document->area }}</td>
+                                <td>
+                                    <span class="d-flex flex-row justify-content-center">
+                                        <button class="text-decoration-none btn btn-sm viewDocumentTemplate" title="Ver Modelo de Documento" data-id="{{ $document->id }}" data-title="{{ $document->title }}" 
+                                            data-content="{{ $document->content }}" data-type="{{ $document->type }}" data-area="{{ $document->area }}" data-customer_id="{{ $customer->id }}" ><i class="fa-solid fa-eye"></i></button>
+
+                                    </span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr colspan="3" style="background-color: orange;">Nenhum registro encontrado</tr>
+                    @endif
+                </tbody>
+            </table>
+
+      
+    </div>
+  </div>
+</div><!-- fim listDocumentModal -->
+
+<!-- addDocumentModal -->
+<div class="modal fade" id="createDocumentModal" tabindex="-1" aria-labelledby="createDocumentModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModal">Cadastrar Documento</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+      <form id="createDocumentForm" class="row g-3">
+                @csrf
+
+                
+                <div class="col-md-12 mb-2">
+                    <label for="title" class="form-label">Título</label>
+                    <input type="text" class="form-control" id="edit_title" name="title" value="{{ old('title') }}">
+                </div>
+                <div class="col-md-12">
+                    <label for="content" class="form-label">Conteúdo</label>
+                    <textarea class="form-control" id="edit_content" name="content" rows="50">{{ old('content') }}</textarea>
+                </div>
+                <div class="col-md-6">
+                    <label for="type" class="form-label">Tipo</label>
+                    <select id="edit_type" name="type" class="form-select">
+                        <option value="">Informe o tipo de documento</option>
+                        <option value="contract">Contrato</option>
+                        <option value="hypossufficiency_declaration">Declaração Hipossuficiência</option>
+                        <option value="power_of_attorney">Procuração</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="area" class="form-label">Área</label>
+                    <select id="edit_area" name="area" class="form-select">
+                        <option value="">Informe a área do direito</option>
+                        <option value="geral">Geral</option>
+                        <option value="ambiental">Ambiental</option>
+                        <option value="civil">Civil</option>
+                        <option value="complience">Complience</option>
+                        <option value="condominio">Condomínio</option>
+                        <option value="digital">Digital</option>
+                        <option value="penal">Penal</option>
+                        <option value="previdenciario">Previdenciário</option>
+                        <option value="trabalhista">Trabalhista</option>
+                        <option value="tributario">Tributário</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-12">
+                    <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="customer_id" name="customer_id" value="{{ $customer->id }}">                 
+                    <input type="hidden" class="form-control" id="author_id" name="author_id" value="{{ auth()->user()->id }}">                 
+                </div>
+                
+            
+      </div><!--fim modal-body-->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-primary addButton">Cadastrar <i class="fa-solid fa-paper-plane"></i></button>
+      </div><!--fim modal-footer-->
+      </form><!--finalizando form aqui para garantir pegar a ação do botão de salvar-->
+    </div>
+  </div>
+</div><!-- fim addDocumentModal -->
+
 
 
 </div><!--fim container-fluid-->
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/f0hn7yp6hoepuf9q4glhvc0ta67w6ereck2x2gaki1oh5zbr/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
     /**Add in database - store */
     $(document).ready(function(){
-        /** Cadastrar registro funcionando com sucesso */
+        /** Cadastrar novo endereço do cliente */
         $('#createAddressForm').on('submit', function(e) {
             e.preventDefault();
             $.ajax({
@@ -381,6 +532,31 @@
                 data: $(this).serialize(),
                 success: function(response) {
                     $('#createAddressModal').modal('hide');
+                    if(response){
+                        Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 2000); // 3000 milissegundos = 3 segundos
+                },
+                error: function(response) {
+                    console.log(response.responseJSON);
+                    if(response.responseJSON){
+                        Swal.fire('Erro!', response.responseJSON.message, 'error');
+                    }
+                }
+            });
+        });
+
+        /** Cadastrar Documento em CustomerContracts */
+        $('#createDocumentForm').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '{{ route('customer-contracts.store') }}',
+                method: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#createDocumentModal').modal('hide');
                     if(response){
                         Swal.fire('Pronto!', response.success, 'success');
                     }
@@ -428,8 +604,68 @@
                         }
                     ];
                     deleteAddress($(this).attr('data-id'));
+            }else if($(this).hasClass('viewDocumentTemplate')){
+                var dados = [
+                        { 
+                            id: $(this).attr('data-id'),
+                            title: $(this).attr('data-title'),
+                            content: $(this).attr('data-content'),
+                            type: $(this).attr('data-type'),
+                            area: $(this).attr('data-area'),
+                            company_id: $(this).attr('data-company_id'),
+                            customer_id: $(this).attr('data-customer_id'),
+                        }
+                    ];
+                    //console.log(dados[0]);
+                    showDocumentTemplate(dados);
             }
         });
+
+        // Função para inicializar o CKEditor apenas uma vez
+        function initTinyMCEOnce(content) {
+            if (!tinymce.get('edit_content')) {
+                tinymce.init({
+                    selector: '#edit_content',
+                    language: 'pt_BR',
+                    plugins: ['anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+                        'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'mentions', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
+                        ],
+                    toolbar_mode: 'floating',
+                    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+                    height: 300,
+                    setup: function (editor) {
+                        editor.on('init', function () {
+                            editor.setContent(content);
+                        });
+                    }
+                });
+            } else {
+                tinymce.get('edit_content').setContent(content);
+            }
+        }
+
+        /**Função que preenche os campos do formulário de atualização */
+        function showDocumentTemplate(dados) {
+            let url = "{{ route('document-templates.show', 'id') }}";
+            url = url.replace('id', dados[0].id);
+
+            /**Preenche os campos do form de atualização*/
+            $.get(url, function() {
+                // Verificar se dados[0].content existe
+                if (dados[0] && dados[0].content) {
+                    initTinyMCEOnce(dados[0].content);
+                } else {
+                    console.error('O conteúdo não está definido.');
+                }
+                $('#edit_id').val(dados[0].id);
+                $('#edit_title').val(dados[0].title);
+                $('#edit_type').val(dados[0].type);
+                $('#edit_area').val(dados[0].area);
+                $('#edit_company_id').val(dados[0].company_id);
+                $('#edit_customer_id').val(dados[0].customer_id);
+                $('#createDocumentModal').modal('show');
+            });
+        }
             
 
         /**Função que preenche os campos do formulário de atualização */
