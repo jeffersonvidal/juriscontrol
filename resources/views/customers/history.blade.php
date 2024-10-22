@@ -147,17 +147,27 @@
                             </tr>
                           </thead>
                           <tbody>
+                            {{-- puxando registros do banco de dados --}}
+                            @if (count($customerDocuments) > 0)
+                                @foreach ($customerDocuments as $customerDocument)
                                 <tr>
-                                    <td>Nome da parte contrária</td>
-                                    <td>5407448-13.2024.8.09.0160</td>
-                                    <td>05/2024</td>
+                                    <td>{{ $customerDocument->title }}</td>
+                                    <td>{{ $customerDocument->type }}</td>
+                                    <td>{{ $customerDocument->area }}</td>
                                     <td>
-                                        <span class="d-flex flex-row justify-content-center">
-                                            <a href="" class="btn btn-info btn-sm me-1 mb-1 mb-sm-0" title="Ver Registro"><i class="fa-solid fa-eye"></i></a>
-                                        </span>
+                                    <span class="d-flex flex-row justify-content-center">
+                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $customerDocument->id }}" data-title="{{ $customerDocument->title }}" 
+                                            data-content="{{ $customerDocument->content }}" data-type="{{ $customerDocument->type }}" data-area="{{ $customerDocument->area }}" ><i class="fa-solid fa-pencil"></i></button>
+                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $customerDocument->id }}" ><i class="fa-solid fa-trash"></i></button>
+
+                                    </span>
                                         
                                     </td>
-                                </tr>                           
+                                </tr>  
+                                @endforeach
+                        @else
+                            <tr colspan="5" style="background-color: orange;">Nenhum registro encontrado</tr>
+                        @endif                         
                           </tbody>
                     </table>
                 </div><!-- fim Documentos -->
@@ -424,7 +434,7 @@
                     {{-- puxando registros do banco de dados --}}
                     @if (count($documentTemplates) > 0)
                         @foreach ($documentTemplates as $document)
-                        {{  dd($document->content }}
+                        
                             <tr>
                             <td>{{ $document->title }}</td>
                             <td>{{ $document->type }}</td>
@@ -432,7 +442,7 @@
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
                                         <button class="text-decoration-none btn btn-sm viewDocumentTemplate" title="Ver Modelo de Documento" data-id="{{ $document->id }}" data-title="{{ $document->title }}" 
-                                            data-content="{{ $document->content }}" data-type="{{ $document->type }}" data-area="{{ $document->area }}" data-customer_id="{{ $customer->id }}" ><i class="fa-solid fa-eye"></i></button>
+                                            data-content="{{ $clientHeaderDocs . $document->content }}" data-type="{{ $document->type }}" data-area="{{ $document->area }}" data-customer_id="{{ $customer->id }}" ><i class="fa-solid fa-eye"></i></button>
 
                                     </span>
                                 </td>
@@ -662,7 +672,7 @@
                 $('#edit_type').val(dados[0].type);
                 $('#edit_area').val(dados[0].area);
                 $('#edit_company_id').val(dados[0].company_id);
-                $('#edit_customer_id').val(dados[0].customer_id);
+                //$('#edit_customer_id').val(dados[0].customer_id);
                 $('#createDocumentModal').modal('show');
             });
         }

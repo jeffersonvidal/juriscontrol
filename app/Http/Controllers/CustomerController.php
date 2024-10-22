@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\CustomerAddress;
+use App\Models\CustomerContract;
 use App\Models\DocumentTemplate;
 use Exception;
 use Google\Client as GoogleClient;
@@ -44,12 +45,22 @@ class CustomerController extends Controller
         /**Helper Adm */
         $helper = new HelpersAdm;
 
+        // Montar cabeçalho de documentos com os dados do cliente
+        $clientHeaderDocs = $helper->mountClientHeaderDocs($customer, $customerAddress->first());
+
+        /**Retorna todos os documentos do cliente */
+        $customerDocuments = CustomerContract::where('customer_id', $customer->id)
+        ->where('company_id', auth()->user()->company_id)
+        ->orderBy('id', 'DESC')->get();
+
+
             //return view
             return view('customers.history', [
                 'customer' => $customer,
                 'customerAddress' => $customerAddress, 
                 'documentTemplates' => $documentTemplates, 
-                'helper' => $helper,
+                'clientHeaderDocs' => $clientHeaderDocs,
+                'customerDocuments' => $customerDocuments,
             ]);
     }
 

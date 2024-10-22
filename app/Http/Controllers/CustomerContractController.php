@@ -42,11 +42,11 @@ class CustomerContractController extends Controller
             $document = new CustomerContract;
             $document->title = $request->title;
             $document->content = $request->content;
-            $document->customer_id = auth()->user()->id;
+            $document->customer_id = $request->customer_id;
             $document->type = $request->type;
             $document->area = $request->area;
             $document->company_id = $request->company_id;
-            //$document->save();
+            $document->save();
 
             //comita depois de tudo ter sido salvo
             DB::commit();
