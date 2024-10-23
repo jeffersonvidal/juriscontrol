@@ -217,6 +217,16 @@ Instalar Dependência masbug/Flysystem Google Drive Ext
 composer require masbug/flysystem-google-drive-ext
 ```
 
+Instalar TinyMCE
+```
+composer require tinymce/tinymce
+```
+
+Instalar FullCalendar
+```
+https://fullcalendar.io/docs/initialize-globals
+```
+
 
 TinyMCE Key: f0hn7yp6hoepuf9q4glhvc0ta67w6ereck2x2gaki1oh5zbr
 
