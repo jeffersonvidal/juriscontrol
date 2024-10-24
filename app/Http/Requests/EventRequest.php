@@ -21,11 +21,12 @@ class EventRequest extends FormRequest
         return [
             'title' => 'required',
             'description' => 'required',
-            'start' => 'required',
-            'end' => 'required',
+            'start' => 'required|Date',
+            'end' => 'required|Date',
             'status' => 'required',
             'eventId' => 'required',
             'company_id' => 'required',
+            'author_id' => 'required',
         ];
     }
 
@@ -38,6 +39,7 @@ class EventRequest extends FormRequest
             'status.required' => 'Informe o Status do evento!',
             'eventId.required' => 'Informe o ID do evento!',
             'company_id.required' => 'Campo Escritório é obrigatório!',
+            'author_id.required' => 'Informe quem está cadastrando esse evento.',
         ] ;
     }
 }

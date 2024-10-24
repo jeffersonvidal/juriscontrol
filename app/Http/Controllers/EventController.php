@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EventRequest;
+use App\Http\Services\EventService;
 use App\Models\Event;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -38,9 +39,21 @@ class EventController extends Controller
      */
     public function store(EventRequest $request)
     {
-        dd($request);
+        //dd($request);
         //Validar o formulário
-        $request->validated();
+        //$request->validated();
+        $data = $request->all();
+        $eventService = new EventService(auth()->user());
+        $event = $eventService->create($data);
+        if($event){
+            return response()->json([
+                'success' => true
+            ]);
+        }else{
+            return response()->json([
+                'success' => false
+            ]);
+        }
     }
 
     /**

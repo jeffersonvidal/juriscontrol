@@ -197,6 +197,8 @@ document.addEventListener('DOMContentLoaded', function() {
   function modalReset(){
       $('#title').val('');
       $('#description').val('');
+      $('#responsible_id').val('');
+      $('#color').val('');
       $('#eventId').val('');
       $('#deleteBtn').hide();
   }
@@ -209,10 +211,14 @@ document.addEventListener('DOMContentLoaded', function() {
           end: $('#endDateTime').val(),
           title: $('#title').val(),
           description: $('#description').val(),
+          responsible_id: $('#responsible_id').val(''),
+          color: $('#color').val(''),
           is_all_day: $('#is_all_day').prop('checked') ? 1 : 0,
       }
       if(eventId){
-          utl = '{{ url('/') }}' + '/events/${eventId}';
+          //utl = '{{ url('/') }}' + '/events/${eventId}';
+          url = "{{ route('events.update', 'id') }}";
+          url = url.replace('id', eventId);
           postData.method = "PUT"
       }
       $.ajax({
