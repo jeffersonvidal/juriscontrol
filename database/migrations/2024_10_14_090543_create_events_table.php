@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
+            $table->integer('author_id');
+            $table->integer('responsible_id');
             $table->unsignedBigInteger('company_id');
             $table->string('start');
             $table->string('end');
@@ -21,6 +23,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('event_id')->nullable();
+            $table->string('color')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('company_id')->references('id')->on('companies');
