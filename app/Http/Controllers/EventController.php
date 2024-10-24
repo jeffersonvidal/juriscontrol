@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -14,7 +15,14 @@ class EventController extends Controller
      */
     public function index()
     {
-        return view('events.index');
+        /**Retorna Usuários do sistema */
+        $users = User::where('company_id', auth()->user()->company_id)
+        ->orderBy('id', 'DESC')->get();
+
+        /**Carrega vuew */
+        return view('events.index', [
+            'users' => $users,
+        ]);
     }
 
     /**

@@ -66,6 +66,22 @@
                     </div>
 
                     <div class="row">
+                        <div class="col-md-8">
+                            <label for="responsible_id" class="form-label">Responsável</label>
+                            <select id="responsible_id" name="responsible_id" class="form-select select2">
+                                <option value="">Informe o Responsável</option>
+                                @foreach ($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <label for="color" class="form-label">Cor</label>
+                            <input type="color" class="form-control" id="color" name="color" value="#50301E">
+                        </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-12">
                             <label for="description" class="form-label">Observações</label>
                             <textarea class="form-control" id="description" name="description" rows="3"></textarea>
@@ -79,6 +95,7 @@
                 
                 <div class="col-md-12">
                     <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="author_id" name="author_id" value="{{ auth()->user()->id }}">                 
                 </div>
                 
             
