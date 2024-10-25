@@ -7,7 +7,10 @@ use App\Http\Services\EventService;
 use App\Models\Event;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Google_Service_Calendar;
 use Illuminate\Http\Request;
+use Google\Client as GoogleClient;
+use Google\Service\Calendar\Event;
 
 class EventController extends Controller
 {
@@ -27,33 +30,60 @@ class EventController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(EventRequest $request)
     {
         //dd($request);
         //Validar o formulário
-        //$request->validated();
-        $data = $request->all();
-        $eventService = new EventService(auth()->user());
-        $event = $eventService->create($data);
-        if($event){
-            return response()->json([
-                'success' => true
-            ]);
-        }else{
-            return response()->json([
-                'success' => false
-            ]);
+        $request->validated();
+
+        /**Configuração no Google Drive */
+        $client = new GoogleClient();
+        $client->setClientId($company->gdrive_client_id);
+        $client->setClientSecret($company->gdrive_client_secret);
+        $client->refreshToken($company->gdrive_refresh_token);
+        $client->setScopes(Google_Service_Calendar::CALENDAR);
+
+        public function syncWithGoogleCalendar(Request $request)
+        {
+            $client = $this->getClient();
+
+            if ($request->get('code')) {
+                $token = $client->fetchAccessTokenWithAuthCode($request->get('code'));
+                $client->setAccessToken($token);
+
+                $service = new Google_Service_Calendar($client);
+
+                // Obtenha eventos do banco de dados
+                $events = Event::all();
+
+                foreach ($events as $event) {
+                    $googleEvent = new Google_Service_Calendar_Event([
+                        'summary' => $event->title,
+                        'description' => $event->description,
+                        'start' => [
+                            'dateTime' => $event->start,
+                            'timeZone' => 'America/Sao_Paulo',
+                        ],
+                        'end' => [
+                            'dateTime' => $event->end,
+                            'timeZone' => 'America/Sao_Paulo',
+                        ],
+                    ]);
+
+                    $service->events->insert('primary', $googleEvent);
+                }
+
+                return response()->json(['message' => 'Eventos sincronizados com sucesso']);
+            } else {
+                return redirect($client->createAuthUrl());
+            }
         }
+        
+        /**Salva no BD */
+        $event = Event::create($request->all());
+        return response()->json($event);
     }
 
     /**
@@ -61,7 +91,7 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        //
+        return Event::find($event);
     }
 
     /**
@@ -75,9 +105,11 @@ class EventController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Event $event)
+    public function update(EventRequest $request, Event $event)
     {
-        //
+        $eventEdit = Event::findOrFail($event);
+        $eventEdit->update($request->all());
+        return response()->json($eventEdit);
     }
 
     /**
@@ -85,6 +117,7 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
-        //
+        Event::destroy($event);
+        return response()->json(['message' => 'Evento excluído com SUCESSO']);
     }
 }

@@ -146,97 +146,115 @@ document.addEventListener('DOMContentLoaded', function() {
       dayMaxEvents:true,
       initialDate: new Date(),
       dateClick:function(info){
-          let startDate, endDate, allDay;
-          allDay = $('#is_all-day').prop('checked');
-          if(allDay){
-              startDate = moment(info.date).format("YYY-MM-DD");
-              endDate = moment(info.date).format("YYY-MM-DD");
-              initializeStartDateEndDateFormat("Y-m-d", true);
-          }else{
-              initializeStartDateEndDateFormat("Y-m-d", false);
-              startDate = moment(info.date).format("YYY-MM-DD HH:mm:ss");
-              endDate = moment(info.date).format("YYY-MM-DD HH:mm:ss");
-          }
-          $('#startDateTime').val(startDate);
-          $('#endDateTime').val(endDate);
-          modalReset();
-          $('#createModal').modal("show");
-      }
+        openModal();
+        $('#start').val(info.dateStr + 'T00:00');
+        $('#end').val(info.dateStr + 'T23:59');
+      },
+      eventClick: function(info) {
+        openModal();
+        $('#eventId').val(info.event.id);
+        $('#title').val(info.event.title);
+        $('#description').val(info.event.extendedProps.description);
+        $('#start').val(info.event.start.toISOString().slice(0,16));
+        $('#end').val(info.event.end.toISOString().slice(0,16));
+    },
+    eventDrop: function(info) {
+        updateEvent(info.event);
+    },
+    eventResize: function(info) {
+        updateEvent(info.event);
+    }
   });
   /**Envia todas as configurações para o html renderizar */
   calendar.render();
-  $('#is_all_day').change(function(){
-    let is_all_day = $(this).prop('checked');
-    if(is_all_day){
-        let start = $('#startDateTime').val().slice(0, 10);
-        $('#startDateTime').val(start);
-        let endDateTime = $('#endDateTime').val().slice(0, 10);
-        $('#endDateTime').val(endDateTime);
-        initializeStartDateEndDateFormat("Y-m-d", is_all_day);
-    }else{
-        let start = $('#startDateTime').val().slice(0, 10);
-        $('#startDateTime').val(start + "00:00");
-        let endDateTime = $('#endDateTime').val().slice(0, 10);
-        $('#endDateTime').val(endDateTime + "00:30");
-        initializeStartDateEndDateFormat("Y-m-d", is_all_day);
+
+  /**Envia requisição do form para salvar no banco de dados e google agenda */
+  $('#createForm').on('submit', function(e) {
+        e.preventDefault();
+        saveEvent();
+    });
+
+    /**Mostra Modal */
+    function openModal() {
+        $('#createModal').modal('show');
     }
-  });
 
-  function initializeStartDateEndDateFormat(format, allDay){
-    let timePicker = !allDay;
-    $('#startDateTime').datetimepicker({
-        format:format,
-        timepicker:timePicker
-    });
-    $('#endDateTime').datetimepicker({
-        format:format,
-        timepicker: timePicker
-    });
-  }
+    /**Fecha Modal */
+    function closeModal() {
+        $('#createModal').modal('hide');
+        $('#createForm')[0].reset();
+    }
 
-  function modalReset(){
-      $('#title').val('');
-      $('#description').val('');
-      $('#responsible_id').val('');
-      $('#color').val('');
-      $('#eventId').val('');
-      $('#deleteBtn').hide();
-  }
+    /**Salva o evento no BD e Google Agenda */
+    function saveEvent() {
+        let eventData = {
+            title: $('#title').val(),
+            description: $('#description').val(),
+            start: $('#start').val(),
+            end: $('#end').val(),
+        };
 
-  function submitEventFormData(){
-      let evetId = $('#eventId').val();
-      let url = '{{ route('events.store') }}';
-      let postData = {
-          start: $('#startDateTime').val(),
-          end: $('#endDateTime').val(),
-          title: $('#title').val(),
-          description: $('#description').val(),
-          responsible_id: $('#responsible_id').val(''),
-          color: $('#color').val(''),
-          is_all_day: $('#is_all_day').prop('checked') ? 1 : 0,
-      }
-      if(eventId){
-          //utl = '{{ url('/') }}' + '/events/${eventId}';
-          url = "{{ route('events.update', 'id') }}";
-          url = url.replace('id', eventId);
-          postData.method = "PUT"
-      }
-      $.ajax({
-          type: 'POST',
-          url: url,
-          dataType: "json",
-          data:postData,
-          success:function(res){
-              if(res.success){
-                  //calendar.refetchEvents();
-                  $('#createModal').modal('hide');
-              }else{
-                  //alert('Algo deu errado!');
-                  Swal.fire('Erro!', res.message, 'error');
-              }
-          }
-      });
-  }
+        let url = '/store-events';
+        let method = 'POST';
+        let eventId = $('#eventId').val();
+
+        if (eventId) {
+            url += '/' + eventId;
+            method = 'PUT';
+        }
+
+        $.ajax({
+            url: url,
+            type: method,
+            data: eventData,
+            success: function(response) {
+                calendar.refetchEvents();
+                closeModal();
+            },
+            error: function(response) {
+                alert('Erro ao salvar evento');
+            }
+        });
+    }
+
+    /**Atualiza os dados do evento no BD E Google Agenda */
+    function updateEvent(event) {
+        let eventData = {
+            title: event.title,
+            description: event.extendedProps.description,
+            start: event.start.toISOString().slice(0,16),
+            end: event.end.toISOString().slice(0,16),
+        };
+
+        $.ajax({
+            url: '/events/' + event.id,
+            type: 'PUT',
+            data: eventData,
+            success: function(response) {
+                calendar.refetchEvents();
+            },
+            error: function(response) {
+                alert('Erro ao atualizar evento');
+            }
+        });
+    }
+
+    /**Exclui evento do BD e Google Agenda */
+    function deleteEvent(event) {
+        $.ajax({
+            url: '/events/' + event.id,
+            type: 'DELETE',
+            success: function(response) {
+                calendar.refetchEvents();
+            },
+            error: function(response) {
+                alert('Erro ao deletar evento');
+            }
+        });
+    }
+
+  
+  
 });/**Fim document.addEventListener('DOMContentLoaded' */
 </script>
 
