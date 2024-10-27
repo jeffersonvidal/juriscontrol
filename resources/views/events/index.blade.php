@@ -51,7 +51,8 @@
                     <div class="row">
                         <div class="col-md-4 mt-4">
                             <div class="form-check form-switch form-check-inline">
-                                <input class="form-check-input" type="checkbox" role="switch" id="is_all_day" name="is_all_day" >
+                                <input class="form-check-input" type="checkbox" role="switch" id="is_all_day" >
+                                <input type="hidden" id="isAllDayHidden" name="is_all_day">
                                 <label class="form-check-label" for="is_all_day">Dia Inteiro</label>
                             </div>
                         </div>
@@ -155,44 +156,31 @@ document.addEventListener('DOMContentLoaded', function() {
       initialDate: new Date(),
       dateClick:function(info){
         openModal();
-        let isAllDay = document.querySelector('#is_all_day');
-        if(isAllDay.checked === true){
-            info.allDay = true;
-        }else{
-            info.allDay = false;
-        }
-        $('#is_all_day').change(function() {
-            if (this.checked) {
-                //$(this).val('true');
-                info.allDay = true;
-            } else {
-                //$(this).val('false');
-                info.allDay = false;
-            }
-            console.log('allDay agora é: ', info.allDay); // Só para verificar no console
-        });
+        
 
         
-        console.log('allDay = ' + info.allDay);
+        //console.log('allDay = ' + info.allDay);
         //console.log($('#startTime').val());
         //$('#start').val(info.dateStr + 'T00:00');
         $('#start').val(info.dateStr + 'T' + $('#startTime').val());
         $('#end').val(info.dateStr + 'T' + $('#endTime').val());
-        $('#is_all_day').val(info.allDay);
+        $('#is_all_day').val();
         //console.log($('#start').val());
       },
       /**Retorna informações do evento cadastrado*/
       eventClick: function(info) {
+        console.log(info.event.start);
         openModal();        
         $('#eventId').val(info.event.id);
         $('#title').val(info.event.title);
-        $('#description').val(info.event.extendedProps.description);
+        $('#description').val(info.event._def.extendedProps.description);
         $('#start').val(info.event.start.toISOString().slice(0,16));
         $('#end').val(info.event.end.toISOString().slice(0,16));
-        $('#author_id').val(info.event.author_id);
-        $('#company_id').val(info.event.company_id);
-        $('#color').val(info.event.color);
-        $('#is_all_day').val(info.event.is_all_day);
+        $('#author_id').val(info.event._def.extendedProps.author_id);
+        $('#responsible_id').val(info.event._def.extendedProps.responsible_id);
+        $('#company_id').val(info.event._def.extendedProps.company_id);
+        $('#color').val(info.event._def.extendedProps.color);
+        $('#is_all_day').val(info.event._def.extendedProps.is_all_day);
         
     },
     eventDrop: function(info) {
@@ -208,12 +196,14 @@ document.addEventListener('DOMContentLoaded', function() {
   /**Envia requisição do form para salvar no banco de dados e google agenda */
   $('#createForm').on('submit', function(e) {
         e.preventDefault();
+        updateCheckboxState();
         saveEvent();
     });
 
     /**Mostra Modal */
     function openModal() {
         $('#createModal').modal('show');
+        updateCheckboxState();
     }
 
     /**Fecha Modal */
@@ -230,6 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
             start: $('#start').val(),
             end: $('#end').val(),
             author_id: $('#author_id').val(),
+            responsible_id: $('#responsible_id').val(),
             company_id: $('#company_id').val(),
             color: $('#color').val(),
             is_all_day: $('#is_all_day').val(),
@@ -242,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let eventId = $('#eventId').val();
 
         if (eventId) {
-            url += '/' + eventId;
+            url += '/update-events/' + eventId;
             method = 'PUT';
         }
 
@@ -264,18 +255,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateEvent(event) {
         let eventData = {
             title: event.title,
-            description: event.extendedProps.description,
+            description: event._def.extendedProps.description,
             start: event.start.toISOString().slice(0,16),
             end: event.end.toISOString().slice(0,16),
-            author_id: event.author_id,
-            company_id: event.company_id,
-            color: event.color,
-            is_all_day: event.is_all_day,
-            eventId: event.eventId,
+            author_id: event._def.extendedProps.author_id,
+            responsible_id: event._def.extendedProps.responsible_id,
+            company_id: event._def.extendedProps.company_id,
+            color: event._def.extendedProps.color,
+            is_all_day: event._def.extendedProps.is_all_day,
+            eventId: event._def.extendedProps.eventId,
         };
 
         $.ajax({
-            url: '/events/' + event.id,
+            url: '/update-events/' + event.id,
             type: 'PUT',
             data: eventData,
             success: function(response) {
@@ -290,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
     /**Exclui evento do BD e Google Agenda */
     function deleteEvent(event) {
         $.ajax({
-            url: '/events/' + event.id,
+            url: '/destroy-events/' + event.id,
             type: 'DELETE',
             success: function(response) {
                 calendar.refetchEvents();
@@ -299,6 +291,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Erro ao deletar evento');
             }
         });
+    }
+
+    // Evento de mudança no checkbox para atualizar o valor
+    $('#is_all_day').change(function() {
+        updateCheckboxState();
+    });
+
+    // Função para atualizar o valor do hidden input com base no estado do checkbox
+    function updateCheckboxState() {
+        var isChecked = $('#is_all_day').is(':checked');
+        $('#isAllDayHidden').val(isChecked ? '1' : '0');
     }
 
   

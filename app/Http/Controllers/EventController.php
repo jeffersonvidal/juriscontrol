@@ -38,15 +38,16 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        $request->is_all_day == true ? 1 : 0;
+        //$request->is_all_day == true ? 1 : 0;
 
-        dd($request->is_all_day);
+        //dd($request);
         $event = Event::create($request->all());
         return response()->json($event);
     }
 
     public function update(Request $request, $id)
     {
+        dd($request);
         $event = Event::find($id);
         $event->update($request->all());
         return response()->json($event);
