@@ -139,6 +139,7 @@ Route::group(['middleware' => 'auth'], function(){
 
   /**Rotas de Calendar (Agenda integrado com Google Agenda) */
   Route::get('/index-events', [EventController::class, 'index'])->name('events.index'); //Listar todos os registros da tabela
+  Route::get('/fetch-events', [EventController::class, 'fetchEvents'])->name('fetch.index'); //Listar todos os registros da tabela
   Route::get('/show-events/{event}', [EventController::class, 'show'])->name('events.show'); //Mostra detalhe de um registro
   Route::post('/store-events', [EventController::class, 'store'])->name('events.store'); //Salva novo registro no BD
   Route::put('/update-events/{event}', [EventController::class, 'update'])->name('events.update'); //Atualiza um registro no BD

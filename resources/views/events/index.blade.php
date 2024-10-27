@@ -51,17 +51,19 @@
                     <div class="row">
                         <div class="col-md-4 mt-4">
                             <div class="form-check form-switch form-check-inline">
-                                <input class="form-check-input" type="checkbox" role="switch" id="is_all_day" name="i1s_all_day" checked value="1">
+                                <input class="form-check-input" type="checkbox" role="switch" id="is_all_day" name="is_all_day" >
                                 <label class="form-check-label" for="is_all_day">Dia Inteiro</label>
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="start" class="form-label">Data Início</label>
-                            <input type="datetime" class="form-control" id="startDateTime" name="start" value="{{ old('start') }}">
+                            <label for="start" class="form-label">Hora Início</label>
+                            <input type="time" class="form-control" id="startTime" name="startTime" value="08:00">
+                            <input type="hidden" class="form-control" id="start" name="start" value="{{ old('start') }}">
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="end" class="form-label">Data Fim</label>
-                            <input type="datetime" class="form-control" id="endDateTime" name="end" value="{{ old('end') }}">
+                            <label for="end" class="form-label">Hora Fim</label>
+                            <input type="time" class="form-control" id="endTime" name="endTime" value="{{ old('endTime') }}">
+                            <input type="hidden" class="form-control" id="end" name="end" value="{{ old('end') }}">
                         </div>
                     </div>
 
@@ -120,6 +122,11 @@
 <script>
 /**Executar quando o documento html for completamente carregado */
 document.addEventListener('DOMContentLoaded', function() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
   /**Recebe o seletor calendar do atributo id da div onde será exibido o calendário */
   var calendarEl = document.getElementById('calendar');
   /**Instanciar FullCalendar.Calendar e atribuir a variável calendar */
@@ -130,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,timeGridDay'
       },
+      events: '/fetch-events',
       /**Traduz para português Brasil */
       locale: 'pt-br',
       /**Mostrar grid com dia e mês */
@@ -147,16 +155,45 @@ document.addEventListener('DOMContentLoaded', function() {
       initialDate: new Date(),
       dateClick:function(info){
         openModal();
-        $('#start').val(info.dateStr + 'T00:00');
-        $('#end').val(info.dateStr + 'T23:59');
+        let isAllDay = document.querySelector('#is_all_day');
+        if(isAllDay.checked === true){
+            info.allDay = true;
+        }else{
+            info.allDay = false;
+        }
+        $('#is_all_day').change(function() {
+            if (this.checked) {
+                //$(this).val('true');
+                info.allDay = true;
+            } else {
+                //$(this).val('false');
+                info.allDay = false;
+            }
+            console.log('allDay agora é: ', info.allDay); // Só para verificar no console
+        });
+
+        
+        console.log('allDay = ' + info.allDay);
+        //console.log($('#startTime').val());
+        //$('#start').val(info.dateStr + 'T00:00');
+        $('#start').val(info.dateStr + 'T' + $('#startTime').val());
+        $('#end').val(info.dateStr + 'T' + $('#endTime').val());
+        $('#is_all_day').val(info.allDay);
+        //console.log($('#start').val());
       },
+      /**Retorna informações do evento cadastrado*/
       eventClick: function(info) {
-        openModal();
+        openModal();        
         $('#eventId').val(info.event.id);
         $('#title').val(info.event.title);
         $('#description').val(info.event.extendedProps.description);
         $('#start').val(info.event.start.toISOString().slice(0,16));
         $('#end').val(info.event.end.toISOString().slice(0,16));
+        $('#author_id').val(info.event.author_id);
+        $('#company_id').val(info.event.company_id);
+        $('#color').val(info.event.color);
+        $('#is_all_day').val(info.event.is_all_day);
+        
     },
     eventDrop: function(info) {
         updateEvent(info.event);
@@ -192,6 +229,12 @@ document.addEventListener('DOMContentLoaded', function() {
             description: $('#description').val(),
             start: $('#start').val(),
             end: $('#end').val(),
+            author_id: $('#author_id').val(),
+            company_id: $('#company_id').val(),
+            color: $('#color').val(),
+            is_all_day: $('#is_all_day').val(),
+            //eventId: $('#eventId').val(),
+            
         };
 
         let url = '/store-events';
@@ -224,6 +267,11 @@ document.addEventListener('DOMContentLoaded', function() {
             description: event.extendedProps.description,
             start: event.start.toISOString().slice(0,16),
             end: event.end.toISOString().slice(0,16),
+            author_id: event.author_id,
+            company_id: event.company_id,
+            color: event.color,
+            is_all_day: event.is_all_day,
+            eventId: event.eventId,
         };
 
         $.ajax({
