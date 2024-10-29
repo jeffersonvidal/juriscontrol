@@ -110,34 +110,39 @@
 <script>
     /**Add in database - store */
     $(document).ready(function(){
-        /**Atualiza registro no banco de dados*/
-        /**Passa valores do registro para o formulário na modal de atualização */
-        $('button').on('click', function() {
-            /**Verifica se o botão tem a classe condicional para fazer algo */
-            if($(this).hasClass('editBtn')){
-                var dados = [
-                        { 
-                            id: $(this).attr('data-id'), 
-                            name: $(this).attr('data-name'), 
-                            email: $(this).attr('data-email'), 
-                            cpf: $(this).attr('data-cpf'), 
-                            phone: $(this).attr('data-phone'), 
-                            birthday: $(this).attr('data-birthday'), 
-                            company_id: $(this).attr('data-company_id'), 
-                            user_profile_id: $(this).attr('data-user_profile_id'), 
-                        }
-                    ];
-                    //editProfile(dados);
-            }
-        });
-
-
         /**Formulário de atualização de registro */
         $('#updateProfileForm').on('submit', function(e) {
             e.preventDefault();
             var id = $('#edit_id').val();
             $.ajax({
                 url: `/update-profile`,
+                method: 'PUT',
+                data: $(this).serialize(),
+                success: function(response) {
+                    console.log(response);
+                    if(response){
+                        Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 2000); // 3000 milissegundos = 3 segundos
+                },
+                error: function(response) {
+                    //Swal.fire('Error', 'ERRO ao atualizar registro', 'error');
+                    console.log(response.responseJSON);
+                    if(response.responseJSON){
+                        Swal.fire('Erro!', response.responseJSON.message, 'error');
+                    }
+                }
+            });
+        });
+
+        /**Formulário de atualização de senha */
+        $('#passwordForm').on('submit', function(e) {
+            e.preventDefault();
+            var id = $('#edit_id').val();
+            $.ajax({
+                url: `/update-profile-password`,
                 method: 'PUT',
                 data: $(this).serialize(),
                 success: function(response) {

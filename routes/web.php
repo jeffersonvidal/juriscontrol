@@ -57,7 +57,7 @@ Route::group(['middleware' => 'auth'], function(){
   Route::get('/show-profile', [ProfileController::class, 'show'])->name('profiles.show'); //Mostra detalhe de um registro
   Route::post('/store-profile', [ProfileController::class, 'store'])->name('profiles.store'); //Salva novo registro no BD
   Route::put('/update-profile', [ProfileController::class, 'update'])->name('profiles.update'); //Atualiza um registro no BD
-  Route::get('/update-profile-password', [ProfileController::class, 'updatePassword'])->name('profiles.update-password'); //Atualiza um registro no BD
+  Route::put('/update-profile-password', [ProfileController::class, 'updatePassword'])->name('profiles.update-password'); //Atualiza um registro no BD
   Route::delete('/destroy-profile', [ProfileController::class, 'destroy'])->name('profiles.destroy'); //Exclui um registro no BD
 
   /**Rotas de Etiquetas */
