@@ -26,6 +26,10 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
+Route::middleware(['prevent-url-manipulation'])->group(function () {
+    // Suas rotas aqui...
+});
+
 /**Rotas Públicas */
 
 /**Rota de login */

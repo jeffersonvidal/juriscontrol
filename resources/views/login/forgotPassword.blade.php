@@ -14,7 +14,8 @@
 
                                     <h3 class="text-center mt-3">Recuperar Senha</h3>
                                     <div class="card-body">
-                                        <!-- componente de mensagens de alerta -->    
+                                        <!-- componente de mensagens de alerta -->
+                                        <x-alerts />
                                         
 
                                         <form action="{{ route('forgot-password.submit') }}" method="POST">
