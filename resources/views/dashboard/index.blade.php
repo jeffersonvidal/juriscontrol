@@ -460,7 +460,7 @@
         <div class="col-sm-4 mb-3 mb-sm-0">
             <div class="card">
                 <div class="card-body">
-                    <h5 clc="card-title">Clientes Aniversariantes</h5>
+                    <h5 clc="card-title"><i class="fa-solid fa-cake-candles"></i> Clientes Aniversariantes</h5>
                     <!--quadros contadores -->
                     <div class="row">
                         <table id="" class="table table-striped table-hover">

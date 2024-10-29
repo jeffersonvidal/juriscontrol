@@ -14,6 +14,7 @@ use App\Http\Controllers\LabelController;
 use App\Http\Controllers\LegalProcessController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Models\ExternalOffice;
@@ -50,6 +51,14 @@ Route::group(['middleware' => 'auth'], function(){
   Route::put('/update-user/{user}', [UserController::class, 'update'])->name('users.update'); //Atualiza um registro no BD
   Route::get('/update-user-password/{user}', [UserController::class, 'updatePassword'])->name('users.update-password'); //Atualiza um registro no BD
   Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name('users.destroy'); //Exclui um registro no BD
+
+  /**Rotas de perfil do usuário logado */
+  Route::get('/index-profile', [ProfileController::class, 'index'])->name('profiles.index'); //Listar todos os registros da tabela
+  Route::get('/show-profile', [ProfileController::class, 'show'])->name('profiles.show'); //Mostra detalhe de um registro
+  Route::post('/store-profile', [ProfileController::class, 'store'])->name('profiles.store'); //Salva novo registro no BD
+  Route::put('/update-profile', [ProfileController::class, 'update'])->name('profiles.update'); //Atualiza um registro no BD
+  Route::get('/update-profile-password', [ProfileController::class, 'updatePassword'])->name('profiles.update-password'); //Atualiza um registro no BD
+  Route::delete('/destroy-profile', [ProfileController::class, 'destroy'])->name('profiles.destroy'); //Exclui um registro no BD
 
   /**Rotas de Etiquetas */
   Route::get('/index-label', [LabelController::class, 'index'])->name('labels.index'); //Listar todos os registros da tabela
