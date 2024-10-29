@@ -8,6 +8,7 @@ use App\Http\Controllers\DocumentTemplateController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExternalOfficeController;
 use App\Http\Controllers\ExternalPetitionController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\HearingController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LabelController;
@@ -32,6 +33,9 @@ Route::get('/', [LoginController::class, 'index'])->name('login.index'); //Carre
 Route::post('/login', [LoginController::class, 'loginProcess'])->name('login.process'); //faz processamento dos dados inseridos no form de login e redireciona para dashboard
 Route::get('/logout', [LoginController::class, 'destroy'])->name('login.destroy'); //faz processamento dos dados inseridos no form de login e redireciona para dashboard
 
+/**Recuperar Senha */
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPassword'])->name('forgot-password.show'); //chama formulário para recuperar senha
+Route::post('/forgot-password', [ForgotPasswordController::class, 'submitForgotPassword'])->name('forgot-password.submit'); //envia requisição de recuperar senha
 
 /**Formulário de cadastro de cliente - próprio cliente preenche os dados */
 /**Rotas de Clientes */

@@ -11,12 +11,13 @@
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4"><img title="Área Restrita" alt="Área Restrita" src="http://localhost:8000\imgs\logoLogin.png" width="250" /></h3></div>
+
+                                    <h3 class="text-center mt-3">Recuperar Senha</h3>
                                     <div class="card-body">
-                                        <!-- componente de mensagens de alerta -->  
-                                        <x-alerts />  
+                                        <!-- componente de mensagens de alerta -->    
                                         
 
-                                        <form action="{{ route('login.process') }}" method="POST">
+                                        <form action="{{ route('forgot-password.submit') }}" method="POST">
                                             @csrf
                                             @method('POST')
 
@@ -24,18 +25,14 @@
                                                 <input class="form-control" id="email" name="email" type="email" placeholder="Digite seu email" value="{{ old('email') }}" />
                                                 <label for="email">Digite seu Email</label>
                                             </div>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control" id="password" name="password" type="password" placeholder="Digite a senha" value="{{ old('password') }}" />
-                                                <label for="password">Digite sua Senha</label>
-                                            </div>
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                <a class="small text-decoration-none" href="{{ route('forgot-password.show') }}">Esqueceu a senha?</a>
-                                                <button class="btn btn-primary" type="submit">Acessar <i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                                                <button class="btn btn-primary" type="submit">Recuperar Senha <i class="fa-solid fa-paper-plane"></i></button>
                                             </div>
                                         </form>
                                     </div>
                                     <div class="card-footer text-center py-3">
-                                    <div class="small">Precisa de uma conta? <a class="text-decoration-none" href="">Criar conta!</a></div>
+                                    <!-- <div class="small">Precisa de uma conta? <a class="text-decoration-none" href="">Criar conta!</a></div> -->
+                                    <div class="small">Clique aqui para <a class="text-decoration-none" href="{{ route('login.index') }}">Acessar</a></div>
                                     </div>
                                 </div>
                             </div>
@@ -60,5 +57,6 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
+        
     
 @endsection

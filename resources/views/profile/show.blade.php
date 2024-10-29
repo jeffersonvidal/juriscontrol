@@ -21,6 +21,7 @@
         </div><!--fim card-header-->
 
         <div class="card-body">
+        <x-alerts />
 
             <!-- Estrutura de Abas -->
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
