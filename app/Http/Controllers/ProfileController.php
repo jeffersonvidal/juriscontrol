@@ -45,7 +45,6 @@ class ProfileController extends Controller
         try {
             $editUser = User::where('id', Auth::id())->first();
             $editUser->name = $request->name;
-            $editUser->email = $request->email;
             $editUser->company_id = $request->company_id;
             $editUser->user_profile_id = $request->user_profile_id;
             $editUser->phone = $request->phone;

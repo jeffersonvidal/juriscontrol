@@ -47,7 +47,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ $theUser->email }}">
+                            <input type="email" class="form-control" id="email" name="email" value="{{ $theUser->email }}" disabled>
                             <span id="email_error" class="text-danger"></span>
                         </div>
 

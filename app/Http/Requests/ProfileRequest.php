@@ -26,11 +26,11 @@ class ProfileRequest extends FormRequest
         return [
             'name' => 'required',
             //'email' => 'required|email|unique:users,email' . ($userId ? $userId->id : null),
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('users')->ignore(Auth::id()),
-            ],
+            // 'email' => [
+            //     'required',
+            //     'email',
+            //     Rule::unique('users')->ignore(Auth::id()),
+            // ],
             'cpf' => 'required',
             'company_id' => 'required',
             'phone' => 'required',
@@ -42,8 +42,6 @@ class ProfileRequest extends FormRequest
     public function messages(): array{
         return [
             'name.required' => 'Campo Nome é obrigatório!',
-            'email.required' => 'Campo Email é obrigatório!',
-            'email.email' => 'Informe um email válido',
             'cpf.required' => 'Campo CPF é obrigatório!',
             'company_id.required' => 'Campo Empresa é obrigatório!',
             'user_profile_id.required' => 'Campo Perfil é obrigatório!',
