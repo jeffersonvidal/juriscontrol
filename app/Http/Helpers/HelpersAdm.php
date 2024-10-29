@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Customer;
 use App\Models\DocumentTemplate;
 use App\Models\ExternalPetition;
 use App\Models\Hearing;
@@ -36,8 +37,8 @@ class HelpersAdm{
   }
 
   public function getMonth(){
-    \Carbon\Carbon::setLocale('pt_BR');
-    $data = \Carbon\Carbon::now();
+    Carbon::setLocale('pt_BR');
+    $data = Carbon::now();
     $mes = $data->translatedFormat('M'); // Formato local abreviado do mês
     return ucfirst($mes);
   }
@@ -117,7 +118,9 @@ class HelpersAdm{
     return str_replace($variaveis, $camposDB, $texto);
   }
 
-  /**Dashboard */
+  /**DASHBOARD */
+  /**RETORNA DADOS DO ESCRITÓRIO NO DASHBOAR */
+
   /**Retorna total de audiências para o dia corrente */
   public function getHearingToday(){
     // Data de início da semana
@@ -147,6 +150,7 @@ class HelpersAdm{
 
     // Soma dos registros da semana corrente
     return Task::where('company_id', auth()->user()->company_id)
+      ->where('status','<>',6)
       ->whereDate('end_date', '<', $isToday)
       ->count();
   }
@@ -183,6 +187,100 @@ class HelpersAdm{
       ->whereDate('delivery_date', '=', $tomorowDay)
       ->count();
   }
+
+  /**RRETORNA DADOS DO USUÁRIO LOGADO NO DASHBOARD */
+
+  /**Retorna total de audiências para o dia corrente */
+  public function getUserHearingToday(){
+    // Data de início da semana
+    $isToday = Carbon::now()->format('Y-m-d');
+
+    // Soma dos registros da semana corrente
+    return Hearing::where('company_id', auth()->user()->company_id)
+      ->where('responsible', auth()->user()->id)
+      ->whereDate('date_happen', '=', $isToday)
+      ->count();
+  }
+
+  /**Retorna total de tarefas para o dia corrente */
+  public function getUserTaskToday(){
+    // Data de início da semana
+    $isToday = Carbon::now()->format('Y-m-d');
+
+    // Soma dos registros da semana corrente
+    return Task::where('company_id', auth()->user()->company_id)
+      ->where('responsible_id', auth()->user()->id)
+      ->whereDate('end_date', '=', $isToday)
+      ->count();
+  }
+
+  /**Retorna total de tarefas atrasadas */
+  public function getUserLateTasks(){
+    // Data de início da semana
+    $isToday = Carbon::now()->format('Y-m-d');
+
+    // Soma dos registros da semana corrente
+    return Task::where('company_id', auth()->user()->company_id)
+      ->where('responsible_id', auth()->user()->id)
+      ->where('status','<>',6)
+      ->whereDate('end_date', '<', $isToday)
+      ->count();
+  }
+
+  /**Retorna qtd petições de amanhã */
+  public function getUserExternalPetition(){
+    $isToday = Carbon::now();
+    // Soma dos registros da semana corrente
+    return ExternalPetition::where('company_id', auth()->user()->company_id)
+      ->where('responsible', auth()->user()->id)
+      ->whereDate('delivery_date', '=', $isToday)
+      ->count();
+  }
+
+  /**Retorna qtd audiências de amanhã */
+  public function getUserTomorowHearing(){
+    $isToday = Carbon::now();
+    $addOneDay = $isToday->addDays(1);
+    $tomorowDay = $addOneDay->format('Y-m-d');
+    // Soma dos registros da semana corrente
+    return Hearing::where('company_id', auth()->user()->company_id)
+      ->where('responsible', auth()->user()->id)
+      ->whereDate('date_happen', '=', $tomorowDay)
+      ->count();
+  }
+
+  /**Retorna qtd tarefas de amanhã */
+  public function getUserTomorowTask(){
+    $isToday = Carbon::now();
+    $addOneDay = $isToday->addDays(1);
+    $tomorowDay = $addOneDay->format('Y-m-d');
+    // Soma dos registros da semana corrente
+    return Task::where('company_id', auth()->user()->company_id)
+    ->where('responsible_id', auth()->user()->id)
+      ->whereDate('end_date', '=', $tomorowDay)
+      ->count();
+  }
+
+  /**Retorna qtd petições de amanhã */
+  public function getUserTomorowExternalPetition(){
+    $isToday = Carbon::now();
+    $addOneDay = $isToday->addDays(1);
+    $tomorowDay = $addOneDay->format('Y-m-d');
+    // Soma dos registros da semana corrente
+    return ExternalPetition::where('company_id', auth()->user()->company_id)
+      ->where('responsible', auth()->user()->id)
+      ->whereDate('delivery_date', '=', $tomorowDay)
+      ->count();
+  }
+
+  /**Retorna Aniversariantes do mês corrente */
+  public function getBirthdays(){
+    $currentMonth = Carbon::now()->month; 
+    $customersWithBirthdaysThisMonth = Customer::whereMonth('birthday', $currentMonth)->get();
+    return $customersWithBirthdaysThisMonth;
+  }
+
+  
 
   
 

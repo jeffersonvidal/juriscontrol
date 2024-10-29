@@ -69,6 +69,14 @@ class DashboardController extends Controller
             'getTomorowHearing' => $this->helperAdm->getTomorowHearing(),
             'getTomorowTask' => $this->helperAdm->getTomorowTask(),
             'getTomorowExternalPetition' => $this->helperAdm->getTomorowExternalPetition(),
+            'getUserLateTasks' => $this->helperAdm->getUserLateTasks(),
+            'userHearingsToday' => $this->helperAdm->getUserHearingToday(),
+            'userTasksToday' => $this->helperAdm->getUserTaskToday(),
+            'getUserTomorowHearing' => $this->helperAdm->getUserTomorowHearing(),
+            'getUserTomorowTask' => $this->helperAdm->getUserTomorowTask(),
+            'getUserTomorowExternalPetition' => $this->helperAdm->getUserTomorowExternalPetition(),
+            'getUserExternalPetition' => $this->helperAdm->getUserExternalPetition(),
+            'getBirthdays' => $this->helperAdm->getBirthdays(),
         ]);
     }
 }

@@ -37,6 +37,7 @@
                       <th>Tribunal</th>
                       <th>Valor</th>
                       <th>Pagto</th>
+                      <th>Situação</th>
                       <th class="text-center">Ações</th>
                     </tr>
                   </thead>
@@ -54,18 +55,28 @@
                             <td>{{ $externalPetition->court }}</td>
                             <td>{{ 'R$' . number_format($externalPetition->amount, 2, ',', '.') }}</td>
                             <td>{{ $externalPetition->getPaymentStatus($externalPetition->payment_status) }}</td>
-                                <td>
-                                    <span class="d-flex flex-row justify-content-center">
-                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $externalPetition->id }}"
-                                        data-wallet_id="{{ $externalPetition->wallet_id }}" data-user_id="{{ $externalPetition->user_id }}" data-company_id="{{ $externalPetition->company_id }}" 
-                                        data-external_office_id="{{ $externalPetition->external_office_id }}" data-responsible="{{ $externalPetition->responsible }}" data-delivery_date="{{ $externalPetition->delivery_date }}" 
-                                        data-type="{{ $externalPetition->type }}" data-customer_name="{{ $externalPetition->customer_name }}" data-process_number="{{ $externalPetition->process_number }}" 
-                                        data-court="{{ $externalPetition->court }}" data-notes="{{ $externalPetition->notes }}" data-amount="{{ $externalPetition->amount }}" 
-                                        data-status="{{ $externalPetition->status }}" data-payment_status="{{ $externalPetition->payment_status }}" data-delivery_date="{{ $externalPetition->delivery_date }}"
-                                        data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
-                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $externalPetition->id }}"><i class="fa-solid fa-trash"></i></button>
-                                    </span>
-                                </td>
+                            <td>
+                                @php
+                                    $isToday = \Carbon\Carbon::now()->format('Y-m-d');
+                                    if($externalPetition->status <> 'completed' AND $externalPetition->delivery_date < $isToday){
+                                        echo "<span class='badge text-bg-warning'>Atrasada</span>";
+                                    }else{
+                                        echo 'No Prazo';
+                                    }
+                                @endphp
+                            </td>
+                            <td>
+                                <span class="d-flex flex-row justify-content-center">
+                                    <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $externalPetition->id }}"
+                                    data-wallet_id="{{ $externalPetition->wallet_id }}" data-user_id="{{ $externalPetition->user_id }}" data-company_id="{{ $externalPetition->company_id }}" 
+                                    data-external_office_id="{{ $externalPetition->external_office_id }}" data-responsible="{{ $externalPetition->responsible }}" data-delivery_date="{{ $externalPetition->delivery_date }}" 
+                                    data-type="{{ $externalPetition->type }}" data-customer_name="{{ $externalPetition->customer_name }}" data-process_number="{{ $externalPetition->process_number }}" 
+                                    data-court="{{ $externalPetition->court }}" data-notes="{{ $externalPetition->notes }}" data-amount="{{ $externalPetition->amount }}" 
+                                    data-status="{{ $externalPetition->status }}" data-payment_status="{{ $externalPetition->payment_status }}" data-delivery_date="{{ $externalPetition->delivery_date }}"
+                                    data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
+                                    <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $externalPetition->id }}"><i class="fa-solid fa-trash"></i></button>
+                                </span>
+                            </td>
                             </tr>
                         @endforeach
                     @else

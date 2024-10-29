@@ -10,6 +10,7 @@ use App\Models\SystemStatus;
 use App\Models\Task;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use DB;
 use Exception;
 use HelpersAdm;
@@ -36,12 +37,11 @@ class TaskController extends Controller
             ->where('company_id', auth()->user()->company_id)->get();
 
         //return view('tasks.index', compact('tasks'));
-
         
         //Carrega a view
         return view('tasks.index', ['tasks' => $tasks, 'labels' => $labels,
         'systemStatus' => $systemStatus, 'priorities' => $priorities, 'externalOffices' => $externalOffices,
-        'users' => $users]);
+        'users' => $users,]);
     }
 
     /**Envia registros para popular tabela na index */
