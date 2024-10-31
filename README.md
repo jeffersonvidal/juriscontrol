@@ -51,6 +51,11 @@ Gerar chave artisan do projeto
 ```
 php artisan key:generate
 ```
+```
+Gerar arquivo de configuração CORS
+```
+php artisan config:publish cors
+```
 Inciar o projeto criado com Laravel
 ```
 php artisan serve
