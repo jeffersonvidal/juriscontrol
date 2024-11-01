@@ -424,8 +424,9 @@
                             state: $(this).attr('data-state'), 
                         }
                     ];
-                    
-                    editRegistro($(this).attr('data-id'));
+                    //console.log(dados[0].id);
+                    //editRegistro($(this).attr('data-id'));
+                    editRegistro(dados);
             }else if($(this).hasClass('deleteBtn')){
                 var dados = [
                         { 
@@ -438,9 +439,9 @@
             
 
         /**Função que preenche os campos do formulário de atualização */
-        function editRegistro(id) {
+        function editRegistro(dados) {
             let url = "{{ route('customers.show', 'id') }}";
-            url = url.replace('id', id);
+            url = url.replace('id', dados[0].id);
             /**Preenche os campos do form de atualização*/
             $.get(url, function() {
                 fetch(url)
@@ -455,29 +456,30 @@
                      ** console.log(data[0][0]); //Lista dados do endereço */
                      //console.log(data[0][0]['customer'].name);
                     /**Dados pessoais*/
-                    $('#edit_id').val(data[0][0]['customer'].id);
-                    $('#edit_name').val(data[0][0]['customer'].name);
-                    $('#edit_email').val(data[0][0]['customer'].email);
-                    $('#edit_phone').val(data[0][0]['customer'].phone);
-                    $('#edit_rg').val(data[0][0]['customer'].rg);
-                    $('#edit_rg_expedidor').val(data[0][0]['customer'].rg_expedidor);
-                    $('#edit_cpf').val(data[0][0]['customer'].cpf);
-                    $('#edit_marital_status').val(data[0][0]['customer'].marital_status);
-                    $('#edit_nationality').val(data[0][0]['customer'].nationality);
-                    $('#edit_profession').val(data[0][0]['customer'].profession);
-                    $('#edit_birthday').val(data[0][0]['customer'].birthday);
-                    $('#edit_met_us').val(data[0][0]['customer'].met_us);
+                    console.log(data['address'][0].city);
+                    $('#edit_id').val(data.id);
+                    $('#edit_name').val(data.name);
+                    $('#edit_email').val(data.email);
+                    $('#edit_phone').val(data.phone);
+                    $('#edit_rg').val(data.rg);
+                    $('#edit_rg_expedidor').val(data.rg_expedidor);
+                    $('#edit_cpf').val(data.cpf);
+                    $('#edit_marital_status').val(data.marital_status);
+                    $('#edit_nationality').val(data.nationality);
+                    $('#edit_profession').val(data.profession);
+                    $('#edit_birthday').val(data.birthday);
+                    $('#edit_met_us').val(data.met_us);
 
                     /**Endereço*/
-                    $('#edit_cep').val(data[0][0].zipcode);
-                    $('#edit_street').val(data[0][0].street);
-                    $('#edit_num').val(data[0][0].num);
-                    $('#edit_complement').val(data[0][0].complement);
-                    $('#edit_neighborhood').val(data[0][0].neighborhood);
-                    $('#edit_city').val(data[0][0].city);
-                    $('#edit_state').val(data[0][0].state);
-                    $('#edit_customer_id').val(data[0][0].customer_id);
-                    $('#edit_address_id').val(data[0][0].id);
+                    $('#edit_cep').val(data['address'][0].zipcode);
+                    $('#edit_street').val(data['address'][0].street);
+                    $('#edit_num').val(data['address'][0].num);
+                    $('#edit_complement').val(data['address'][0].complement);
+                    $('#edit_neighborhood').val(data['address'][0].neighborhood);
+                    $('#edit_city').val(data['address'][0].city);
+                    $('#edit_state').val(data['address'][0].state);
+                    $('#edit_customer_id').val(data['address'][0].customer_id);
+                    $('#edit_address_id').val(data['address'][0].id);
                 })
                 .catch(error => {
                     console.error('Erro:', error);

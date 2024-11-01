@@ -74,13 +74,15 @@ class CustomerController extends Controller
 
     public function show(Customer $customer)
     {
-        $customerAddress = CustomerAddress::with('customer')
-            ->where('customer_id', $customer->id)
-            ->orderBy('created_at')
-            ->get();
+        // $customerAddress = CustomerAddress::with('customer')
+        //     ->where('customer_id', $customer->id)
+        //     ->orderBy('created_at')
+        //     ->get();
 
-        //return response()->json($theCustomer);
-        return response()->json([$customerAddress]);
+        // //return response()->json($theCustomer);
+        // return response()->json([$customerAddress]);
+        $customer->load('address');
+        return response()->json($customer);
     }
 
     /**Salva registro no banco de dados */
