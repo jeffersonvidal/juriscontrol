@@ -172,6 +172,7 @@ class CustomerController extends Controller
     /**Atualiza registro no banco de dados */
     public function update(CustomerRequest $request, Customer $customer)
     {
+        dd($request);
         //Validar o formulário
         $request->validated();
 
