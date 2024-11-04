@@ -164,8 +164,6 @@
                         </div>
                     </div>
                     
-                    <!-- ['company_id', 'name','email','phone','rg',
-    'rg_expedidor','cpf', 'marital_status', 'nationality', 'profession', 'birthday']; -->
                 </fieldset>
                 
                 <fieldset>
@@ -349,7 +347,7 @@
                 <div class="col-md-12">
                     <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
                     <input type="hidden" class="form-control" id="edit_id" name="id">                 
-                    <input type="hidden" class="form-control" id="edit_address_id" name="id" value="">                 
+                    {{-- <input type="hidden" class="form-control" id="edit_address_id" name="id" value="">                  --}}
                 </div>
                 
             
@@ -415,6 +413,7 @@
                             nationality: $(this).attr('data-nationality'), 
                             profession: $(this).attr('data-profession'), 
                             birthday: $(this).attr('data-birthday'), 
+                            /** Endereço*/
                             zipcode: $(this).attr('data-zipcode'), 
                             street: $(this).attr('data-street'), 
                             num: $(this).attr('data-num'), 
@@ -456,7 +455,7 @@
                      ** console.log(data[0][0]); //Lista dados do endereço */
                      //console.log(data[0][0]['customer'].name);
                     /**Dados pessoais*/
-                    console.log(data['address'][0].city);
+                    //console.log(data['address'][0].city);
                     $('#edit_id').val(data.id);
                     $('#edit_name').val(data.name);
                     $('#edit_email').val(data.email);
@@ -479,7 +478,7 @@
                     $('#edit_city').val(data['address'][0].city);
                     $('#edit_state').val(data['address'][0].state);
                     $('#edit_customer_id').val(data['address'][0].customer_id);
-                    $('#edit_address_id').val(data['address'][0].id);
+                    //$('#edit_address_id').val(data['address'][0].id);
                 })
                 .catch(error => {
                     console.error('Erro:', error);
@@ -496,9 +495,14 @@
         /**Formulário de atualização de registro */
         $('#updateForm').on('submit', function(e) {
             e.preventDefault();
+            let url = "{{ route('customers.update', 'id') }}";
             var id = $('#edit_id').val();
+            url = url.replace('id', id);
+            
+            console.log(url);
             $.ajax({
-                url: `/update-customer/${id}`,
+                //url: `/update-customer/${id}`,
+                url: url,
                 method: 'PUT',
                 data: $(this).serialize(),
                 success: function(response) {
