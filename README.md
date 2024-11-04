@@ -5,6 +5,9 @@
 ## Projeto
 * Repositório: https://github.com/jeffersonvidal/juriscontrol.git
 
+## Fazer deploy do sistema na hospedagem Hostinger
+https://medium.com/@anushujan/deploying-a-laravel-11-project-on-hostinger-using-web-hosting-eca710e024f0
+
 ### Sistemas que inspiram recursos
 * EasyJur (dashboard, movimentações, jurisprudencias(wescrapping))
 * AdvBox (taskscore, tarefas recorrentes)
