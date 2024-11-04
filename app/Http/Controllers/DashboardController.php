@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -58,11 +59,33 @@ class DashboardController extends Controller
             ];
         }
 
+        /**Cliente por mês */
+        // $customersPerMonth = Customer::select(
+        //     DB::raw("MONTHNAME(created_at) as month_name"),
+        //     DB::raw("COUNT(*) as total")
+        // )
+        // ->whereYear("created_at", date("Y"))
+        // ->groupBy(DB::raw("MONTH(created_at)"), DB::raw("MONTHNAME(created_at)"))
+        // ->orderBy(DB::raw("MONTH(created_at)"))
+        // ->get();
+        
+
+    $customersPerMonth = DB::table('customers')
+    ->select(DB::raw('DATE_FORMAT(created_at, "%b") as month'), 
+    DB::raw('COUNT(*) as count'))
+    ->groupBy(DB::raw('DATE_FORMAT(created_at, "%Y-%m")'))
+    ->get();
+
+        
+
+        
+
         return view('dashboard.index', [
             'incomeWeek' => $this->helperAdm->getIncomeWeek(),
             'expenseWeek' => $this->helperAdm->getExpenseWeek(),
             'cashBalance' => $this->helperAdm->getCashBalance(),
             'invoices' => $chartData,
+            'customersPerMonth' => $customersPerMonth,
             'hearingsToday' => $this->helperAdm->getHearingToday(),
             'tasksToday' => $this->helperAdm->getTaskToday(),
             'lateTasks' => $this->helperAdm->getLateTasks(),

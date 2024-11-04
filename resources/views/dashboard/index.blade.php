@@ -539,12 +539,10 @@
 
         /**Novos Clientes */
         var dataNewCustomers = google.visualization.arrayToDataTable([
-          ['Task', 'Hours per Day'],
-          ['Work',     11],
-          ['Eat',      2],
-          ['Commute',  2],
-          ['Watch TV', 2],
-          ['Sleep',    7]
+          ['Mês', 'Novos Clientes'],
+          @foreach($customersPerMonth as $customer) 
+            ['{{ $customer->month }}', {{ $customer->count }}], 
+          @endforeach
         ]);
 
         var optionsNewCustomers = {
