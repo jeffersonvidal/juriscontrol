@@ -23,7 +23,7 @@ class HearingController extends Controller
     public function index()
     {
         $hearings = Hearing::where('company_id', auth()->user()->company_id)
-        ->orderBy('id', 'DESC')->get();
+        ->orderBy('date_happen', 'ASC')->get();
 
         $users = User::where('company_id', auth()->user()->company_id)
         ->orderBy('id', 'DESC')->get();

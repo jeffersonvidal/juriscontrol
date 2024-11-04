@@ -33,7 +33,8 @@ class ExternalPetitionController extends Controller
         ->orderBy('payment_status', 'DESC')->get();
 
         $externalOffices = ExternalOffice::where('company_id', auth()->user()->company_id)
-        ->orderBy('name', 'ASC')->get();
+        ->orderBy('name', 'ASC')
+        ->orderBy('delivery_date', 'ASC')->get();
         
         $users = User::where('company_id', auth()->user()->company_id)
         ->orderBy('name', 'ASC')->get();

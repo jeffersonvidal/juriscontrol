@@ -172,7 +172,7 @@ class CustomerController extends Controller
     /**Atualiza registro no banco de dados */
     public function update(CustomerRequest $request, Customer $customer)
     {
-        dd($request);
+        //dd($request);
         //Validar o formulário
         $request->validated();
 
@@ -194,17 +194,35 @@ class CustomerController extends Controller
             $customer->met_us = $request->met_us;
             $customer->update();
 
-            $customerAddress = new CustomerAddress();
-            $customerAddress->zipcode = $this->helperAdm->limpaCampo($request->zipcode);
-            $customerAddress->street = $request->street;
-            $customerAddress->num = $request->num;
-            $customerAddress->complement = $request->complement;
-            $customerAddress->neighborhood = $request->neighborhood;
-            $customerAddress->city = $request->city;
-            $customerAddress->state = $request->state;
-            $customerAddress->company_id = $request->company_id;
+            /**Verifica se o cliente tem endereço cadastrado */
+            $getCustomerAddress = CustomerAddress::where('customer_id', $customer->id);
+            if($getCustomerAddress->exists()){
+                $editCustomerAddress = CustomerAddress::where('customer_id', $customer->id)
+                ->where('company_id', auth()->user()->company_id)->update([
+                    'zipcode' => $this->helperAdm->limpaCampo($request->zipcode),
+                    'street' => $request->street,
+                    'num' => $request->num,
+                    'complement' => $request->complement,
+                    'neighborhood' => $request->neighborhood,
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'company_id' => $request->company_id,
+                ]);
+            }else{
+                $customerAddress = new CustomerAddress();
+                $customerAddress->customer_id = $customer->id;
+                $customerAddress->zipcode = $this->helperAdm->limpaCampo($request->zipcode);
+                $customerAddress->street = $request->street;
+                $customerAddress->num = $request->num;
+                $customerAddress->complement = $request->complement;
+                $customerAddress->neighborhood = $request->neighborhood;
+                $customerAddress->city = $request->city;
+                $customerAddress->state = $request->state;
+                $customerAddress->company_id = $request->company_id;
+                $customerAddress->save();
+            }
 
-            $customer->customerAddress($customer->id)->update($request->all());
+            
 
             //comita depois de tudo ter sido salvo
             DB::commit();
