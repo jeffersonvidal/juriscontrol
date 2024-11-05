@@ -100,7 +100,7 @@ class HelpersAdm{
     '[[phone]]','[[email]]','[[rg]]','[[rg_expedidor]]','[[cpf]]','[[street]]','[[num]]',
     '[[complement]]','[[neighborhood]]','[[city]]','[[state]]','[[zipcode]]');
 
-    $texto = "<strong>[[name]]</strong>, [[nationality]], [[nationality]], [[profession]], portador(a) do RG nº [[rg]] [[rg_expedidor]], 
+    $texto = "[[name]], [[nationality]], [[nationality]], [[profession]], portador(a) do RG nº [[rg]] [[rg_expedidor]], 
     inscrito(a) no CPF sob o nº [[cpf]], residente e domiciliado em [[street]] nº [[num]], 
     [[complement]], [[neighborhood]], [[city]] - [[state]], CEP [[zipcode]], 
     telefone: [[phone]], e-mail: [[email]]";

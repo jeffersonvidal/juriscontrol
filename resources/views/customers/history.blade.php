@@ -59,6 +59,8 @@
                 <div class="tab-pane fade show active" id="pills-dadosPessoais" role="tabpanel" aria-labelledby="pills-dadosPessoais-tab" tabindex="0">
                     <fieldset>
                         <legend>Dados Pessoais</legend>
+                        <button type="button" class="btn btn-sm btn-dark float-end" data-bs-toggle="modal" data-bs-target="#headerDocument" title="Gerar Cabeçalho para Documentos"><i class="fa-solid fa-file-lines"></i> Gerar Cabeçalho</button>
+
                         
                         <div class="row">
                             <div class="col-md-4"><strong>Nome:</strong> {{ $customer->name }}</div>
@@ -459,6 +461,10 @@
   </div>
 </div><!-- fim listDocumentModal -->
 
+
+
+
+
 <!-- addDocumentModal -->
 <div class="modal fade" id="createDocumentModal" tabindex="-1" aria-labelledby="createDocumentModal" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -524,9 +530,26 @@
   </div>
 </div><!-- fim addDocumentModal -->
 
-
-
 </div><!--fim container-fluid-->
+
+<!-- headerDocument -->
+<div class="modal fade" id="headerDocument" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Cabeçalho para Documentos</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{ $clientHeaderDocs }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- headerDocument -->
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.tiny.cloud/1/f0hn7yp6hoepuf9q4glhvc0ta67w6ereck2x2gaki1oh5zbr/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
