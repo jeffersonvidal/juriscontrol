@@ -20,6 +20,7 @@
                     <!--quadros contadores -->
                     <div class="row">
                         <div class="col-sm-3 mb-4">
+                        <a href="{{ route('hearings.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -30,7 +31,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                         <div class="col-sm-3 mb-4">
                             <div class="card border shadow-sm h-100 py-2">
