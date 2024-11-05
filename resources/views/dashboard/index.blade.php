@@ -259,8 +259,147 @@
 
     <!--Financeiro -->
     <div class="row mt-4">
-        <!-- gráfico receita vs despesas -->
-        <div class="col-md-12">
+       
+        <!-- visão jurídico -->
+        <div class="card mb-4 shadow-sm border-light">
+                    <div class="card-header hstack gap-2">
+                        <i class="fa-solid fa-gavel"></i> <span>VISÃO GERAL - JURÍDICO</span>
+                    </div>
+    
+    
+                    <div class="card-body">
+                        <!-- componente de mensagens e alertas -->    
+                        
+    
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border border-4 border-primary border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2 text-lg-center">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Audiências Hoje</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>3</h3></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border border-4 border-warning border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2 text-lg-center">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Tarefas Hoje</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>17</h3></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border border-4 border-danger border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2 text-lg-center">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Tarefas Atrasadas</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>8</h3></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border border-4 border-dark border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2 text-lg-center">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Consultivos</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>32</h3></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                
+                        </div>
+                    </div>
+                    
+                </div><!-- fim visão jurídico -->
+
+    
+        
+    </div><!--Fim financeiro -->
+
+    <!--Contratos e Aniversariantes -->
+    <div class="row">
+        <!--Contract Chart -->
+        <div class="col-sm-4 mb-3 mb-sm-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Origem dos Clientes</h5>
+                    <!--quadros contadores -->
+                    <div class="row">
+                        <div class="newContractChart" id="newContractChart"></div>
+                    </div>
+                </div><!--Fim quadros contadores -->
+        </div>
+        </div>
+        <!--Customers Chart -->
+        <div class="col-sm-4 mb-3 mb-sm-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Novos Clientes</h5>
+                    <!--quadros contadores -->
+                    <div class="row">
+                        <div class="newCustomersChart" id="newCustomersChart"></div>
+                    </div>
+                    <!--Fim quadros contadores -->
+                </div>
+            </div>
+        </div>
+        <!--Aniversariantes -->
+        <div class="col-sm-4 mb-3 mb-sm-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 clc="card-title"><i class="fa-solid fa-cake-candles"></i> Clientes Aniversariantes</h5>
+                    <!--quadros contadores -->
+                    <div class="row">
+                        <table id="" class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Data</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{-- puxando registros do banco de dados --}}
+                                @if (count($getBirthdays) > 0)
+                                    @foreach ($getBirthdays as $birthday)
+                                        <tr>
+                                        <td>{{ $birthday->name }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($birthday->birthday)->format('d/m') }}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr colspan="2" style="background-color: orange; text-align:center; margin:0 auto;">Nenhum aniversariante encontrado</tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--Fim quadros contadores -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Financeiro-->
+    <div class="row mt-4">
+         <!-- gráfico receita vs despesas -->
+         <div class="col-md-12">
 
             <!-- visão geral do sistema -->
             <div class="card mb-4 shadow-sm border">
@@ -350,146 +489,9 @@
 
                 
 
-        </div><!-- fim gráfico receita vs despesas -->
-
-        
-
-
-        <!-- visão jurídico -->
-        <div class="card mb-4 shadow-sm border-light">
-                    <div class="card-header hstack gap-2">
-                        <i class="fa-solid fa-gavel"></i> <span>VISÃO GERAL - JURÍDICO</span>
-                    </div>
-    
-    
-                    <div class="card-body">
-                        <!-- componente de mensagens e alertas -->    
-                        
-    
-                        <div class="row">
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border border-4 border-primary border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2 text-lg-center">
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                    Audiências Hoje</div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>3</h3></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border border-4 border-warning border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2 text-lg-center">
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                    Tarefas Hoje</div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>17</h3></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border border-4 border-danger border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2 text-lg-center">
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                    Tarefas Atrasadas</div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>8</h3></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border border-4 border-dark border-top-0 border-end-0 border-bottom-0 shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2 text-lg-center">
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                    Consultivos</div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>32</h3></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                
-                        </div>
-                    </div>
-                    
-                </div><!-- fim visão jurídico -->
-
-    
-        
-    </div><!--Fim financeiro -->
-
-    <!--Contratos e Aniversariantes -->
-    <div class="row">
-        <!--Contract Chart -->
-        <div class="col-sm-4 mb-3 mb-sm-0">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Contratos</h5>
-                    <!--quadros contadores -->
-                    <div class="row">
-                        <div class="newContractChart" id="newContractChart"></div>
-                    </div>
-                </div><!--Fim quadros contadores -->
-        </div>
-        </div>
-        <!--Customers Chart -->
-        <div class="col-sm-4 mb-3 mb-sm-0">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Novos Clientes</h5>
-                    <!--quadros contadores -->
-                    <div class="row">
-                        <div class="newCustomersChart" id="newCustomersChart"></div>
-                    </div>
-                    <!--Fim quadros contadores -->
-                </div>
-            </div>
-        </div>
-        <!--Aniversariantes -->
-        <div class="col-sm-4 mb-3 mb-sm-0">
-            <div class="card">
-                <div class="card-body">
-                    <h5 clc="card-title"><i class="fa-solid fa-cake-candles"></i> Clientes Aniversariantes</h5>
-                    <!--quadros contadores -->
-                    <div class="row">
-                        <table id="" class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Data</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{-- puxando registros do banco de dados --}}
-                                @if (count($getBirthdays) > 0)
-                                    @foreach ($getBirthdays as $birthday)
-                                        <tr>
-                                        <td>{{ $birthday->name }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($birthday->birthday)->format('d/m') }}</td>
-                                        </tr>
-                                    @endforeach
-                                @else
-                                    <tr colspan="2" style="background-color: orange; text-align:center; margin:0 auto;">Nenhum aniversariante encontrado</tr>
-                                @endif
-                            </tbody>
-                        </table>
-                    </div>
-                    <!--Fim quadros contadores -->
-                </div>
-            </div>
-        </div>
+            </div><!-- fim gráfico receita vs despesas -->
     </div>
+    <!--Fim Financeiro-->
 
 
 </div><!-- fim container-->
@@ -518,14 +520,12 @@
             var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
             chart.draw(data, options);
 
-        /**Novos Contratos */
+        /**Origem dos clientes */
         var dataNewContracts = google.visualization.arrayToDataTable([
-          ['Task', 'Hours per Day'],
-          ['Work',     11],
-          ['Eat',      2],
-          ['Commute',  2],
-          ['Watch TV', 2],
-          ['Sleep',    7]
+          ['Origem', 'Total'],
+          @foreach($customersMetUs as $customerMetUs) 
+            ['{{ $customerMetUs->met_us }}', {{ $customerMetUs->total }}],
+          @endforeach
         ]);
 
         var optionsNewContracts = {

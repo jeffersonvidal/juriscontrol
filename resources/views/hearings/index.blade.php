@@ -181,10 +181,7 @@
                         <option value="instruction_closure">Encerramento de Instrução</option>
                     </select>
                 </div>
-                <!-- 'object','company_id','user_id','responsible','status',
-    'date_happen','time_happen','external_office_id','client','local','type',
-    'process_num','modality','informed_client','informed_witnesses','link',
-    'notes','amount','payment_status' -->
+
                 <div class="col-md-4">
                     <label for="process_num" class="form-label">Processo Nº</label>
                     <input type="text" class="form-control" id="process_num" name="process_num" value="{{ old('process_num') }}">
@@ -217,7 +214,7 @@
                 </div>
                 
 
-                <div class="col-md-8 mt-5">
+                <div class="col-md-12 mt-5">
                     <div class="form-check form-switch form-check-inline">
                         <input class="form-check-input" type="checkbox" role="switch" id="informed_client" name="informed_client">
                         <label class="form-check-label" for="informed_client">Cliente Informado</label>
@@ -227,14 +224,7 @@
                         <label class="form-check-label" for="informed_witnesses">Testemunhas Informadas</label>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <label for="payment_status" class="form-label">Pago</label>
-                    <select id="payment_status" name="payment_status" class="form-select">
-                        <option value="">Informe</option>
-                        <option value="paid">Pago</option>
-                        <option value="unpaid">Não Pago</option>
-                    </select>
-                </div>
+                
 
                 <div class="col-md-12">
                     <label for="notes" class="form-label">Observações</label>
@@ -344,10 +334,7 @@
                         <option value="instruction_closure">Encerramento de Instrução</option>
                     </select>
                 </div>
-                <!-- 'object','company_id','user_id','responsible','status',
-    'date_happen','time_happen','external_office_id','client','local','type',
-    'process_num','modality','informed_client','informed_witnesses','link',
-    'notes','amount','payment_status' -->
+
                 <div class="col-md-4">
                     <label for="process_num" class="form-label">Processo Nº</label>
                     <input type="text" class="form-control" id="edit_process_num" name="process_num" value="{{ old('process_num') }}">
@@ -370,7 +357,7 @@
                     <input type="text" class="form-control" id="edit_amount" name="amount" value="{{ old('amount') }}">
                 </div>
 
-                <div class="col-md-8 mt-5">
+                <div class="col-md-12 mt-5">
                     <div class="form-check form-switch form-check-inline">
                         <input class="form-check-input" type="checkbox" role="switch" id="edit_informed_client" name="informed_client" value="s">
                         <label class="form-check-label" for="informed_client">Cliente Informado</label>
@@ -380,14 +367,7 @@
                         <label class="form-check-label" for="informed_witnesses">Testemunhas Informadas</label>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <label for="payment_status" class="form-label">Pago</label>
-                    <select id="edit_payment_status" name="payment_status" class="form-select">
-                        <option value="">Informe</option>
-                        <option value="paid">Pago</option>
-                        <option value="unpaid">Não Pago</option>
-                    </select>
-                </div>
+                
 
                 <div class="paymentMethod" style="display:none;">
                     <div class="col-md-12">

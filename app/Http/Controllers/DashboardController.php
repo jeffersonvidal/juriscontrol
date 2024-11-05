@@ -60,21 +60,15 @@ class DashboardController extends Controller
         }
 
         /**Cliente por mês */
-        // $customersPerMonth = Customer::select(
-        //     DB::raw("MONTHNAME(created_at) as month_name"),
-        //     DB::raw("COUNT(*) as total")
-        // )
-        // ->whereYear("created_at", date("Y"))
-        // ->groupBy(DB::raw("MONTH(created_at)"), DB::raw("MONTHNAME(created_at)"))
-        // ->orderBy(DB::raw("MONTH(created_at)"))
-        // ->get();
-        
+        $customersPerMonth = DB::table('customers')
+        ->select(DB::raw('DATE_FORMAT(created_at, "%b") as month'), 
+        DB::raw('COUNT(*) as count'))
+        ->groupBy(DB::raw('DATE_FORMAT(created_at, "%Y-%m")'))
+        ->get();
 
-    $customersPerMonth = DB::table('customers')
-    ->select(DB::raw('DATE_FORMAT(created_at, "%b") as month'), 
-    DB::raw('COUNT(*) as count'))
-    ->groupBy(DB::raw('DATE_FORMAT(created_at, "%Y-%m")'))
-    ->get();
+        /**Origem dos clientes */
+        $customersMetUs = Customer::select('met_us', DB::raw('count(*) as total'))
+        ->groupBy('met_us')->get();
 
         
 
@@ -86,6 +80,7 @@ class DashboardController extends Controller
             'cashBalance' => $this->helperAdm->getCashBalance(),
             'invoices' => $chartData,
             'customersPerMonth' => $customersPerMonth,
+            'customersMetUs' => $customersMetUs,
             'hearingsToday' => $this->helperAdm->getHearingToday(),
             'tasksToday' => $this->helperAdm->getTaskToday(),
             'lateTasks' => $this->helperAdm->getLateTasks(),

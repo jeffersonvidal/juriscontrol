@@ -150,7 +150,7 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <label for="label_id" class="form-label">Etiqueta <a href=""><i class="fa-solid fa-plus" title="Adicionar Etiqueta"></i></a></label>
+                    <label for="label_id" class="form-label">Etiqueta <!--<a href=""><i class="fa-solid fa-plus" title="Adicionar Etiqueta"></i></a>--></label>
                     <select id="label_id" name="label_id" class="form-select">
                         <option value="">Defina uma Etiqueta</option>
                         @if (count($labels) > 0)
@@ -161,7 +161,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label for="status" class="form-label">Status <a href=""><i class="fa-solid fa-plus" title="Adicionar Status"></i></a></label>
+                    <label for="status" class="form-label">Status <!--<a href=""><i class="fa-solid fa-plus" title="Adicionar Status"></i></a>--></label>
                     <select id="status" name="status" class="form-select">
                         <option value="">Informe o Status</option>
                         @if (count($systemStatus) > 0)
@@ -175,7 +175,6 @@
                     <label for="source" class="form-label">Origem</label>
                     <select id="source" name="source" class="form-select select2">
                         <option value="">Informe a Origem</option>
-                        <option value="{{ auth()->user()->company_id }}">Próprio Escritório</option>
                         @if (count($externalOffices) > 0)
                             @foreach($externalOffices as $externalOffice)
                                 echo '<option value="{{ $externalOffice->id }}">{{ $externalOffice->name }}</option>';
@@ -268,7 +267,7 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <label for="label_id" class="form-label">Etiqueta <a href=""><i class="fa-solid fa-plus" title="Adicionar Etiqueta"></i></a></label>
+                    <label for="label_id" class="form-label">Etiqueta <!--<a href=""><i class="fa-solid fa-plus" title="Adicionar Etiqueta"></i></a>--></label>
                     <select id="edit_label_id" name="label_id" class="form-select">
                         <option value="">Defina uma Etiqueta</option>
                         @if (count($labels) > 0)
@@ -279,7 +278,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label for="status" class="form-label">Status <a href=""><i class="fa-solid fa-plus" title="Adicionar Status"></i></a></label>
+                    <label for="status" class="form-label">Status <!--<a href=""><i class="fa-solid fa-plus" title="Adicionar Status"></i></a>--></label>
                     <select id="edit_status" name="status" class="form-select">
                         <option value="">Informe o Status</option>
                         @if (count($systemStatus) > 0)
@@ -293,7 +292,6 @@
                     <label for="source" class="form-label">Origem</label>
                     <select id="edit_source" name="source" class="form-select select2">
                         <option value="">Informe a Origem</option>
-                        <option value="{{ auth()->user()->company_id }}">Próprio Escritório</option>
                         @if (count($externalOffices) > 0)
                             @foreach($externalOffices as $externalOffice)
                                 echo '<option value="{{ $externalOffice->id }}">{{ $externalOffice->name }}</option>';

@@ -34,7 +34,9 @@ class TaskController extends Controller
         $systemStatus = SystemStatus::all();
         $priorities = Priority::all();
         $tasks = Task::with(['user', 'label', 'priority', 'externalOffice'])
-            ->where('company_id', auth()->user()->company_id)->get();
+            ->where('company_id', auth()->user()->company_id)
+            ->orderBy('delivery_date','ASC')
+            ->get();
 
         //return view('tasks.index', compact('tasks'));
         
