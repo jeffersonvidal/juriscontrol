@@ -57,6 +57,14 @@ class LabelController extends Controller
                 'company_id' => $request->company_id,
             ]);
 
+            
+            flash()
+            ->options([
+                'timeout' => 3000, // 3 seconds
+                'position' => 'top-center',
+            ])
+            ->success('Tá feito. Prontin');
+
             //comita depois de tudo ter sido salvo
             DB::commit();
 
@@ -82,6 +90,9 @@ class LabelController extends Controller
 
         try {
             $label->update($request->validated());
+
+            
+            toastr()->success('Your submission has been received successfully.');
 
             //comita depois de tudo ter sido salvo
             DB::commit();

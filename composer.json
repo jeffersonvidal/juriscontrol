@@ -12,6 +12,8 @@
         "laravel/tinker": "^2.9",
         "masbug/flysystem-google-drive-ext": "^2.4",
         "owen-it/laravel-auditing": "^13.6",
+        "php-flasher/flasher-laravel": "*",
+        "php-flasher/flasher-toastr-symfony": "^2.1",
         "tinymce/tinymce": "^7.4"
     },
     "require-dev": {

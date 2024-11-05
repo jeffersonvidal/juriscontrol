@@ -235,6 +235,12 @@ Instalar FullCalendar
 https://fullcalendar.io/docs/initialize-globals
 ```
 
+Instalar PHP Alert e Toastr
+```
+composer require php-flasher/flasher-laravel
+
+php artisan flasher:install
+```
 
 TinyMCE Key: f0hn7yp6hoepuf9q4glhvc0ta67w6ereck2x2gaki1oh5zbr
 

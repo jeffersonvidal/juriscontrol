@@ -24,6 +24,37 @@
         </form>
         <!-- Navbar-->
         <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            <!--alerta de notificações -->
+            <div class="dropdown dropstart">
+                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="position-absolute top-0 start-0 translate-bottom badge rounded-pill bg-danger">
+                        9
+                    </span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Notificação 01</a></li>
+                    <li><a class="dropdown-item" href="#">Notificação 02</a></li>
+                    <li><a class="dropdown-item" href="#">Notificação 03</a></li>
+                </ul>
+            </div>
+
+            <!--Alertas de lembretes -->
+            <div class="dropdown dropstart">
+                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span class="position-absolute top-0 start-0 translate-bottom badge rounded-pill bg-danger">
+                        7
+                    </span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addLembrete">Novo Lembrete</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Lembrete 01</a></li>
+                </ul>
+            </div>
+
+            <!--Perfil do usuário-->
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -192,6 +223,62 @@
         </div><!--end content page-->
     </div><!--end sidebar-->
 
+
+
+<!-- addLembrete -->
+<div class="modal fade" id="addLembrete" tabindex="-1" aria-labelledby="addLembreteModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Lembrete</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+      <form id="createAddressForm" class="row g-3">
+                @csrf
+
+                
+                <fieldset>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="alert_time" class="form-label">Data e Hora</label>
+                            <input type="datetime-local" class="form-control" id="alert_time" name="alert_time" value="{{ old('alert_time') }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="target_user_id" class="form-label">Para quem?</label>
+                            <select id="target_user_id" name="target_user_id" class="form-select">
+                                <option value="1">Sim</option>
+                                <option value="0">Não</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="message" class="form-label">Mensagem</label>
+                            <textarea class="form-control" id="edit_message" name="message" rows="3">{{ old('message') }}</textarea>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                
+                <div class="col-md-12">
+                    <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="author_id" name="author_id" value="{{ auth()->user()->id }}">                 
+                </div>
+                
+            
+      </div><!--fim modal-body-->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-primary addButton">Salvar <i class="fa-regular fa-floppy-disk"></i></button>
+      </div><!--fim modal-footer-->
+      </form><!--finalizando form aqui para garantir pegar a ação do botão de salvar-->
+    </div>
+  </div>
+</div><!-- fim addLembrete -->
 
 
 </body>
