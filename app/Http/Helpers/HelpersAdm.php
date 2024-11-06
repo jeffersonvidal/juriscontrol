@@ -119,14 +119,30 @@ class HelpersAdm{
   }
 
   /**Retorna situação se está atrasado ou no prazo */
-  public function getSituation($dataPrazo){
+  public function getSituation($dataPrazo, $status = null){
     $isToday = Carbon::now()->format('Y-m-d');
-    if($dataPrazo < $isToday){
+    $excludedStatuses = ['canceled', 'completed', 'paid'];
+
+    if ($dataPrazo < $isToday && !in_array($status, $excludedStatuses)) {
       echo "<span class='badge text-bg-danger'>Atrasada</span>";
     }else if($dataPrazo == $isToday){
       echo "<span class='badge text-bg-warning'>Hoje</span>";
+    }else if($status == 'completed'){
+        echo 'Concluído';
     }else{
-        echo 'No Prazo';
+      echo 'No Prazo';
+    }
+  }
+
+  /**Retorna situação se está atrasado ou no prazo */
+  public function getSituationTable($dataPrazo){
+    $isToday = Carbon::now()->format('Y-m-d');
+    if($dataPrazo < $isToday){
+      echo "class='table-danger'";
+    }else if($dataPrazo == $isToday){
+      echo "class='table-warning'";
+    }else{
+        echo '';
     }
   }
 

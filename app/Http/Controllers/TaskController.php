@@ -43,7 +43,7 @@ class TaskController extends Controller
         //Carrega a view
         return view('tasks.index', ['tasks' => $tasks, 'labels' => $labels,
         'systemStatus' => $systemStatus, 'priorities' => $priorities, 'externalOffices' => $externalOffices,
-        'users' => $users,]);
+        'users' => $users, 'helper' => new HelpersAdm,]);
     }
 
     /**Envia registros para popular tabela na index */
@@ -60,8 +60,9 @@ class TaskController extends Controller
         $users = User::where('company_id', auth()->user()->company_id)->orderBy('name', 'ASC')->get();
         $systemStatus = SystemStatus::all();
         $priorities = Priority::all();
+        $helper = new HelpersAdm;
 
-        return response()->json([$tasks, $labels, $systemStatus, $priorities, $externalOffices, $users]);
+        return response()->json([$tasks, $labels, $systemStatus, $priorities, $externalOffices, $users, $helper]);
     }
 
     /**

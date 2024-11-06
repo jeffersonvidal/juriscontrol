@@ -50,16 +50,7 @@
                             <td>{{ $task->getPriority($task->priority)->name }}</td>
                             <td>{{ $task->getStatus($task->status)->name }}</td>
                             <td>{{ \Carbon\Carbon::parse($task->delivery_date)->format('d/m/Y') }}</td>
-                            <td>
-                                @php
-                                    $isToday = \Carbon\Carbon::now()->format('Y-m-d');
-                                    if($task->status <> 6 AND $task->end_date < $isToday){
-                                        echo "<span class='badge text-bg-warning'>Atrasada</span>";
-                                    }else{
-                                        echo 'No Prazo';
-                                    }
-                                @endphp
-                            </td>
+                            <td>{{ $helper->getSituation($task->delivery_date, $task->status) }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $task->id }}"

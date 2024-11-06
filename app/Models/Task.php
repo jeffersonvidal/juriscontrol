@@ -66,7 +66,7 @@ class Task extends Model implements Auditable
     }
 
     public function getStatus($status){
-        return SystemStatus::where('id', $status)->first();
+        return SystemStatus::where('value', $status)->first();
     }
 
 }

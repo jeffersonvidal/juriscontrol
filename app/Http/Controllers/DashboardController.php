@@ -78,13 +78,16 @@ class DashboardController extends Controller
         ->groupBy('met_us')->get();
 
         /**Retorna as audiências da semana */
-        $hearingsWeek = Hearing::whereBetween('date_happen', [$startOfWeek, $endOfWeek])->get();
+        $hearingsWeek = Hearing::whereBetween('date_happen', [$startOfWeek, $endOfWeek])
+        ->orderBy('date_happen', 'ASC')->get();
         
         /**Retorna as petições da semana */
-        $petitionsWeek = ExternalPetition::whereBetween('delivery_date', [$startOfWeek, $endOfWeek])->get();
+        $petitionsWeek = ExternalPetition::whereBetween('delivery_date', [$startOfWeek, $endOfWeek])
+        ->orderBy('delivery_date','ASC')->get();
         
         /**Retorna as tarefas da semana */
-        $tasksWeek = Task::whereBetween('delivery_date', [$startOfWeek, $endOfWeek])->get();
+        $tasksWeek = Task::whereBetween('delivery_date', [$startOfWeek, $endOfWeek])
+        ->orderBy('delivery_date','ASC')->get();
 
         
 
@@ -115,6 +118,7 @@ class DashboardController extends Controller
             'getUserTomorowExternalPetition' => $this->helperAdm->getUserTomorowExternalPetition(),
             'getUserExternalPetition' => $this->helperAdm->getUserExternalPetition(),
             'getBirthdays' => $this->helperAdm->getBirthdays(),
+            'helper' => new HelpersAdm,
         ]);
     }
 }

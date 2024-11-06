@@ -17,7 +17,7 @@ class TaskSeeder extends Seeder
             Task::create([
                 'title' => 'Levantamento dos documentos do cliente',
                 'description' => '',
-                'status' => '1',
+                'status' => 'open',
                 'source' => '1',
                 'delivery_date' => '2024-11-09',
                 'end_date' => '2024-11-05',

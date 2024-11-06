@@ -18,7 +18,7 @@ class SystemStatus extends Model implements Auditable
 
     /** Table fields */
     protected $fillable = [
-        'name',
+        'name','value'
     ];
 
     public function task(){

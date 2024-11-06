@@ -294,7 +294,7 @@
                             {{-- puxando registros do banco de dados --}}
                             @if (count($hearingsWeek) > 0)
                                 @foreach ($hearingsWeek as $hearing)
-                                <tr class="{{ $hearing->date_happen < $isToday ? 'table-danger':''}}">
+                                <tr {{ $helper->getSituationTable($hearing->date_happen) }}>
                                     <td>{{ Str::limit($hearing->client,20) }}</td>
                                     <td>{{ \Carbon\Carbon::parse($hearing->date_happen)->format('d/m') }}</td>
                                 </tr>
@@ -327,9 +327,9 @@
                             {{-- puxando registros do banco de dados --}}
                             @if (count($petitionsWeek) > 0)
                                 @foreach ($petitionsWeek as $petition)
-                                <tr class="{{ $petition->delivery_date < $isToday ? 'table-danger':''}}">
+                                <tr {{ $helper->getSituationTable($petition->delivery_date) }}>
                                     <td>{{ Str::limit($petition->customer_name,20) }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($petition->date_happen)->format('d/m') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($petition->delivery_date)->format('d/m') }}</td>
                                 </tr>
                                 @endforeach
                             @else
@@ -360,9 +360,9 @@
                             {{-- puxando registros do banco de dados --}}
                             @if (count($tasksWeek) > 0)
                                 @foreach ($tasksWeek as $task)
-                                <tr class="{{ $task->delivery_date < $isToday ? 'table-danger':''}}">
+                                <tr {{ $helper->getSituationTable($task->delivery_date) }}>
                                     <td>{{ Str::limit($task->title, 20) }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($task->date_happen)->format('d/m') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($task->delivery_date)->format('d/m') }}</td>
                                 </tr>
                                 @endforeach
                             @else

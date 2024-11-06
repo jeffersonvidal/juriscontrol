@@ -15,7 +15,7 @@ return new class extends Migration
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');//
             $table->id();
             $table->string('title');
-            $table->integer('status');
+            $table->string('status');
             $table->integer('source'); //origem (escritórios parceiros ou não)
             $table->date('delivery_date'); //data de entrega da tarefa
             $table->date('end_date'); //data fatal para executar a tarefa

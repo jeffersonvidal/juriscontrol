@@ -67,7 +67,7 @@
                                 <td>{{ $hearing->local }}</td>
                                 <td>{{ $hearing->getType($hearing->type) }}</td>
                                 <td>{{ $hearing->getPaymentStatus($hearing->id) }}</td>
-                                <td>{{ $helper->getSituation($hearing->date_happen) }}</td>
+                                <td>{{ $helper->getSituation($hearing->date_happen, $hearing->status) }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
                                         <button class="text-decoration-none btn btn-sm paymentBtn" title="Ver Detalhes" 
