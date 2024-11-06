@@ -32,7 +32,7 @@
                       <th>Tarefa</th>
                       <th>Responsável(eis)</th>
                       <th>Cliente</th>
-                      <th>Prioridade</th>
+                      <th>Etiqueta</th>
                       <th>Status</th>
                       <th>Entrega</th>
                       <th>Situação</th>
@@ -47,7 +47,7 @@
                             <td>{{ $task->title }}</td>
                             <td>{{ $task->getUser($task->responsible_id)->name }}</td>
                             <td>{{ $task->client }}</td>
-                            <td>{{ $task->getPriority($task->priority)->name }}</td>
+                            <td>{!! $helper->getLabel($task->label_id) !!}</td>
                             <td>{{ $task->getStatus($task->status)->name }}</td>
                             <td>{{ \Carbon\Carbon::parse($task->delivery_date)->format('d/m/Y') }}</td>
                             <td>{{ $helper->getSituation($task->delivery_date, $task->status) }}</td>

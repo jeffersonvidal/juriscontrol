@@ -5,6 +5,7 @@ use App\Models\DocumentTemplate;
 use App\Models\ExternalPetition;
 use App\Models\Hearing;
 use App\Models\Invoice;
+use App\Models\Label;
 use App\Models\Task;
 use Carbon\Carbon;
 
@@ -145,6 +146,19 @@ class HelpersAdm{
         echo '';
     }
   }
+
+  /**Retorna etiqueta */
+  public function getLabel($labelId) {
+    $theLabel = Label::where('id', $labelId)
+        ->where('company_id', auth()->user()->company_id)->first();
+    
+    if ($theLabel) {
+        return '<span class="badge rounded-pill" style="background-color:' . $theLabel->hexa_color_bg . '; color:' . $theLabel->hexa_color_font . ';">' . $theLabel->name . '</span>';
+    }
+
+    return '<span class="badge rounded-pill" style="background-color:#ccc; color:#000;">Label não encontrado</span>';
+  }
+
 
   /**DASHBOARD */
   /**RETORNA DADOS DO ESCRITÓRIO NO DASHBOAR */
