@@ -70,8 +70,15 @@
                                 <td>{{ $helper->getSituation($hearing->date_happen, $hearing->status) }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
-                                        <button class="text-decoration-none btn btn-sm paymentBtn" title="Ver Detalhes" 
-                                        data-bs-toggle="modal" data-bs-target="#paymentModal">
+                                        <button class="text-decoration-none btn btn-sm hearingDetailsBtn" title="Ver Detalhes" 
+                                        data-id="{{ $hearing->id }}" data-object="{{ $hearing->object }}" data-company_id="{{ $hearing->company_id }}"
+                                        data-user_id="{{ $hearing->user_id }}" data-date_happen="{{ $hearing->date_happen }}" data-responsible="{{ $hearing->responsible }}"
+                                        data-status="{{ $hearing->status }}" data-time_happen="{{ $hearing->time_happen }}" data-external_office_id="{{ $hearing->external_office_id }}"
+                                        data-client="{{ $hearing->client }}" data-local="{{ $hearing->local }}" data-type="{{ $hearing->type }}"
+                                        data-process_num="{{ $hearing->process_num }}" data-modality="{{ $hearing->modality }}" data-informed_client="{{ $hearing->informed_client }}"
+                                        data-informed_witnesses="{{ $hearing->informed_witnesses }}" data-link="{{ $hearing->link }}" data-notes="{{ $hearing->notes }}"
+                                        data-amount="{{ $hearing->amount }}" data-payment_status="{{ $hearing->payment_status }}"
+                                        data-bs-toggle="modal" >
                                         <i class="fa-solid fa-eye"></i></button>
                                         
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro"  
@@ -423,6 +430,150 @@
 
 </div><!--fim container-fluid-->
 
+<!-- detailsModal -->
+<div class="modal fade" id="hearingDetailsModal" tabindex="-1" aria-labelledby="hearingDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="hearingDetailsModalLabel">Detalhes</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!--conteúdo-->
+        <form id="hearingDetailForm" name="hearingDetailForm" class="row g-3">
+                <!-- @csrf -->
+                
+                <div class="col-md-4">
+                    <label for="object" class="form-label">Objeto *</label>
+                    <select id="hearingDetail_object" name="object" class="form-select" disabled>
+                        <option value="">Informe o objeto</option>
+                        <option value="hearing">Audiência</option>
+                        <option value="expertise">Perícia</option>
+                        <option value="meeting">Reunião</option>
+                        <option value="petition">Petição</option>
+                        <option value="diligence">Diligência</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="responsible" class="form-label">Responsável *</label>
+                    <select id="hearingDetail_responsible" name="responsible" class="form-select" disabled>
+                        <option value="">Informe o responsável</option>
+                        @foreach ($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                        @endforeach
+                        
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="status" class="form-label">Status *</label>
+                    <select id="hearingDetail_status" name="status" class="form-select" disabled>
+                        <option value="">Informe o status</option>
+                        <option value="open">Aberto</option>
+                        <option value="canceled">Cancelado</option>
+                        <option value="completed">Concluído</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <label for="date_happen" class="form-label">Data *</label>
+                    <input disabled type="date" class="form-control" id="hearingDetail_date_happen" name="date_happen" value="{{ old('date_happen') }}">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="time_happen" class="form-label">Horário *</label>
+                    <input disabled type="time" class="form-control" id="hearingDetail_time_happen" name="time_happen" value="{{ old('time_happen') }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="external_office_id" class="form-label">Escritório *</label>
+                    <select disabled id="hearingDetail_external_office_id" name="external_office_id" class="form-select">
+                        <option value="">Informe o Escritório</option>
+                        @foreach ($externalOffices as $externalOffice)
+                            <option value="{{$externalOffice->id }}">{{$externalOffice->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            
+                <div class="col-md-4">
+                    <label for="client" class="form-label">Cliente *</label>
+                    <input disabled type="text" class="form-control" id="hearingDetail_client" name="client" value="{{ old('client') }}">
+                </div>
+            
+                <div class="col-md-4">
+                    <label for="local" class="form-label">Local *</label>
+                    <input disabled type="text" class="form-control" id="hearingDetail_local" name="local" value="{{ old('local') }}">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="type" class="form-label">Tipo *</label>
+                    <select disabled id="hearingDetail_type" name="type" class="form-select">
+                        <option value="">Informe o Tipo</option>
+                        <option value="initial">Inicial</option>
+                        <option value="conciliation">Conciliação</option>
+                        <option value="expert_due_dilivence">Diligência Pericial</option>
+                        <option value="instruction">Instrução</option>
+                        <option value="una">Una</option>
+                        <option value="visit">Visita</option>
+                        <option value="instruction_closure">Encerramento de Instrução</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="process_num" class="form-label">Processo Nº</label>
+                    <input disabled type="text" class="form-control" id="hearingDetail_process_num" name="process_num" value="{{ old('process_num') }}">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="modality" class="form-label">Modalidade *</label>
+                    <select disabled id="hearingDetail_modality" name="modality" class="form-select">
+                        <option value="">Informe a Modalidade</option>
+                        <option value="online">Online</option>
+                        <option value="in_person">Presencial</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="link" class="form-label">Link</label>
+                    <input disabled type="text" class="form-control" id="hearingDetail_link" name="link" value="{{ old('link') }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="amount" class="form-label">Valor *</label>
+                    <input disabled type="text" class="form-control" id="hearingDetail_amount" name="amount" value="{{ old('amount') }}">
+                </div>
+
+                <div class="col-md-12 mt-5">
+                    <div class="form-check form-switch form-check-inline">
+                        <input disabled class="form-check-input" type="checkbox" role="switch" id="hearingDetail_informed_client" name="informed_client" value="s">
+                        <label class="form-check-label" for="informed_client">Cliente Informado</label>
+                    </div>
+                    <div class="form-check form-switch form-check-inline">
+                        <input disabled class="form-check-input" type="checkbox" role="switch" id="hearingDetail_informed_witnesses" name="informed_witnesses" value="s">
+                        <label class="form-check-label" for="informed_witnesses">Testemunhas Informadas</label>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="notes" class="form-label">Observações</label>
+                    <textarea disabled class="form-control" id="hearingDetail_notes" name="notes" rows="3"></textarea>
+                </div>
+                
+                
+                
+                <div class="col-md-12">
+                    <input type="hidden" class="form-control" id="hearingDetail_company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="hearingDetail_user_id" name="user_id" value="{{ auth()->user()->id }}">                 
+                    <input type="hidden" class="form-control" id="hearingDetail_id" name="id" value="{{ $hearing->id }}">                 
+                </div>
+            </form>
+        <!--fim conteúdo-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Fim detailsModal -->
+
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
     /**Add in database - store */
@@ -491,11 +642,100 @@
                         }
                     ];
                     deleteRegistro($(this).attr('data-id'));
-            }
+
+                }else if($(this).hasClass('hearingDetailsBtn')){
+                    var dados = [
+                        { 
+                            id: $(this).attr('data-id'), 
+                            object: $(this).attr('data-object'), 
+                            company_id: $(this).attr('data-company_id'), 
+                            user_id: $(this).attr('data-user_id'), 
+                            responsible: $(this).attr('data-responsible'), 
+                            status: $(this).attr('data-status'), 
+                            date_happen: $(this).attr('data-date_happen'), 
+                            time_happen: $(this).attr('data-time_happen'), 
+                            external_office_id: $(this).attr('data-external_office_id'), 
+                            client: $(this).attr('data-client'), 
+                            local: $(this).attr('data-local'), 
+                            type: $(this).attr('data-type'), 
+                            process_num: $(this).attr('data-process_num'), 
+                            modality: $(this).attr('data-modality'), 
+                            informed_client: $(this).attr('data-informed_client'), 
+                            informed_witnesses: $(this).attr('data-informed_witnesses'), 
+                            link: $(this).attr('data-link'), 
+                            notes: $(this).attr('data-notes'), 
+                            type: $(this).attr('data-type'), 
+                            amount: $(this).attr('data-amount'), 
+                            payment_status: $(this).attr('data-payment_status'), 
+                        }
+                        
+                    ];
+                    showDetails(dados);
+                }
         });
 
-        
+
+        /**Função que preenche a modal de detalhes */
+        function showDetails(dados) {
+            let url = "{{ route('hearings.show', 'id') }}";
+            url = url.replace('id', dados[0].id);
+            //console.log(url);
+            /**Preenche os campos do form de atualização*/
+            $.get(url, function() {
+                fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                    throw new Error('Erro na rede: ' + response.statusText);
+                    }
+                    return response.json();
+                    //console.log('Response: ' + response);
+                })
+                .then(data => {
+                    /**Dados vão aqui */
+                    $('#hearingDetail_id').val(data.id);
+                    $('#hearingDetail_object').val(data.object);
+                    $('#hearingDetail_company_id').val(data.company_id);
+                    $('#hearingDetail_user_id').val(data.user_id);
+                    $('#hearingDetail_responsible').val(data.responsible);
+                    $('#hearingDetail_status').val(data.status);
+                    $('#hearingDetail_date_happen').val(data.date_happen);
+                    $('#hearingDetail_time_happen').val(data.time_happen);
+                    $('#hearingDetail_external_office_id').val(data.external_office_id);
+                    $('#hearingDetail_client').val(data.client);
+                    $('#hearingDetail_local').val(data.local);
+                    $('#hearingDetail_type').val(data.type);
+                    $('#hearingDetail_process_num').val(data.process_num);
+                    $('#hearingDetail_modality').val(data.modality);
+                    $('#hearingDetail_informed_client').val(data.informed_client === 's' ? 'Sim' : 'Não');
+                    $('#hearingDetail_informed_witnesses').val(data.informed_witnesses === 's' ? 'Sim' : 'Não');
+                    $('#hearingDetail_link').val(data.link);
+                    $('#hearingDetail_notes').val(data.notes);
+                    $('#hearingDetail_payment_status').val(data.payment_status);
+                    $('#hearingDetail_amount').val(data.amount);
+                    /**Verifica Se cliente e testemunhas foram informados */
+                    if(data.informed_client === 's'){
+                        document.querySelector('#hearingDetail_informed_client').checked = true;
+                    }else{
+                        document.querySelector('#hearingDetail_informed_client').checked = false;
+                    }
+                    if(data.informed_witnesses === 's'){
+                        document.querySelector('#hearingDetail_informed_witnesses').checked = true;
+                    }else{
+                        document.querySelector('#hearingDetail_informed_witnesses').checked = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                });
+                
+                
+                $('#hearingDetailsModal').modal('show');
+            });
+            //console.log(url);
             
+
+        }//Fim showDetails()
+
 
         /**Função que preenche os campos do formulário de atualização */
         function editRegistro(dados) {
