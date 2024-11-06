@@ -156,7 +156,7 @@ class HelpersAdm{
         return '<span class="badge rounded-pill" style="background-color:' . $theLabel->hexa_color_bg . '; color:' . $theLabel->hexa_color_font . ';">' . $theLabel->name . '</span>';
     }
 
-    return '<span class="badge rounded-pill" style="background-color:#ccc; color:#000;">Label não encontrado</span>';
+    return '<span class="badge rounded-pill" style="background-color:#ccc; color:#000;">Sem etiqueta</span>';
   }
 
 
