@@ -55,16 +55,7 @@
                             <td>{{ $externalPetition->court }}</td>
                             <td>{{ 'R$' . number_format($externalPetition->amount, 2, ',', '.') }}</td>
                             <td>{{ $externalPetition->getPaymentStatus($externalPetition->payment_status) }}</td>
-                            <td>
-                                @php
-                                    $isToday = \Carbon\Carbon::now()->format('Y-m-d');
-                                    if($externalPetition->status <> 'completed' AND $externalPetition->delivery_date < $isToday){
-                                        echo "<span class='badge text-bg-warning'>Atrasada</span>";
-                                    }else{
-                                        echo 'No Prazo';
-                                    }
-                                @endphp
-                            </td>
+                            <td>{{ $helper->getSituation($externalPetition->delivery_date, $externalPetition->status) }}</td>
                             <td>
                                 <span class="d-flex flex-row justify-content-center">
                                     <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $externalPetition->id }}"

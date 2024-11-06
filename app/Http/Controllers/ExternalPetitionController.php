@@ -51,6 +51,7 @@ class ExternalPetitionController extends Controller
             'wallets' => $wallets,
             'users' => $users,
             'typePetitions' => $typePetitions,
+            'helper' => new HelpersAdm,
         ]);
     }
 
@@ -206,7 +207,7 @@ class ExternalPetitionController extends Controller
             DB::commit();
 
             //Redireciona para outra página após cadastrar com sucesso
-            return response()->json( ['success' => 'Registro cadastrado com sucesso!']);
+            return response()->json( ['success' => 'Registro alterado com sucesso!']);
         } catch (Exception $e) {
             //Desfazer a transação caso não consiga cadastrar com sucesso no BD
             DB::rollBack();
