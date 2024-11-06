@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\ExternalPetition;
+use App\Models\Hearing;
 use App\Models\Invoice;
+use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use HelpersAdm;
@@ -19,6 +22,10 @@ class DashboardController extends Controller
     }
     
     public function index(){
+        // Data do dia corrente
+        $isToday = Carbon::now()->format('Y-m-d');
+        $startOfWeek = Carbon::now()->startOfWeek(); 
+        $endOfWeek = Carbon::now()->endOfWeek(); 
 
         // Consulta para obter os dados de receitas e despesas por mês
         $invoices = Invoice::select(
@@ -70,6 +77,15 @@ class DashboardController extends Controller
         $customersMetUs = Customer::select('met_us', DB::raw('count(*) as total'))
         ->groupBy('met_us')->get();
 
+        /**Retorna as audiências da semana */
+        $hearingsWeek = Hearing::whereBetween('date_happen', [$startOfWeek, $endOfWeek])->get();
+        
+        /**Retorna as petições da semana */
+        $petitionsWeek = ExternalPetition::whereBetween('delivery_date', [$startOfWeek, $endOfWeek])->get();
+        
+        /**Retorna as tarefas da semana */
+        $tasksWeek = Task::whereBetween('delivery_date', [$startOfWeek, $endOfWeek])->get();
+
         
 
         
@@ -78,9 +94,13 @@ class DashboardController extends Controller
             'incomeWeek' => $this->helperAdm->getIncomeWeek(),
             'expenseWeek' => $this->helperAdm->getExpenseWeek(),
             'cashBalance' => $this->helperAdm->getCashBalance(),
+            'isToday' => $isToday,
             'invoices' => $chartData,
             'customersPerMonth' => $customersPerMonth,
             'customersMetUs' => $customersMetUs,
+            'hearingsWeek' => $hearingsWeek,
+            'tasksWeek' => $tasksWeek,
+            'petitionsWeek' => $petitionsWeek,
             'hearingsToday' => $this->helperAdm->getHearingToday(),
             'tasksToday' => $this->helperAdm->getTaskToday(),
             'lateTasks' => $this->helperAdm->getLateTasks(),

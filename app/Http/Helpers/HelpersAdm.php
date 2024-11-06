@@ -118,6 +118,16 @@ class HelpersAdm{
     return str_replace($variaveis, $camposDB, $texto);
   }
 
+  /**Retorna situação se está atrasado ou no prazo */
+  public function getSituation($dataPrazo){
+    $isToday = Carbon::now()->format('Y-m-d');
+    if($dataPrazo < $isToday){
+      echo "<span class='badge text-bg-warning'>Atrasada</span>";
+    }else{
+        echo 'No Prazo';
+    }
+  }
+
   /**DASHBOARD */
   /**RETORNA DADOS DO ESCRITÓRIO NO DASHBOAR */
 

@@ -17,7 +17,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Sua Agenda Hoje</h5>
-                    <!--quadros contadores -->
+                    <!--quadros contadores sua agenda hoje -->
                     <div class="row">
                         <div class="col-sm-3 mb-4">
                         <a href="{{ route('hearings.index') }}" class="text-decoration-none text-dark">
@@ -34,6 +34,7 @@
                             </div></a>
                         </div>
                         <div class="col-sm-3 mb-4">
+                        <a href="{{ route('tasks.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -44,9 +45,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                         <div class="col-sm-3 mb-4">
+                        <a href="{{ route('tasks.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -57,9 +59,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                         <div class="col-sm-3 mb-4">
+                        <a href="{{ route('external-petitions.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -71,14 +74,15 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                     </div>
-                    <!--Fim quadros contadores -->
+                    <!--Fim quadros contadores sua agenda hoje-->
                     <h5 class="card-title">Sua Agenda Amanhã</h5>
-                    <!--quadros contadores -->
+                    <!--quadros contadores sua agenda amanhã-->
                     <div class="row">
-                    <div class="col-sm-3 mb-4">
+                        <div class="col-sm-3 mb-4">
+                        <a href="{{ route('hearings.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -89,9 +93,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                         <div class="col-sm-3 mb-4">
+                        <a href="{{ route('tasks.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -102,9 +107,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                         <div class="col-sm-3 mb-4">
+                        <a href="{{ route('tasks.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -115,9 +121,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                         <div class="col-sm-3 mb-4">
+                        <a href="{{ route('external-petitions.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -128,10 +135,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                     </div>
-                    <!--Fim quadros contadores -->
+                    <!--Fim quadros contadores sua agenda amanhã -->
                 </div>
             </div>
         </div>
@@ -139,9 +146,10 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Agenda Escritório Hoje</h5>
-                    <!--quadros contadores -->
+                    <!--quadros contadores agenda escritório hoje-->
                     <div class="row">
                         <div class="col-sm-3 mb-4">
+                        <a href="{{ route('hearings.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -152,9 +160,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                         <div class="col-sm-3 mb-4">
+                        <a href="{{ route('tasks.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -165,9 +174,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                         <div class="col-sm-3 mb-4">
+                        <a href="{{ route('tasks.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -178,9 +188,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                         <div class="col-sm-3 mb-4">
+                        <a href="{{ route('external-petitions.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -192,14 +203,15 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                     </div>
-                    <!--Fim quadros contadores -->
+                    <!--Fim quadros contadores agenda escritório hoje-->
                     <h5 class="card-title">Agenda Escritório Amanhã</h5>
-                    <!--quadros contadores -->
+                    <!--quadros contadores agenda escritório amanhã-->
                     <div class="row">
-                    <div class="col-sm-3 mb-4">
+                        <div class="col-sm-3 mb-4">
+                        <a href="{{ route('hearings.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -210,9 +222,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                         <div class="col-sm-3 mb-4">
+                        <a href="{{ route('tasks.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -223,9 +236,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                         <div class="col-sm-3 mb-4">
+                        <a href="{{ route('tasks.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -236,9 +250,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                         <div class="col-sm-3 mb-4">
+                        <a href="{{ route('external-petitions.index') }}" class="text-decoration-none text-dark">
                             <div class="card border shadow-sm h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -249,10 +264,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div></a>
                         </div>
                     </div>
-                    <!--Fim quadros contadores -->
+                    <!--Fim quadros contadores agenda escritório amanhã-->
                 </div>
             </div>
         </div>
@@ -265,21 +280,28 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Audiências da Semana</h5>
+                    <h5 class="card-title"><a class="text-decoration-none text-dark" href="{{ route('hearings.index') }}">Audiências da Semana</a></h5>
                     <!--quadros contadores -->
                     <div class="row">
                         <table class="table table-striped table-hover">
                             <thead>
-                                <tr>
-                                <th>Cliente</th>
-                                <th>Data</th>
+                            <tr>
+                                    <th>Cliente</th>
+                                    <th>Data</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Fulano de Tal</td>
-                                    <td>10/10</td>
+                            {{-- puxando registros do banco de dados --}}
+                            @if (count($hearingsWeek) > 0)
+                                @foreach ($hearingsWeek as $hearing)
+                                <tr class="{{ $hearing->date_happen < $isToday ? 'table-danger':''}}">
+                                    <td>{{ Str::limit($hearing->client,20) }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($hearing->date_happen)->format('d/m') }}</td>
                                 </tr>
+                                @endforeach
+                            @else
+                                <tr colspan="2">Nenhum registro encontrado</tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -291,21 +313,28 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Petições da Semana</h5>
+                <h5 class="card-title"><a class="text-decoration-none text-dark" href="{{ route('external-petitions.index') }}">Petições da Semana</a></h5>
                     <!--quadros contadores -->
                     <div class="row">
                         <table class="table table-striped table-hover">
                             <thead>
                                 <tr>
-                                <th>Cliente</th>
-                                <th>Data</th>
+                                    <th>Cliente</th>
+                                    <th>Data</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Fulano de Tal</td>
-                                    <td class="table-success">10/10</td>
+                            {{-- puxando registros do banco de dados --}}
+                            @if (count($petitionsWeek) > 0)
+                                @foreach ($petitionsWeek as $petition)
+                                <tr class="{{ $petition->delivery_date < $isToday ? 'table-danger':''}}">
+                                    <td>{{ Str::limit($petition->customer_name,20) }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($petition->date_happen)->format('d/m') }}</td>
                                 </tr>
+                                @endforeach
+                            @else
+                                <tr colspan="2">Nenhum registro encontrado</tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -317,21 +346,28 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Tarefas da Semana</h5>
+                <h5 class="card-title"><a class="text-decoration-none text-dark" href="{{ route('tasks.index') }}">Tarefas da Semana</a></h5>
                     <!--quadros contadores -->
                     <div class="row">
                         <table class="table table-striped table-hover">
                             <thead>
                                 <tr>
-                                <th>Tarefa</th>
-                                <th>Data</th>
+                                    <th>Tarefa</th>
+                                    <th>Data</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Fulano de Tal</td>
-                                    <td>10/10</td>
+                            {{-- puxando registros do banco de dados --}}
+                            @if (count($tasksWeek) > 0)
+                                @foreach ($tasksWeek as $task)
+                                <tr class="{{ $task->delivery_date < $isToday ? 'table-danger':''}}">
+                                    <td>{{ Str::limit($task->title, 20) }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($task->date_happen)->format('d/m') }}</td>
                                 </tr>
+                                @endforeach
+                            @else
+                                <tr colspan="2">Nenhum registro encontrado</tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -353,12 +389,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="table-primary">
+                                <!-- <tr class="table-primary">
                                     <td>Notificação 01</td>
                                 </tr>
                                 <tr class="table-warning">
                                     <td>Notificação 02</td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
