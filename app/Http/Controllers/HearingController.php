@@ -12,16 +12,26 @@ use App\Models\User;
 use App\Models\Wallet;
 use Carbon\Carbon;
 use DB;
+use HelpersAdm;
 use Exception;
 use Illuminate\Http\Request;
 
 class HearingController extends Controller
 {
+
+    private $helperAdm;
+
+    public function __construct(HelpersAdm $helpersAdm){
+        $this->helperAdm = $helpersAdm;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        // Data do dia corrente
+        $isToday = Carbon::now()->format('Y-m-d');
+
         $hearings = Hearing::where('company_id', auth()->user()->company_id)
         ->orderBy('date_happen', 'ASC')->get();
 
@@ -35,12 +45,15 @@ class HearingController extends Controller
         ->orderBy('id', 'DESC')->get();
 
 
+
         //Carrega a view
         return view('hearings.index', [
             'hearings' => $hearings,
             'users' => $users,
             'externalOffices' => $externalOffices,
             'wallets' => $wallets,
+            'isToday' => $isToday,
+            'helper' => new HelpersAdm,
         ]);
     }
 

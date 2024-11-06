@@ -122,7 +122,9 @@ class HelpersAdm{
   public function getSituation($dataPrazo){
     $isToday = Carbon::now()->format('Y-m-d');
     if($dataPrazo < $isToday){
-      echo "<span class='badge text-bg-warning'>Atrasada</span>";
+      echo "<span class='badge text-bg-danger'>Atrasada</span>";
+    }else if($dataPrazo == $isToday){
+      echo "<span class='badge text-bg-warning'>Hoje</span>";
     }else{
         echo 'No Prazo';
     }

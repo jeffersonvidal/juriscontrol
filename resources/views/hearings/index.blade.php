@@ -49,6 +49,7 @@
                         <th>Local</th>
                         <th>Tipo</th>
                         <th>Pago</th>
+                        <th>Situação</th>
                         <th class="text-center">Ações</th>
                         </tr>
                     </thead>
@@ -57,15 +58,16 @@
                     @if (count($hearings) > 0)
                         @foreach ($hearings as $hearing)
                             <tr>
-                             <td>{{ $hearing->getObject($hearing->id) }}</td> 
-                             <td>{{ $hearing->getResponsible($hearing->responsible)->name }}</td> 
-                            <td>{{ $hearing->getStatus($hearing->status) }}</td>
-                            <td>{{ \Carbon\Carbon::parse($hearing->date_happen)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($hearing->time_happen)->format('H:i') }}</td>
-                            <td>{{ $hearing->getExternalOffices($hearing->external_office_id) }}</td>
-                            <td>{{ $hearing->client }}</td>
-                            <td>{{ $hearing->local }}</td>
-                            <td>{{ $hearing->getType($hearing->type) }}</td>
-                            <td>{{ $hearing->getPaymentStatus($hearing->id) }}</td>
+                                <td>{{ $hearing->getObject($hearing->id) }}</td> 
+                                <td>{{ $hearing->getResponsible($hearing->responsible)->name }}</td> 
+                                <td>{{ $hearing->getStatus($hearing->status) }}</td>
+                                <td>{{ \Carbon\Carbon::parse($hearing->date_happen)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($hearing->time_happen)->format('H:i') }}</td>
+                                <td>{{ $hearing->getExternalOffices($hearing->external_office_id) }}</td>
+                                <td>{{ $hearing->client }}</td>
+                                <td>{{ $hearing->local }}</td>
+                                <td>{{ $hearing->getType($hearing->type) }}</td>
+                                <td>{{ $hearing->getPaymentStatus($hearing->id) }}</td>
+                                <td>{{ $helper->getSituation($hearing->date_happen) }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
                                         <button class="text-decoration-none btn btn-sm paymentBtn" title="Ver Detalhes" 
