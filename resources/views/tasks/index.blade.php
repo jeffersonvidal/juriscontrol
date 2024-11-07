@@ -157,7 +157,7 @@
                         <option value="">Informe o Status</option>
                         @if (count($systemStatus) > 0)
                             @foreach($systemStatus as $status)
-                                echo '<option value="{{ $status->id }}">{{ $status->name }}</option>';
+                                echo '<option value="{{ $status->value }}">{{ $status->name }}</option>';
                             @endforeach
                         @endif
                     </select>
@@ -274,7 +274,7 @@
                         <option value="">Informe o Status</option>
                         @if (count($systemStatus) > 0)
                             @foreach($systemStatus as $status)
-                                echo '<option value="{{ $status->id }}">{{ $status->name }}</option>';
+                                echo '<option value="{{ $status->value }}">{{ $status->name }}</option>';
                             @endforeach
                         @endif
                     </select>

@@ -79,14 +79,17 @@ class DashboardController extends Controller
 
         /**Retorna as audiências da semana */
         $hearingsWeek = Hearing::whereBetween('date_happen', [$startOfWeek, $endOfWeek])
+        ->where('status', '!=', 'completed')
         ->orderBy('date_happen', 'ASC')->get();
         
         /**Retorna as petições da semana */
         $petitionsWeek = ExternalPetition::whereBetween('delivery_date', [$startOfWeek, $endOfWeek])
+        ->where('status', '!=', 'completed')
         ->orderBy('delivery_date','ASC')->get();
         
         /**Retorna as tarefas da semana */
         $tasksWeek = Task::whereBetween('delivery_date', [$startOfWeek, $endOfWeek])
+        ->where('status', '!=', 'completed')
         ->orderBy('delivery_date','ASC')->get();
 
         
