@@ -28,7 +28,7 @@
 
 <!-- addModal -->
 <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Evento</h1>
@@ -58,11 +58,13 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="start" class="form-label">Hora Início</label>
-                            <input type="datetime-local" class="form-control" id="start" name="start" value="{{ old('start') }}">
+                            <input type="time" class="form-control" id="startTime" name="startTime" value="08:00">
+                            <input type="hidden" class="form-control" id="start" name="start" value="{{ old('start') }}">
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="endTime" class="form-label">Hora Fim</label>
-                            <input type="datetime-local" class="form-control" id="end" name="end" value="{{ old('end') }}">
+                            <label for="end" class="form-label">Hora Fim</label>
+                            <input type="time" class="form-control" id="endTime" name="endTime" value="{{ old('endTime') }}">
+                            <input type="hidden" class="form-control" id="end" name="end" value="{{ old('end') }}">
                         </div>
                     </div>
 
@@ -136,33 +138,38 @@ document.addEventListener('DOMContentLoaded', function() {
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,timeGridDay'
       },
-      events: '/fetch-events', /**url que carrega todos os eventos salvos no bd */
-      locale: 'pt-br', /**Traduz para português Brasil */
-      initialView: 'dayGridMonth', /**Mostrar grid com dia e mês */
-      navLinks:true, /**Permite clicar nos dias da semana */
-      selectable:true, /**Permitir clicar e arrastar o mouse sobre um ou vários dias no calendário */
-      selectMirror:true, /**Indicar visualmente a área que será selecionada antes que o usuário solte o btn do mouse para confirmar seleção */
-      editable:true, /**Permitir arrastar e redimensionar os eventos diretamente no calendário */
-      dayMaxEvents:true, /**Nº máximo de eventos em um determinado dia, se for true, o nº de eventos será limitado à altura da célula do dia */
+      events: '/fetch-events',
+      /**Traduz para português Brasil */
+      locale: 'pt-br',
+      /**Mostrar grid com dia e mês */
+      initialView: 'dayGridMonth',
+      /**Permite clicar nos dias da semana */
+      navLinks:true,
+      /**Permitir clicar e arrastar o mouse sobre um ou vários dias no calendário */
+      selectable:true,
+      /**Indicar visualmente a área que será selecionada antes que o usuário solte o btn do mouse para confirmar seleção */
+      selectMirror:true,
+      /**Permitir arrastar e redimensionar os eventos diretamente no calendário */
+      editable:true,
+      /**Nº máximo de eventos em um determinado dia, se for true, o nº de eventos será limitado à altura da célula do dia */
+      dayMaxEvents:true,
       initialDate: new Date(),
       dateClick:function(info){
         openModal();
-        //console.log('allDay = ' + info.allDay);
-        //console.log($('#endTime').val());
-        //$('#start').val(info.dateStr + 'T00:00');
         
-        // Obtém a data do dia clicado 
-        var clickedDate = new Date(info.date); 
-        // Define a hora como 00:00:00 
-        clickedDate.setUTCHours(0, 0, 0, 0); 
-        $('#start').val(clickedDate.toISOString().slice(0,16));
-        $('#end').val(clickedDate.toISOString().slice(0,16));
+
+        
+        //console.log('allDay = ' + info.allDay);
+        //console.log($('#startTime').val());
+        //$('#start').val(info.dateStr + 'T00:00');
+        $('#start').val(info.dateStr + 'T' + $('#startTime').val());
+        $('#end').val(info.dateStr + 'T' + $('#endTime').val());
         $('#is_all_day').val();
         //console.log($('#start').val());
       },
       /**Retorna informações do evento cadastrado*/
       eventClick: function(info) {
-        //console.log(info.event.start);
+        console.log(info.event.start);
         openModal();        
         $('#eventId').val(info.event.id);
         $('#title').val(info.event.title);

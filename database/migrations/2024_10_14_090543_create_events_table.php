@@ -16,12 +16,12 @@ return new class extends Migration
             $table->integer('author_id');
             $table->integer('responsible_id');
             $table->unsignedBigInteger('company_id');
-            $table->string('start');
-            $table->string('end');
+            $table->dateTime('start');
+            $table->dateTime('end');
             $table->integer('status')->default(0)->nullable();
             $table->integer('is_all_day')->default(0)->nullable();
             $table->string('title');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('event_id')->nullable();
             $table->string('color')->nullable();
             $table->timestamps();
