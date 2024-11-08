@@ -26,6 +26,43 @@
     </div><!--fim card -->
 
 
+<!-- detailsModal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="detailsModalLabel">Detalhes do evento</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!--conteúdo -->
+        <dl class="row">
+            <dt class="col-sm-3">ID: #</dt>
+            <dd class="col-sm-9" id="details_id"></dd>
+            
+            <dt class="col-sm-3">Título</dt>
+            <dd class="col-sm-9" id="details_title"></dd>
+            
+            <dt class="col-sm-3">Início</dt>
+            <dd class="col-sm-9" id="details_start"></dd>
+            
+            <dt class="col-sm-3">Fim</dt>
+            <dd class="col-sm-9" id="details_end"></dd>
+            
+            <dt class="col-sm-3">Descrição</dt>
+            <dd class="col-sm-9" id="details_description"></dd>
+
+        </dl>
+        <!--fim conteúdo -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Fim detailsModal -->
+
 <!-- addModal -->
 <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -146,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
       dayMaxEvents:true, /**Nº máximo de eventos em um determinado dia, se for true, o nº de eventos será limitado à altura da célula do dia */
       initialDate: new Date(),
       dateClick:function(info){
-        openModal();
+        openCreateModal();
         //console.log('allDay = ' + info.allDay);
         //console.log($('#endTime').val());
         //$('#start').val(info.dateStr + 'T00:00');
@@ -162,26 +199,16 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       /**Retorna informações do evento cadastrado*/
       eventClick: function(info) {
-        //console.log(info.event.start);
-        openModal();        
-        $('#eventId').val(info.event.id);
-        $('#title').val(info.event.title);
-        $('#description').val(info.event._def.extendedProps.description);
-        $('#start').val(info.event.start.toISOString().slice(0,16));
-        $('#end').val(info.event.end.toISOString().slice(0,16));
-        $('#author_id').val(info.event._def.extendedProps.author_id);
-        $('#responsible_id').val(info.event._def.extendedProps.responsible_id);
-        $('#company_id').val(info.event._def.extendedProps.company_id);
-        $('#color').val(info.event._def.extendedProps.color);
-        $('#is_all_day').val(info.event._def.extendedProps.is_all_day);
+        console.log(info.event.extendedProps);
+        detailsModal();
+        document.getElementById('details_id').innerText =info.event.id;
+        document.getElementById('details_title').innerText =info.event.title;
+        document.getElementById('details_start').innerText =info.event.start.toLocaleString();
+        document.getElementById('details_end').innerText =info.event.end.toLocaleString();
+        document.getElementById('details_description').innerText =info.event.extendedProps.description;
         
-    },
-    eventDrop: function(info) {
-        updateEvent(info.event);
-    },
-    eventResize: function(info) {
-        updateEvent(info.event);
-    }
+    }, //fim de calendar = new FullCalendar.Calendar()
+
   });
   /**Envia todas as configurações para o html renderizar */
   calendar.render();
@@ -194,96 +221,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     /**Mostra Modal */
-    function openModal() {
+    function openCreateModal() {
         $('#createModal').modal('show');
         updateCheckboxState();
+    }
+
+    /**Mostra Modal de detalhes do evento */
+    function detailsModal() {
+        $('#detailsModal').modal('show');
     }
 
     /**Fecha Modal */
     function closeModal() {
         $('#createModal').modal('hide');
         $('#createForm')[0].reset();
-    }
-
-    /**Salva o evento no BD e Google Agenda */
-    function saveEvent() {
-        let eventData = {
-            title: $('#title').val(),
-            description: $('#description').val(),
-            start: $('#start').val(),
-            end: $('#end').val(),
-            author_id: $('#author_id').val(),
-            responsible_id: $('#responsible_id').val(),
-            company_id: $('#company_id').val(),
-            color: $('#color').val(),
-            is_all_day: $('#is_all_day').val(),
-            //eventId: $('#eventId').val(),
-            
-        };
-
-        let url = '/store-events';
-        let method = 'POST';
-        let eventId = $('#eventId').val();
-
-        if (eventId) {
-            url += '/update-events/' + eventId;
-            method = 'PUT';
-        }
-
-        $.ajax({
-            url: url,
-            type: method,
-            data: eventData,
-            success: function(response) {
-                calendar.refetchEvents();
-                closeModal();
-            },
-            error: function(response) {
-                alert('Erro ao salvar evento');
-            }
-        });
-    }
-
-    /**Atualiza os dados do evento no BD E Google Agenda */
-    function updateEvent(event) {
-        let eventData = {
-            title: event.title,
-            description: event._def.extendedProps.description,
-            start: event.start.toISOString().slice(0,16),
-            end: event.end.toISOString().slice(0,16),
-            author_id: event._def.extendedProps.author_id,
-            responsible_id: event._def.extendedProps.responsible_id,
-            company_id: event._def.extendedProps.company_id,
-            color: event._def.extendedProps.color,
-            is_all_day: event._def.extendedProps.is_all_day,
-            eventId: event._def.extendedProps.eventId,
-        };
-
-        $.ajax({
-            url: '/update-events/' + event.id,
-            type: 'PUT',
-            data: eventData,
-            success: function(response) {
-                calendar.refetchEvents();
-            },
-            error: function(response) {
-                alert('Erro ao atualizar evento');
-            }
-        });
-    }
-
-    /**Exclui evento do BD e Google Agenda */
-    function deleteEvent(event) {
-        $.ajax({
-            url: '/destroy-events/' + event.id,
-            type: 'DELETE',
-            success: function(response) {
-                calendar.refetchEvents();
-            },
-            error: function(response) {
-                alert('Erro ao deletar evento');
-            }
-        });
     }
 
     // Evento de mudança no checkbox para atualizar o valor
