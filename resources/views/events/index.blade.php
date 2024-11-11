@@ -55,9 +55,7 @@
         </dl>
         <!--fim conteúdo -->
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-      </div>
+
     </div>
   </div>
 </div>
