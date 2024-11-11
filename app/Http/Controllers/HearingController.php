@@ -33,7 +33,7 @@ class HearingController extends Controller
         $isToday = Carbon::now()->format('Y-m-d');
 
         $hearings = Hearing::where('company_id', auth()->user()->company_id)
-        ->orderBy('date_happen', 'ASC')->get();
+        ->orderByRaw("FIELD(status, 'completed'), date_happen ASC")->get();
 
         $users = User::where('company_id', auth()->user()->company_id)
         ->orderBy('id', 'DESC')->get();

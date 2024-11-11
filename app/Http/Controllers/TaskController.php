@@ -34,9 +34,10 @@ class TaskController extends Controller
         $systemStatus = SystemStatus::all();
         $priorities = Priority::all();
         $tasks = Task::with(['user', 'label', 'priority', 'externalOffice'])
-            ->where('company_id', auth()->user()->company_id)
-            ->orderBy('delivery_date','ASC')
-            ->get();
+        ->where('company_id', auth()->user()->company_id)
+        ->orderByRaw("FIELD(status, 'completed'), delivery_date ASC")
+        ->get();
+
 
         //return view('tasks.index', compact('tasks'));
         
@@ -50,11 +51,10 @@ class TaskController extends Controller
     public function getall()
     {
         $tasks = Task::where('company_id', auth()->user()->company_id)
-            ->with('label')
-            ->with('user')
-            ->with('externalOffice')
-            ->with('priority')
-            ->orderBy('id', 'DESC')->get();
+        ->with(['label', 'user', 'externalOffice', 'priority'])
+        ->orderByRaw("FIELD(status, 'completed'), id DESC")
+        ->get();
+
         $labels = Label::where('company_id', auth()->user()->company_id)->orderBy('name', 'ASC')->get();
         $externalOffices = ExternalOffice::where('company_id', auth()->user()->company_id)->orderBy('name', 'ASC')->get();
         $users = User::where('company_id', auth()->user()->company_id)->orderBy('name', 'ASC')->get();
