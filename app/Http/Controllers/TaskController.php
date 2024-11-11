@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
+use App\Models\Event;
 use App\Models\ExternalOffice;
 use App\Models\Label;
 use App\Models\Priority;
@@ -36,7 +37,7 @@ class TaskController extends Controller
         $tasks = Task::with(['user', 'label', 'priority', 'externalOffice'])
         ->where('company_id', auth()->user()->company_id)
         ->orderByRaw("FIELD(status, 'completed'), delivery_date ASC")
-        ->get();
+        ->get(); //todos registros com status = completed vai para o fim da listagem
 
 
         //return view('tasks.index', compact('tasks'));
@@ -53,7 +54,7 @@ class TaskController extends Controller
         $tasks = Task::where('company_id', auth()->user()->company_id)
         ->with(['label', 'user', 'externalOffice', 'priority'])
         ->orderByRaw("FIELD(status, 'completed'), id DESC")
-        ->get();
+        ->get(); //todos registros com status = completed vai para o fim da listagem
 
         $labels = Label::where('company_id', auth()->user()->company_id)->orderBy('name', 'ASC')->get();
         $externalOffices = ExternalOffice::where('company_id', auth()->user()->company_id)->orderBy('name', 'ASC')->get();
@@ -95,6 +96,21 @@ class TaskController extends Controller
             $task->company_id = $request->company_id;
             $task->save();
             //dd($task);
+
+            /**Salva tarefa na tabela eventos */
+            $event = new Event();
+            $event->company_id = $request->company_id;
+            $event->author_id = $request->author_id;
+            $event->responsible_id = $request->responsible_id;
+            $event->start = $request->end_date;
+            $event->end = $request->delivery_date;
+            $event->is_all_day = 1;
+            $event->status = 0;
+            $event->title = $request->title;
+            $event->description = $request->description;
+            $event->color = '#50301E';
+            $event->event_id = $task->id;
+            $event->save();
 
             //comita depois de tudo ter sido salvo
             DB::commit();
@@ -156,6 +172,41 @@ class TaskController extends Controller
             $task->company_id = $request->company_id;
             $task->update();
             //dd($task);
+
+            /**Verifica se a tarefa está cadastrado em eventos */
+            $theEvent = Event::where('event_id', $request->id)->first();
+            /**Se existir o evento, salva alterações */
+            if ($theEvent) {
+                $theEvent->company_id = $request->company_id;
+                $theEvent->author_id = $request->author_id;
+                $theEvent->responsible_id = $request->responsible_id;
+                $theEvent->start = $request->end_date;
+                $theEvent->end = $request->delivery_date;
+                $theEvent->is_all_day = 1;
+                $theEvent->status = 0;
+                $theEvent->title = $request->title;
+                $theEvent->description = $request->description;
+                $theEvent->color = '#50301E';
+                $theEvent->event_id = $task->id;
+                $theEvent->update();
+            } else {
+                /**Se não existir o evento, cadastra */
+                $event = new Event();
+                $event->company_id = $request->company_id;
+                $event->author_id = $request->author_id;
+                $event->responsible_id = $request->responsible_id;
+                $event->start = $request->end_date;
+                $event->end = $request->delivery_date;
+                $event->is_all_day = 1;
+                $event->status = 0;
+                $event->title = $request->title;
+                $event->description = $request->description;
+                $event->color = '#50301E';
+                $event->event_id = $task->id;
+                $event->save();
+            }
+
+            
 
             //comita depois de tudo ter sido salvo
             DB::commit();
