@@ -29,14 +29,15 @@ class DashboardController extends Controller
 
         // Consulta para obter os dados de receitas e despesas por mês
         $invoices = Invoice::select(
-            DB::raw("MONTHNAME(due_at) as month_name"),
-            DB::raw("type"),
-            DB::raw("SUM(amount) as total")
+            DB::raw("MONTHNAME(due_at) as month_name"), //obtém o nome do mês
+            DB::raw("type"), //seleciona o tipo de fatura
+            DB::raw("SUM(amount) as total") //calcula a soma dos valores das faturas
         )
-        ->whereYear("created_at", date("Y"))
-        ->groupBy(DB::raw("MONTH(created_at)"), DB::raw("MONTHNAME(created_at)"), "type")
-        ->orderBy(DB::raw("MONTH(created_at)"))
-        ->get();
+        ->whereYear("created_at", date("Y")) //Filtra os resultados para incluir apenas as faturas criadas no ano atual.
+        ->groupBy(DB::raw("MONTH(due_at)"), DB::raw("MONTHNAME(due_at)"), "type") //Agrupa os resultados por mês (tanto o número quanto o nome) e pelo tipo de fatura
+        ->where('status', 'paid')
+        ->orderBy(DB::raw("MONTH(due_at)")) //Ordena os resultados pelo mês em que as faturas foram criadas.
+        ->get(); //Executa a consulta e obtém os resultados.
 
         // Preparar os dados para o gráfico
         $data = [];
