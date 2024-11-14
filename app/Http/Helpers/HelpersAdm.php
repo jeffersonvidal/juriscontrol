@@ -192,7 +192,8 @@ class HelpersAdm{
 
     // Soma dos registros da semana corrente
     return Task::where('company_id', auth()->user()->company_id)
-      ->where('status','<>',6)
+      ->where('status','!=','completed')
+      ->where('status','!=','canceled')
       ->whereDate('end_date', '<', $isToday)
       ->count();
   }
@@ -264,7 +265,8 @@ class HelpersAdm{
     // Soma dos registros da semana corrente
     return Task::where('company_id', auth()->user()->company_id)
       ->where('responsible_id', auth()->user()->id)
-      ->where('status','<>',6)
+      ->where('status','!=','completed')
+      ->where('status','!=','canceled')
       ->whereDate('end_date', '<', $isToday)
       ->count();
   }
