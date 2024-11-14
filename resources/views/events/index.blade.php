@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('details_id').innerText =info.event.id;
         document.getElementById('details_title').innerText =info.event.title;
         document.getElementById('details_start').innerText =info.event.start.toLocaleString();
-        document.getElementById('details_end').innerText =info.event.end.toLocaleString();
+        document.getElementById('details_end').innerText =info.event.end !== null ? info.event.end.toLocaleString() : info.event.start.toLocaleString();
         document.getElementById('details_description').innerText =info.event.extendedProps.description;
 
         // Verifica o campo "is_all_day" e define o texto apropriado
