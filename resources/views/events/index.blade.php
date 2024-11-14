@@ -51,6 +51,9 @@
             
             <dt class="col-sm-3">Descrição</dt>
             <dd class="col-sm-9" id="details_description"></dd>
+            
+            <dt class="col-sm-3">Dia todo</dt>
+            <dd class="col-sm-9" id="details_is_all_day"></dd>
 
         </dl>
         <!--fim conteúdo -->
@@ -197,15 +200,25 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       /**Retorna informações do evento cadastrado*/
       eventClick: function(info) {
-        console.log(info.event.extendedProps);
-        detailsModal();
+        //console.log(info.event.extendedProps);
+        /**Envia os dados do evento para janela modal de detalhes */
         document.getElementById('details_id').innerText =info.event.id;
         document.getElementById('details_title').innerText =info.event.title;
         document.getElementById('details_start').innerText =info.event.start.toLocaleString();
         document.getElementById('details_end').innerText =info.event.end.toLocaleString();
         document.getElementById('details_description').innerText =info.event.extendedProps.description;
-        
-    }, //fim de calendar = new FullCalendar.Calendar()
+
+        // Verifica o campo "is_all_day" e define o texto apropriado
+        if (info.event.extendedProps.is_all_day === 1) {
+            document.getElementById('details_is_all_day').innerText = "Sim";
+        } else if (info.event.extendedProps.is_all_day === 0) {
+            document.getElementById('details_is_all_day').innerText = "Não";
+        }
+
+        /**Abre modal com os detalhes do evento */
+        openDetailsModal();
+    }
+, //fim de calendar = new FullCalendar.Calendar()
 
   });
   /**Envia todas as configurações para o html renderizar */
@@ -225,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**Mostra Modal de detalhes do evento */
-    function detailsModal() {
+    function openDetailsModal() {
         $('#detailsModal').modal('show');
     }
 

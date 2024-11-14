@@ -32,7 +32,8 @@ class EventController extends Controller
 
     public function fetchEvents()
     {
-        $events = Event::all();
+        $events = Event::where('company_id', auth()->user()->company_id)
+        ->get();
         return response()->json($events);
     }
 
