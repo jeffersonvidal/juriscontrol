@@ -193,8 +193,8 @@ document.addEventListener('DOMContentLoaded', function() {
         var clickedDate = new Date(info.date); 
         // Define a hora como 00:00:00 
         clickedDate.setUTCHours(0, 0, 0, 0); 
-        $('#start').val(clickedDate.toISOString().slice(0,16));
-        $('#end').val(clickedDate.toISOString().slice(0,16));
+        document.getElementById('start').value = clickedDate.toISOString().slice(0,16);
+        document.getElementById('end').value = clickedDate.toISOString().slice(0,16);
         $('#is_all_day').val();
         //console.log($('#start').val());
       },
@@ -224,11 +224,43 @@ document.addEventListener('DOMContentLoaded', function() {
   /**Envia todas as configurações para o html renderizar */
   calendar.render();
 
-  /**Envia requisição do form para salvar no banco de dados e google agenda */
+  /**Envia requisição do form para salvar novo evento no banco de dados */
   $('#createForm').on('submit', function(e) {
         e.preventDefault();
         updateCheckboxState();
-        saveEvent();
+        /**Dados vindos do formulário */
+        let eventData = {
+            title: $('#title').val(),
+            description: $('#description').val(),
+            start: $('#start').val(),
+            end: $('#end').val(),
+            author_id: $('#author_id').val(),
+            responsible_id: $('#responsible_id').val(),
+            company_id: $('#company_id').val(),
+            color: $('#color').val(),
+            is_all_day: $('#is_all_day').val(),            
+        };
+
+        let url = '/store-events';
+        let method = 'POST';
+        $.ajax({
+            url: url,
+            type: method,
+            data: eventData,
+            success: function(response) {
+                calendar.refetchEvents();
+                closeModal();
+                if(response){
+                    Swal.fire('Pronto!', response.success, 'success');
+                }
+                setTimeout(function() {
+                    location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                }, 1000); // 3000 milissegundos = 3 segundos
+            },
+            error: function(response) {
+                alert('Erro ao salvar evento');
+            }
+        });
     });
 
     /**Mostra Modal */
@@ -256,7 +288,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Função para atualizar o valor do hidden input com base no estado do checkbox
     function updateCheckboxState() {
         var isChecked = $('#is_all_day').is(':checked');
-        $('#isAllDayHidden').val(isChecked ? '1' : '0');
+        $('#is_all_day').val(isChecked ? '1' : '0');
+        //$('#isAllDayHidden').val(isChecked ? '1' : '0');
+    }
+
+    /**Função para converter data */
+    function converterData(data){
+        const dataObj = new Date(data); /**Converter a string em um objeto date */
+        const ano =dataObj.getFullYear(); /**Extrair o ano da data */
+        const mes =String(dataObj.getMonth() + 1).padStart(2,'0'); /**Ober o mês, mês começa de 0, padStart adiciona zeros à esquerda para garantir que o mês tenha dois dígitos */
+        const dia =String(dataObj.getDate()).padStart(2,'0'); /**Obter o dia do mês */
+        const hora =String(dataObj.getHours()).padStart(2,'0'); /**Obter a hora */
+        const minuto =String(dataObj.getMinutes()).padStart(2,'0'); /**Obter os minutos */
+
+        return `${ano}-${mes}-${dia} ${hora}:${minuto}`; /**retorna a data no formato YYY-MM-DD HH:MM */
     }
 
   
