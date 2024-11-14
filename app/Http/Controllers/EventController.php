@@ -43,7 +43,8 @@ class EventController extends Controller
 
         //dd($request);
         $event = Event::create($request->all());
-        return response()->json($event);
+        //return response()->json($event);
+        return response()->json( ['success' => 'Evento cadastrado com sucesso!']);
     }
 
     public function update(Request $request, $id)
@@ -51,7 +52,8 @@ class EventController extends Controller
         dd($request);
         $event = Event::find($id);
         $event->update($request->all());
-        return response()->json($event);
+        //return response()->json($event);
+        return response()->json( ['success' => 'Evento alterado com sucesso!']);
     }
 
     public function destroy($id)
