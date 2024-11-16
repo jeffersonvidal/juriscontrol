@@ -145,7 +145,7 @@
             </form>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" id="editEventCancel">Cancelar</button>
-                <button type="submit" class="btn btn-primary updateButton" onclick="submitEventFormData()">Salvar Alterações <i class="fa-solid fa-paper-plane"></i></button>
+                <button type="submit" class="btn btn-primary editButton">Salvar Alterações <i class="fa-solid fa-paper-plane"></i></button>
             </div><!--fim modal-footer-->
         </div>
         <!--fim conteúdo view edit event -->
@@ -250,201 +250,251 @@
 <script src="https://momentjs.com/downloads/moment.min.js"></script>
 
 <script>
-/**Executar quando o documento html for completamente carregado */
-document.addEventListener('DOMContentLoaded', function() {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-  /**Recebe o seletor calendar do atributo id da div onde será exibido o calendário */
-  var calendarEl = document.getElementById('calendar');
-  /**Instanciar FullCalendar.Calendar e atribuir a variável calendar */
-  var calendar = new FullCalendar.Calendar(calendarEl, {
-      /**Criar cabeçalho do calendário*/
-      headerToolbar:{
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
-      },
-      events: '/fetch-events', /**url que carrega todos os eventos salvos no bd */
-      locale: 'pt-br', /**Traduz para português Brasil */
-      initialView: 'dayGridMonth', /**Mostrar grid com dia e mês */
-      navLinks:true, /**Permite clicar nos dias da semana */
-      selectable:true, /**Permitir clicar e arrastar o mouse sobre um ou vários dias no calendário */
-      selectMirror:true, /**Indicar visualmente a área que será selecionada antes que o usuário solte o btn do mouse para confirmar seleção */
-      editable:true, /**Permitir arrastar e redimensionar os eventos diretamente no calendário */
-      dayMaxEvents:true, /**Nº máximo de eventos em um determinado dia, se for true, o nº de eventos será limitado à altura da célula do dia */
-      initialDate: new Date(),
-      dateClick:function(info){
-        openCreateModal();
-        //console.log('allDay = ' + info.allDay);
-        //console.log($('#endTime').val());
-        //$('#start').val(info.dateStr + 'T00:00');
-        
-        // Obtém a data do dia clicado 
-        var clickedDate = new Date(info.date); 
-        // Define a hora como 00:00:00 
-        clickedDate.setUTCHours(0, 0, 0, 0); 
-        document.getElementById('start').value = clickedDate.toISOString().slice(0,16);
-        document.getElementById('end').value = clickedDate.toISOString().slice(0,16);
-        $('#is_all_day').val();
-        //console.log($('#start').val());
-      },
-      /**Retorna informações do evento cadastrado*/
-      eventClick: function(info) {
-        //console.log(info.event.extendedProps);
-        /**Envia os dados do evento para janela modal de detalhes */
-        document.getElementById('details_id').innerText =info.event.id;
-        document.getElementById('details_title').innerText =info.event.title;
-        document.getElementById('details_start').innerText =info.event.start.toLocaleString();
-        document.getElementById('details_end').innerText =info.event.end !== null ? info.event.end.toLocaleString() : info.event.start.toLocaleString();
-        document.getElementById('details_description').innerText =info.event.extendedProps.description;
-        document.getElementById('details_desponsible_id').innerText = info.event.extendedProps.responsible_name;
-        // Verifica o campo "is_all_day" e define o texto apropriado
-        if (info.event.extendedProps.is_all_day === 1) {
-            document.getElementById('details_is_all_day').innerText = "Sim";
-        } else if (info.event.extendedProps.is_all_day === 0) {
-            document.getElementById('details_is_all_day').innerText = "Não";
-        }
-
-        /** Envia os dados do evento para o formulário de alterar evento */
-        $('#edit_id').val(info.event.id);
-        $('#edit_title').val(info.event.title);
-
-        // Convertendo as datas para o formato correto usando moment.js
-        const start = moment(info.event.start).format('YYYY-MM-DDTHH:mm');
-        //info.event.end !== null ? info.event.end.toLocaleString() : info.event.start.toLocaleString();
-        const end = moment(info.event.end !== null ? info.event.end : info.event.start).format('YYYY-MM-DDTHH:mm');
-
-        $('#edit_start').val(start);
-        $('#edit_end').val(end);
-
-        $('#edit_color').val(info.event.backgroundColor);
-        $('#edit_description').val(info.event.extendedProps.description);
-        $('#edit_responsible_id').val(info.event.extendedProps.responsible_id);
-
-        // Verifica o campo "is_all_day" e define o estado do checkbox apropriado
-        if (info.event.extendedProps.is_all_day === 1) {
-            $('#edit_is_all_day').prop('checked', true);
-        } else {
-            $('#edit_is_all_day').prop('checked', false);
-        }
-
-        /**Abre modal com os detalhes do evento */
-        openDetailsModal();
-    }
-, //fim de calendar = new FullCalendar.Calendar()
-
-  });
-  /**Envia todas as configurações para o html renderizar */
-  calendar.render();
-
-  /**Envia requisição do form para salvar novo evento no banco de dados */
-  $('#createForm').on('submit', function(e) {
-        e.preventDefault();
-        updateCheckboxState();
-        /**Dados vindos do formulário */
-        let eventData = {
-            title: $('#title').val(),
-            description: $('#description').val(),
-            start: $('#start').val(),
-            end: $('#end').val(),
-            author_id: $('#author_id').val(),
-            responsible_id: $('#responsible_id').val(),
-            company_id: $('#company_id').val(),
-            color: $('#color').val(),
-            is_all_day: $('#is_all_day').val(),            
-        };
-
-        let url = '/store-events';
-        let method = 'POST';
-        $.ajax({
-            url: url,
-            type: method,
-            data: eventData,
-            success: function(response) {
-                calendar.refetchEvents();
-                closeModal();
-                if(response){
-                    Swal.fire('Pronto!', response.success, 'success');
-                }
-                setTimeout(function() {
-                    location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
-                }, 1000); // 3000 milissegundos = 3 segundos
-            },
-            error: function(response) {
-                alert('Erro ao salvar evento');
+$(document).ready(function(){
+    /**Executar quando o documento html for completamente carregado */
+    //document.addEventListener('DOMContentLoaded', function() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+    /**Recebe o seletor calendar do atributo id da div onde será exibido o calendário */
+    var calendarEl = document.getElementById('calendar');
+    /**Instanciar FullCalendar.Calendar e atribuir a variável calendar */
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        /**Criar cabeçalho do calendário*/
+        headerToolbar:{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: '/fetch-events', /**url que carrega todos os eventos salvos no bd */
+        locale: 'pt-br', /**Traduz para português Brasil */
+        initialView: 'dayGridMonth', /**Mostrar grid com dia e mês */
+        navLinks:true, /**Permite clicar nos dias da semana */
+        selectable:true, /**Permitir clicar e arrastar o mouse sobre um ou vários dias no calendário */
+        selectMirror:true, /**Indicar visualmente a área que será selecionada antes que o usuário solte o btn do mouse para confirmar seleção */
+        editable:true, /**Permitir arrastar e redimensionar os eventos diretamente no calendário */
+        dayMaxEvents:true, /**Nº máximo de eventos em um determinado dia, se for true, o nº de eventos será limitado à altura da célula do dia */
+        initialDate: new Date(),
+        dateClick:function(info){
+            openCreateModal();
+            //console.log('allDay = ' + info.allDay);
+            //console.log($('#endTime').val());
+            //$('#start').val(info.dateStr + 'T00:00');
+            
+            // Obtém a data do dia clicado 
+            var clickedDate = new Date(info.date); 
+            // Define a hora como 00:00:00 
+            clickedDate.setUTCHours(0, 0, 0, 0); 
+            document.getElementById('start').value = clickedDate.toISOString().slice(0,16);
+            document.getElementById('end').value = clickedDate.toISOString().slice(0,16);
+            $('#is_all_day').val();
+            //console.log($('#start').val());
+        },
+        /**Retorna informações do evento cadastrado*/
+        eventClick: function(info) {
+            //console.log(info.event.extendedProps);
+            /**Envia os dados do evento para janela modal de detalhes */
+            document.getElementById('details_id').innerText =info.event.id;
+            document.getElementById('details_title').innerText =info.event.title;
+            document.getElementById('details_start').innerText =info.event.start.toLocaleString();
+            document.getElementById('details_end').innerText =info.event.end !== null ? info.event.end.toLocaleString() : info.event.start.toLocaleString();
+            document.getElementById('details_description').innerText =info.event.extendedProps.description;
+            document.getElementById('details_desponsible_id').innerText = info.event.extendedProps.responsible_name;
+            // Verifica o campo "is_all_day" e define o texto apropriado
+            if (info.event.extendedProps.is_all_day === 1) {
+                document.getElementById('details_is_all_day').innerText = "Sim";
+            } else if (info.event.extendedProps.is_all_day === 0) {
+                document.getElementById('details_is_all_day').innerText = "Não";
+            }
+
+            /** Envia os dados do evento para o formulário de alterar evento */
+            $('#edit_id').val(info.event.id);
+            $('#edit_title').val(info.event.title);
+
+            // Convertendo as datas para o formato correto usando moment.js
+            const start = moment(info.event.start).format('YYYY-MM-DDTHH:mm');
+            //info.event.end !== null ? info.event.end.toLocaleString() : info.event.start.toLocaleString();
+            const end = moment(info.event.end !== null ? info.event.end : info.event.start).format('YYYY-MM-DDTHH:mm');
+
+            $('#edit_start').val(start);
+            $('#edit_end').val(end);
+
+            $('#edit_color').val(info.event.backgroundColor);
+            $('#edit_description').val(info.event.extendedProps.description);
+            $('#edit_responsible_id').val(info.event.extendedProps.responsible_id);
+
+            // Verifica o campo "is_all_day" e define o estado do checkbox apropriado
+            if (info.event.extendedProps.is_all_day === 1) {
+                $('#edit_is_all_day').prop('checked', true);
+            } else {
+                $('#edit_is_all_day').prop('checked', false);
+            }
+
+            /**Abre modal com os detalhes do evento */
+            openDetailsModal();
+        }
+    , //fim de calendar = new FullCalendar.Calendar()
+
     });
+    /**Envia todas as configurações para o html renderizar */
+    calendar.render();
 
-    /**Mostra Modal */
-    function openCreateModal() {
-        $('#createModal').modal('show');
-        updateCheckboxState();
-    }
+    /**Envia requisição do form para salvar novo evento no banco de dados */
+    $('#createForm').on('submit', function(e) {
+            e.preventDefault();
+            updateCheckboxState();
+            /**Dados vindos do formulário */
+            let eventData = {
+                title: $('#title').val(),
+                description: $('#description').val(),
+                start: $('#start').val(),
+                end: $('#end').val(),
+                author_id: $('#author_id').val(),
+                responsible_id: $('#responsible_id').val(),
+                company_id: $('#company_id').val(),
+                color: $('#color').val(),
+                is_all_day: $('#is_all_day').val(),            
+            };
 
-    /**Mostra Modal de detalhes do evento */
-    function openDetailsModal() {
-        $('#detailsModal').modal('show');
-    }
+            let url = '/store-events';
+            let method = 'POST';
+            
+            $.ajax({
+                url: url,
+                type: method,
+                data: eventData,
+                success: function(response) {
+                    calendar.refetchEvents();
+                    closeModal();
+                    if(response){
+                        Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 1000); // 3000 milissegundos = 3 segundos
+                },
+                error: function(response) {
+                    alert('Erro ao salvar evento');
+                }
+            });
+        });
 
-    /**Fecha Modal */
-    function closeModal() {
-        $('#createModal').modal('hide');
-        $('#createForm')[0].reset();
-    }
+        /**Altera informações do evento e salva no banco de dados */
+        
+            /** Altera informações do evento e salva no banco de dados */
+            $('#updateForm').on('submit', function(e) {
+                e.preventDefault();
+                updateCheckboxState();
 
-    // Evento de mudança no checkbox para atualizar o valor
-    $('#is_all_day').change(function() {
-        updateCheckboxState();
-    });
+                /** Dados vindos do formulário */
+                let eventData = {
+                    title: $('#edit_title').val(),
+                    description: $('#edit_description').val(),
+                    start: $('#edit_start').val(),
+                    end: $('#edit_end').val(),
+                    author_id: $('#edit_author_id').val(),
+                    responsible_id: $('#edit_responsible_id').val(),
+                    company_id: $('#edit_company_id').val(),
+                    color: $('#edit_color').val(),
+                    is_all_day: $('#edit_is_all_day').val(),
+                    id: $('#edit_id').val(),
+                };
 
-    // Função para atualizar o valor do hidden input com base no estado do checkbox
-    function updateCheckboxState() {
-        var isChecked = $('#is_all_day').is(':checked');
-        $('#is_all_day').val(isChecked ? '1' : '0');
-        //$('#isAllDayHidden').val(isChecked ? '1' : '0');
-    }
+                console.log(eventData);
 
-    /**Função para converter data */
-    function converterData(data){
-        const dataObj = new Date(data); /**Converter a string em um objeto date */
-        const ano =dataObj.getFullYear(); /**Extrair o ano da data */
-        const mes =String(dataObj.getMonth() + 1).padStart(2,'0'); /**Ober o mês, mês começa de 0, padStart adiciona zeros à esquerda para garantir que o mês tenha dois dígitos */
-        const dia =String(dataObj.getDate()).padStart(2,'0'); /**Obter o dia do mês */
-        const hora =String(dataObj.getHours()).padStart(2,'0'); /**Obter a hora */
-        const minuto =String(dataObj.getMinutes()).padStart(2,'0'); /**Obter os minutos */
+                let url = '/update-events/' + eventData.id;  // Concatena o ID do evento na URL
+                let method = 'POST';
 
-        return `${ano}-${mes}-${dia} ${hora}:${minuto}`; /**retorna a data no formato YYY-MM-DD HH:MM */
-    }
+                $.ajax({
+                url: url,
+                type: method,
+                data: eventData,
+                success: function(response) {
+                    calendar.refetchEvents();
+                    closeModal();
+                    if(response) {
+                    Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                    location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 1000); // 1000 milissegundos = 1 segundo
+                },
+                error: function(response) {
+                    alert('Erro ao salvar evento');
+                }
+                });
+            });
+        
 
-    /**Ocultar detalhes do evento e mostra formulário de alteração de evento */
-    document.getElementById("btnViewEditEvento").addEventListener("click", function() { 
-        // Esconder viewEventDetails e detailsModalLabel 
-        document.getElementById("viewEventDetails").style.display = "none"; 
-        document.getElementById("detailsModalLabel").style.display = "none"; 
-        document.getElementById("btnViewEditEvento").style.display = "none"; 
-        // Mostrar viewEditEvent e editModalLabel 
-        document.getElementById("viewEditEvent").style.display = "block"; 
-        document.getElementById("editModalLabel").style.display = "block"; 
-    });
+        /**Mostra Modal */
+        function openCreateModal() {
+            $('#createModal').modal('show');
+            updateCheckboxState();
+        }
 
-    /**Mostra os detalhes do evento e fecha formulário de alterar evento*/
-    document.getElementById("editEventCancel").addEventListener("click", function() { 
-        // Esconder viewEditEvent e editModalLabel 
-        document.getElementById("viewEditEvent").style.display = "none"; 
-        document.getElementById("editModalLabel").style.display = "none"; 
-        // Mostrar viewEventDetails e detailsModalLabel 
-        document.getElementById("viewEventDetails").style.display = "block"; 
-        document.getElementById("detailsModalLabel").style.display = "block"; 
-        document.getElementById("btnViewEditEvento").style.display = "block"; 
-    });
+        /**Mostra Modal de detalhes do evento */
+        function openDetailsModal() {
+            $('#detailsModal').modal('show');
+        }
 
-  //editEventCancel
-  
-});/**Fim document.addEventListener('DOMContentLoaded' */
+        /**Fecha Modal */
+        function closeModal() {
+            $('#createModal').modal('hide');
+            $('#createForm')[0].reset();
+        }
+
+        // Evento de mudança no checkbox para atualizar o valor
+        $('#is_all_day').change(function() {
+            updateCheckboxState();
+        });
+
+        // Função para atualizar o valor do hidden input com base no estado do checkbox
+        function updateCheckboxState() {
+            var isChecked = $('#is_all_day').is(':checked');
+            $('#is_all_day').val(isChecked ? '1' : '0');
+            //$('#isAllDayHidden').val(isChecked ? '1' : '0');
+        }
+
+        /**Função para converter data */
+        function converterData(data){
+            const dataObj = new Date(data); /**Converter a string em um objeto date */
+            const ano =dataObj.getFullYear(); /**Extrair o ano da data */
+            const mes =String(dataObj.getMonth() + 1).padStart(2,'0'); /**Ober o mês, mês começa de 0, padStart adiciona zeros à esquerda para garantir que o mês tenha dois dígitos */
+            const dia =String(dataObj.getDate()).padStart(2,'0'); /**Obter o dia do mês */
+            const hora =String(dataObj.getHours()).padStart(2,'0'); /**Obter a hora */
+            const minuto =String(dataObj.getMinutes()).padStart(2,'0'); /**Obter os minutos */
+
+            return `${ano}-${mes}-${dia} ${hora}:${minuto}`; /**retorna a data no formato YYY-MM-DD HH:MM */
+        }
+
+        /**Ocultar detalhes do evento e mostra formulário de alteração de evento */
+        document.getElementById("btnViewEditEvento").addEventListener("click", function() { 
+            // Esconder viewEventDetails e detailsModalLabel 
+            document.getElementById("viewEventDetails").style.display = "none"; 
+            document.getElementById("detailsModalLabel").style.display = "none"; 
+            document.getElementById("btnViewEditEvento").style.display = "none"; 
+            // Mostrar viewEditEvent e editModalLabel 
+            document.getElementById("viewEditEvent").style.display = "block"; 
+            document.getElementById("editModalLabel").style.display = "block"; 
+        });
+
+        /**Mostra os detalhes do evento e fecha formulário de alterar evento*/
+        document.getElementById("editEventCancel").addEventListener("click", function() { 
+            // Esconder viewEditEvent e editModalLabel 
+            document.getElementById("viewEditEvent").style.display = "none"; 
+            document.getElementById("editModalLabel").style.display = "none"; 
+            // Mostrar viewEventDetails e detailsModalLabel 
+            document.getElementById("viewEventDetails").style.display = "block"; 
+            document.getElementById("detailsModalLabel").style.display = "block"; 
+            document.getElementById("btnViewEditEvento").style.display = "block"; 
+        });
+
+    //editEventCancel
+    
+    //});/**Fim document.addEventListener('DOMContentLoaded' */
+});
 </script>
 
 @endsection
