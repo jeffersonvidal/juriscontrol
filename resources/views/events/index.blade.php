@@ -28,35 +28,128 @@
 
 <!-- detailsModal -->
 <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="detailsModalLabel">Detalhes do evento</h1>
+        <h1 class="modal-title fs-5" id="editModalLabel" style="display: none;">Alterar evento</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!--conteúdo -->
-        <dl class="row">
-            <dt class="col-sm-3">ID: #</dt>
-            <dd class="col-sm-9" id="details_id"></dd>
-            
-            <dt class="col-sm-3">Título</dt>
-            <dd class="col-sm-9" id="details_title"></dd>
-            
-            <dt class="col-sm-3">Início</dt>
-            <dd class="col-sm-9" id="details_start"></dd>
-            
-            <dt class="col-sm-3">Fim</dt>
-            <dd class="col-sm-9" id="details_end"></dd>
-            
-            <dt class="col-sm-3">Descrição</dt>
-            <dd class="col-sm-9" id="details_description"></dd>
-            
-            <dt class="col-sm-3">Dia todo</dt>
-            <dd class="col-sm-9" id="details_is_all_day"></dd>
+        <!--conteúdo view event details -->
+        <div id="viewEventDetails">
+            <dl class="row">
+                <dt class="col-sm-3">ID: #</dt>
+                <dd class="col-sm-9" id="details_id"></dd>
+                
+                <dt class="col-sm-3">Título</dt>
+                <dd class="col-sm-9" id="details_title"></dd>
+                
+                <div class="col-md-6">
+                    <dt class="col-sm-3">Início</dt>
+                    <dd class="col-sm-9" id="details_start"></dd>
+                </div>
 
-        </dl>
-        <!--fim conteúdo -->
+                <div class="col-md-6">
+                    <dt class="col-sm-3">Fim</dt>
+                    <dd class="col-sm-9" id="details_end"></dd>
+                </div>
+                
+                <dt class="col-sm-3">Descrição</dt>
+                <dd class="col-sm-9" id="details_description"></dd>
+
+                <div class="col-md-6">
+                    <dt class="col-sm-3">Dia todo</dt>
+                    <dd class="col-sm-9" id="details_is_all_day"></dd>
+                </div>
+
+                <div class="col-md-6">
+                    <dt class="col-sm-3">Evento para:</dt>
+                    <dd class="col-sm-9" id="details_desponsible_id"></dd>
+                </div>
+    
+            </dl>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btnViewEditEvento">Alterar Evento &nbsp;<i class="fa-solid fa-pen"></i></button>
+            </div><!--fim modal-footer-->
+        </div>
+        
+        
+        <!--fim conteúdo view event details -->
+
+        <!--conteúdo view edit event -->
+        <div id="viewEditEvent" style="display: none;">
+            <form id="updateForm" class="row g-3">
+                @csrf
+
+                
+                <fieldset>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="edit_title" class="form-label">Título</label>
+                            <input type="text" class="form-control" id="edit_title" name="title" value="{{ old('title') }}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mt-4">
+                            <div class="form-check form-switch form-check-inline">
+                                <input class="form-check-input" type="checkbox" role="switch" id="edit_is_all_day" >
+                                <input type="hidden" id="isAllDayHidden" name="is_all_day">
+                                <label class="form-check-label" for="is_all_day">Dia Inteiro</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="edit_start" class="form-label">Hora Início</label>
+                            <input type="datetime-local" class="form-control" id="edit_start" name="start" value="{{ old('start') }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="edit_endTime" class="form-label">Hora Fim</label>
+                            <input type="datetime-local" class="form-control" id="edit_end" name="end" value="{{ old('end') }}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label for="edit_responsible_id" class="form-label">Responsável</label>
+                            <select id="edit_responsible_id" name="responsible_id" class="form-select select2">
+                                <option value="">Informe o Responsável</option>
+                                @foreach ($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <label for="edit_color" class="form-label">Cor</label>
+                            <input type="color" class="form-control" id="edit_color" name="color" value="#50301E">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="edit_description" class="form-label">Observações</label>
+                            <textarea class="form-control" id="edit_description" name="description" rows="3"></textarea>
+                        </div>
+                    </div>
+                    
+                </fieldset>
+                
+               
+
+                
+                <div class="col-md-12">
+                    <input type="hidden" class="form-control" id="edit_company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="edit_author_id" name="author_id" value="{{ auth()->user()->id }}">                 
+                    <input type="hidden" class="form-control" id="edit_id" name="author_id" value="">                 
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="editEventCancel">Cancelar</button>
+                <button type="submit" class="btn btn-primary updateButton" onclick="submitEventFormData()">Salvar Alterações <i class="fa-solid fa-paper-plane"></i></button>
+            </div><!--fim modal-footer-->
+        </div>
+        <!--fim conteúdo view edit event -->
+        
       </div>
 
     </div>
@@ -304,10 +397,33 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${ano}-${mes}-${dia} ${hora}:${minuto}`; /**retorna a data no formato YYY-MM-DD HH:MM */
     }
 
-  
+    /**Ocultar detalhes do evento e mostra formulário de alteração de evento */
+    document.getElementById("btnViewEditEvento").addEventListener("click", function() { 
+        // Esconder viewEventDetails e detailsModalLabel 
+        document.getElementById("viewEventDetails").style.display = "none"; 
+        document.getElementById("detailsModalLabel").style.display = "none"; 
+        document.getElementById("btnViewEditEvento").style.display = "none"; 
+        // Mostrar viewEditEvent e editModalLabel 
+        document.getElementById("viewEditEvent").style.display = "block"; 
+        document.getElementById("editModalLabel").style.display = "block"; 
+    });
+
+    /**Mostra os detalhes do evento e fecha formulário de alterar evento*/
+    document.getElementById("editEventCancel").addEventListener("click", function() { 
+        // Esconder viewEditEvent e editModalLabel 
+        document.getElementById("viewEditEvent").style.display = "none"; 
+        document.getElementById("editModalLabel").style.display = "none"; 
+        // Mostrar viewEventDetails e detailsModalLabel 
+        document.getElementById("viewEventDetails").style.display = "block"; 
+        document.getElementById("detailsModalLabel").style.display = "block"; 
+        document.getElementById("btnViewEditEvento").style.display = "block"; 
+    });
+
+  //editEventCancel
   
 });/**Fim document.addEventListener('DOMContentLoaded' */
 </script>
 
 @endsection
    
+
