@@ -300,12 +300,35 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('details_start').innerText =info.event.start.toLocaleString();
         document.getElementById('details_end').innerText =info.event.end !== null ? info.event.end.toLocaleString() : info.event.start.toLocaleString();
         document.getElementById('details_description').innerText =info.event.extendedProps.description;
-
+        document.getElementById('details_desponsible_id').innerText = info.event.extendedProps.responsible_name;
         // Verifica o campo "is_all_day" e define o texto apropriado
         if (info.event.extendedProps.is_all_day === 1) {
             document.getElementById('details_is_all_day').innerText = "Sim";
         } else if (info.event.extendedProps.is_all_day === 0) {
             document.getElementById('details_is_all_day').innerText = "Não";
+        }
+
+        /** Envia os dados do evento para o formulário de alterar evento */
+        $('#edit_id').val(info.event.id);
+        $('#edit_title').val(info.event.title);
+
+        // Convertendo as datas para o formato correto usando moment.js
+        const start = moment(info.event.start).format('YYYY-MM-DDTHH:mm');
+        //info.event.end !== null ? info.event.end.toLocaleString() : info.event.start.toLocaleString();
+        const end = moment(info.event.end !== null ? info.event.end : info.event.start).format('YYYY-MM-DDTHH:mm');
+
+        $('#edit_start').val(start);
+        $('#edit_end').val(end);
+
+        $('#edit_color').val(info.event.backgroundColor);
+        $('#edit_description').val(info.event.extendedProps.description);
+        $('#edit_responsible_id').val(info.event.extendedProps.responsible_id);
+
+        // Verifica o campo "is_all_day" e define o estado do checkbox apropriado
+        if (info.event.extendedProps.is_all_day === 1) {
+            $('#edit_is_all_day').prop('checked', true);
+        } else {
+            $('#edit_is_all_day').prop('checked', false);
         }
 
         /**Abre modal com os detalhes do evento */
