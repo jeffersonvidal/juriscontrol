@@ -70,6 +70,7 @@
     
             </dl>
             <div class="modal-footer">
+                <button type="submit" class="btn btn-danger" id="deleteButton">Excluir Evento <i class="fa-solid fa-trash"></i></button>
                 <button class="btn btn-primary" id="btnViewEditEvento">Alterar Evento &nbsp;<i class="fa-solid fa-pen"></i></button>
             </div><!--fim modal-footer-->
         </div>
@@ -145,7 +146,7 @@
             </form>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" id="editEventCancel">Cancelar</button>
-                <button type="submit" class="btn btn-primary editButton">Salvar Alterações <i class="fa-solid fa-paper-plane"></i></button>
+                <button type="submit" class="btn btn-primary editButton" id="updateButton">Salvar Alterações <i class="fa-solid fa-paper-plane"></i></button>
             </div><!--fim modal-footer-->
         </div>
         <!--fim conteúdo view edit event -->
@@ -250,9 +251,9 @@
 <script src="https://momentjs.com/downloads/moment.min.js"></script>
 
 <script>
-$(document).ready(function(){
+//$(document).ready(function(){
     /**Executar quando o documento html for completamente carregado */
-    //document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -382,7 +383,7 @@ $(document).ready(function(){
         });
 
         /**Altera informações do evento e salva no banco de dados */
-        $('#updateForm').on('submit', function(e) {
+        $('#updateButton').on('click', function(e) {
             e.preventDefault();
             updateCheckboxState();
 
@@ -400,25 +401,26 @@ $(document).ready(function(){
                 id: $('#edit_id').val(),
             };
 
-            console.log(eventData);
-
             let url = '/update-events/' + eventData.id;  // Concatena o ID do evento na URL
+            let method = 'PUT';
 
-            $.ajax({ 
-                url: url, 
-                type: 'PUT', 
-                data: formData, 
-                processData: false, 
-                contentType: false, 
-                success: 
-                
-                function(response) { 
-                    console.log('Dados enviados com sucesso:', response); 
-                }, 
-                error: 
-                function(xhr, status, error) { 
-                    console.log('Ocorreu um erro ao enviar os dados:', error); 
-                } 
+            $.ajax({
+                url: url,
+                type: method,
+                data: eventData,
+                success: function(response) {
+                    calendar.refetchEvents();
+                    closeModal();
+                    if(response) {
+                        Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 1000); // 1000 milissegundos = 1 segundo
+                },
+                error: function(response) {
+                    alert('Erro ao salvar evento');
+                }
             });
         });
         
@@ -488,8 +490,8 @@ $(document).ready(function(){
 
     //editEventCancel
     
-    //});/**Fim document.addEventListener('DOMContentLoaded' */
-});
+    });/**Fim document.addEventListener('DOMContentLoaded' */
+//});
 </script>
 
 @endsection
