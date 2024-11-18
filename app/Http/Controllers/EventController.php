@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Google\Client; 
 use Google\Service\Calendar; 
 use Illuminate\Support\Facades\Session;
+use App\Http\Services\GoogleService;
 
 class EventController extends Controller
 {
@@ -29,6 +30,8 @@ class EventController extends Controller
      */
     public function index()
     {
+        $googleService = new GoogleService(auth()->user());
+        //dd($googleService->authUrl());
         /**Retorna Usuários do sistema */
         $users = User::where('company_id', auth()->user()->company_id)
         ->orderBy('id', 'DESC')->get();
@@ -57,9 +60,6 @@ class EventController extends Controller
         $event = Event::create($request->all());
 
         /** Salva e sincroniza no Google Agenda */
-        //if ($this->calendar) { 
-            $this->createGoogleCalendarEvent($event); 
-        //}
 
         // Retorna uma resposta JSON com sucesso
         return response()->json(['success' => 'Evento cadastrado com sucesso!']);

@@ -363,3 +363,15 @@ data acontecer, origem(escritórios), cliente, local, horario, tipo(inicial, con
 
 Tasks Management (tarefas para recurso taskscore)
 id, grupo, fase, pontuação, recorrente, agenda geral
+
+#API Google Drive - Buscar da tabela Companies
+#GOOGLE_DRIVE_CLIENT_ID=190531505058-1rq8aorlhg31k62desttmg6v91uittbu.apps.googleusercontent.com
+#GOOGLE_DRIVE_CLIENT_SECRET=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
+GOOGLE_DRIVE_REFRESH_TOKEN=1//041qdWUWV80dJCgYIARAAGAQSNwF-L9Irf17dHd-qKS52H5xrr9R-PK9n3qP9B7dJ96oIkPqK1uJKxuzzXPg1zRoEfge5KeCNA_o
+#GOOGLE_DRIVE_PARTNERS_FOLDER=1rlF_wdwPHfkR8-e5ypd0_50xRIgIe7ay
+#GOOGLE_DRIVE_CUSTOMERS_FOLDER=1ftvWHP_TJHhLoUOzfQroDW9bttnb_tmx
+
+#API Google Calendar
+GOOGLE_CLIENT_ID=190531505058-1rq8aorlhg31k62desttmg6v91uittbu.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+GOOGLE_REDIRECT_URI=${APP_URL}/google/callback
