@@ -159,6 +159,7 @@ Route::group(['middleware' => 'auth'], function(){
   Route::post('/store-events', [EventController::class, 'store'])->name('events.store'); //Salva novo registro no BD
   Route::put('/update-events/{event}', [EventController::class, 'update'])->name('events.update'); //Atualiza um registro no BD
   Route::delete('/destroy-events/{event}', [EventController::class, 'destroy'])->name('events.destroy'); //Exclui um registro no BD
+  Route::get('/oauth2callback', [EventController::class, 'handleGoogleCallback'])->name('events.google'); //Listar todos os registros da tabela
 
   
 }); //fim da restrição de acesso para quem não está logado no sistema
