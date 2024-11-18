@@ -8,6 +8,9 @@
 ## Fazer deploy do sistema na hospedagem Hostinger
 https://medium.com/@anushujan/deploying-a-laravel-11-project-on-hostinger-using-web-hosting-eca710e024f0
 
+## Google APIs
+https://github.com/googleapis/google-api-php-client
+
 ### Sistemas que inspiram recursos
 * EasyJur (dashboard, movimentações, jurisprudencias(wescrapping))
 * AdvBox (taskscore, tarefas recorrentes)

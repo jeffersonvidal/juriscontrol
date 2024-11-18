@@ -342,197 +342,201 @@
     /**Envia todas as configurações para o html renderizar */
     calendar.render();
 
-    /**Envia requisição do form para salvar novo evento no banco de dados */
+    /** Envia requisição do form para salvar novo evento no banco de dados */
     $('#createForm').on('submit', function(e) {
-            e.preventDefault();
-            updateCheckboxState();
-            /**Dados vindos do formulário */
-            let eventData = {
-                title: $('#title').val(),
-                description: $('#description').val(),
-                start: $('#start').val(),
-                end: $('#end').val(),
-                author_id: $('#author_id').val(),
-                responsible_id: $('#responsible_id').val(),
-                company_id: $('#company_id').val(),
-                color: $('#color').val(),
-                is_all_day: $('#is_all_day').val(),            
-            };
+        e.preventDefault();
+        updateCheckboxState(); // Certifique-se de que esta função está definida
 
-            let url = '/store-events';
-            let method = 'POST';
-            
-            $.ajax({
-                url: url,
-                type: method,
-                data: eventData,
-                success: function(response) {
-                    calendar.refetchEvents();
-                    closeModal();
-                    if(response){
-                        Swal.fire('Pronto!', response.success, 'success');
-                    }
-                    setTimeout(function() {
-                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
-                    }, 1000); // 3000 milissegundos = 3 segundos
-                },
-                error: function(response) {
-                    alert('Erro ao salvar evento');
+        /** Dados vindos do formulário */
+        let eventData = {
+            title: $('#title').val(),
+            description: $('#description').val(),
+            start: $('#start').val(),
+            end: $('#end').val(),
+            author_id: $('#author_id').val(),
+            responsible_id: $('#responsible_id').val(),
+            company_id: $('#company_id').val(),
+            color: $('#color').val(),
+            is_all_day: $('#is_all_day').val(),
+        };
+
+        let url = '/store-events';
+        let method = 'POST';
+
+        $.ajax({
+            url: url,
+            type: method,
+            data: eventData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Adicione o token CSRF para segurança
+            },
+            success: function(response) {
+                calendar.refetchEvents(); // Certifique-se de que 'calendar' está definido e acessível
+                closeModal(); // Certifique-se de que 'closeModal' está definido e acessível
+                if(response){
+                    Swal.fire('Pronto!', response.success, 'success');
                 }
-            });
-        });
-
-        /**Altera informações do evento e salva no banco de dados */
-        $('#updateButton').on('click', function(e) {
-            e.preventDefault();
-            updateCheckboxState();
-
-            /** Dados vindos do formulário */
-            let eventData = {
-                title: $('#edit_title').val(),
-                description: $('#edit_description').val(),
-                start: $('#edit_start').val(),
-                end: $('#edit_end').val(),
-                author_id: $('#edit_author_id').val(),
-                responsible_id: $('#edit_responsible_id').val(),
-                company_id: $('#edit_company_id').val(),
-                color: $('#edit_color').val(),
-                is_all_day: $('#edit_is_all_day').val(),
-                id: $('#edit_id').val(),
-            };
-
-            let url = '/update-events/' + eventData.id;  // Concatena o ID do evento na URL
-            let method = 'PUT';
-
-            $.ajax({
-                url: url,
-                type: method,
-                data: eventData,
-                success: function(response) {
-                    calendar.refetchEvents();
-                    closeModal();
-                    if(response) {
-                        Swal.fire('Pronto!', response.success, 'success');
-                    }
-                    setTimeout(function() {
-                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
-                    }, 1000); // 1000 milissegundos = 1 segundo
-                },
-                error: function(response) {
-                    alert('Erro ao salvar evento');
-                }
-            });
-        });
-
-        /**EXCLUIR EVENTO */
-        $('#deleteButton').on('click', function() { 
-            //var eventId = $(this).data('id'); 
-            var eventId = document.querySelector("#details_id").textContent;
-            // Obtém o ID do evento a partir do atributo data-id 
-            deleteRegistro(eventId); // Chama a função passando o ID do evento
-        });
-
-        /**Exibe pergunta se deseja realmente excluir o registro */ 
-        function deleteRegistro(id) { 
-            Swal.fire({ 
-                title: 'Deseja realmente excluir esse registro?', 
-                text: "Não será possível reverter essa operação posteriormente!", 
-                icon: 'warning', 
-                showCancelButton: true, 
-                confirmButtonColor: '#3085d6', 
-                cancelButtonColor: '#d33', 
-                confirmButtonText: 'Sim! Excluir!' 
-            }).then((result) => { 
-                if (result.isConfirmed) { 
-                    var csrfToken = $('meta[name="csrf-token"]').attr('content'); 
-                    $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': csrfToken } 
-                }); 
-                /**ID que será informado na url */ 
-                let url = '/destroy-events/' + id; // Concatena o ID do evento na URL 
-                $.ajax({ 
-                    url: url, 
-                    method: 'DELETE', 
-                    success: function() { 
-                        Swal.fire('Pronto!', 'Registro excluído.', 'success'); 
-                        setTimeout(function() { 
-                            location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor 
-                            }, 2000); // 3000 milissegundos = 3 segundos 
-                            }, 
-                            error: function() { 
-                                Swal.fire('Erro!', 'ERRO ao excluir registro', 'error'); 
-                            } 
-                        }); 
-                    } 
-                }); 
+                setTimeout(function() {
+                    location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                }, 1000); // 1000 milissegundos = 1 segundo
+            },
+            error: function(response) {
+                alert('Erro ao salvar evento');
             }
-        
-
-        /**Mostra Modal */
-        function openCreateModal() {
-            $('#createModal').modal('show');
-            updateCheckboxState();
-        }
-
-        /**Mostra Modal de detalhes do evento */
-        function openDetailsModal() {
-            $('#detailsModal').modal('show');
-        }
-
-        /**Fecha Modal */
-        function closeModal() {
-            $('#createModal').modal('hide');
-            $('#createForm')[0].reset();
-        }
-
-        // Evento de mudança no checkbox para atualizar o valor
-        $('#is_all_day').change(function() {
-            updateCheckboxState();
         });
+    });
 
-        // Função para atualizar o valor do hidden input com base no estado do checkbox
-        function updateCheckboxState() {
-            var isChecked = $('#is_all_day').is(':checked');
-            $('#is_all_day').val(isChecked ? '1' : '0');
-            //$('#isAllDayHidden').val(isChecked ? '1' : '0');
-        }
+    /**Altera informações do evento e salva no banco de dados */
+    $('#updateButton').on('click', function(e) {
+        e.preventDefault();
+        updateCheckboxState();
 
-        /**Função para converter data */
-        function converterData(data){
-            const dataObj = new Date(data); /**Converter a string em um objeto date */
-            const ano =dataObj.getFullYear(); /**Extrair o ano da data */
-            const mes =String(dataObj.getMonth() + 1).padStart(2,'0'); /**Ober o mês, mês começa de 0, padStart adiciona zeros à esquerda para garantir que o mês tenha dois dígitos */
-            const dia =String(dataObj.getDate()).padStart(2,'0'); /**Obter o dia do mês */
-            const hora =String(dataObj.getHours()).padStart(2,'0'); /**Obter a hora */
-            const minuto =String(dataObj.getMinutes()).padStart(2,'0'); /**Obter os minutos */
+        /** Dados vindos do formulário */
+        let eventData = {
+            title: $('#edit_title').val(),
+            description: $('#edit_description').val(),
+            start: $('#edit_start').val(),
+            end: $('#edit_end').val(),
+            author_id: $('#edit_author_id').val(),
+            responsible_id: $('#edit_responsible_id').val(),
+            company_id: $('#edit_company_id').val(),
+            color: $('#edit_color').val(),
+            is_all_day: $('#edit_is_all_day').val(),
+            id: $('#edit_id').val(),
+        };
 
-            return `${ano}-${mes}-${dia} ${hora}:${minuto}`; /**retorna a data no formato YYY-MM-DD HH:MM */
-        }
+        let url = '/update-events/' + eventData.id;  // Concatena o ID do evento na URL
+        let method = 'PUT';
 
-        /**Ocultar detalhes do evento e mostra formulário de alteração de evento */
-        document.getElementById("btnViewEditEvento").addEventListener("click", function() { 
-            // Esconder viewEventDetails e detailsModalLabel 
-            document.getElementById("viewEventDetails").style.display = "none"; 
-            document.getElementById("detailsModalLabel").style.display = "none"; 
-            document.getElementById("btnViewEditEvento").style.display = "none"; 
-            // Mostrar viewEditEvent e editModalLabel 
-            document.getElementById("viewEditEvent").style.display = "block"; 
-            document.getElementById("editModalLabel").style.display = "block"; 
+        $.ajax({
+            url: url,
+            type: method,
+            data: eventData,
+            success: function(response) {
+                calendar.refetchEvents();
+                closeModal();
+                if(response) {
+                    Swal.fire('Pronto!', response.success, 'success');
+                }
+                setTimeout(function() {
+                    location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                }, 1000); // 1000 milissegundos = 1 segundo
+            },
+            error: function(response) {
+                alert('Erro ao salvar evento');
+            }
         });
+    });
 
-        /**Mostra os detalhes do evento e fecha formulário de alterar evento*/
-        document.getElementById("editEventCancel").addEventListener("click", function() { 
-            // Esconder viewEditEvent e editModalLabel 
-            document.getElementById("viewEditEvent").style.display = "none"; 
-            document.getElementById("editModalLabel").style.display = "none"; 
-            // Mostrar viewEventDetails e detailsModalLabel 
-            document.getElementById("viewEventDetails").style.display = "block"; 
-            document.getElementById("detailsModalLabel").style.display = "block"; 
-            document.getElementById("btnViewEditEvento").style.display = "block"; 
-        });
+    /**EXCLUIR EVENTO */
+    $('#deleteButton').on('click', function() { 
+        //var eventId = $(this).data('id'); 
+        var eventId = document.querySelector("#details_id").textContent;
+        // Obtém o ID do evento a partir do atributo data-id 
+        deleteRegistro(eventId); // Chama a função passando o ID do evento
+    });
 
-    //editEventCancel
+    /**Exibe pergunta se deseja realmente excluir o registro */ 
+    function deleteRegistro(id) { 
+        Swal.fire({ 
+            title: 'Deseja realmente excluir esse registro?', 
+            text: "Não será possível reverter essa operação posteriormente!", 
+            icon: 'warning', 
+            showCancelButton: true, 
+            confirmButtonColor: '#3085d6', 
+            cancelButtonColor: '#d33', 
+            confirmButtonText: 'Sim! Excluir!' 
+        }).then((result) => { 
+            if (result.isConfirmed) { 
+                var csrfToken = $('meta[name="csrf-token"]').attr('content'); 
+                $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': csrfToken } 
+            }); 
+            /**ID que será informado na url */ 
+            let url = '/destroy-events/' + id; // Concatena o ID do evento na URL 
+            $.ajax({ 
+                url: url, 
+                method: 'DELETE', 
+                success: function() { 
+                    Swal.fire('Pronto!', 'Registro excluído.', 'success'); 
+                    setTimeout(function() { 
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor 
+                        }, 2000); // 3000 milissegundos = 3 segundos 
+                        }, 
+                        error: function() { 
+                            Swal.fire('Erro!', 'ERRO ao excluir registro', 'error'); 
+                        } 
+                    }); 
+                } 
+            }); 
+        }
     
-    });/**Fim document.addEventListener('DOMContentLoaded' */
+
+    /**Mostra Modal */
+    function openCreateModal() {
+        $('#createModal').modal('show');
+        updateCheckboxState();
+    }
+
+    /**Mostra Modal de detalhes do evento */
+    function openDetailsModal() {
+        $('#detailsModal').modal('show');
+    }
+
+    /**Fecha Modal */
+    function closeModal() {
+        $('#createModal').modal('hide');
+        $('#createForm')[0].reset();
+    }
+
+    // Evento de mudança no checkbox para atualizar o valor
+    $('#is_all_day').change(function() {
+        updateCheckboxState();
+    });
+
+    // Função para atualizar o valor do hidden input com base no estado do checkbox
+    function updateCheckboxState() {
+        var isChecked = $('#is_all_day').is(':checked');
+        $('#is_all_day').val(isChecked ? '1' : '0');
+        //$('#isAllDayHidden').val(isChecked ? '1' : '0');
+    }
+
+    /**Função para converter data */
+    function converterData(data){
+        const dataObj = new Date(data); /**Converter a string em um objeto date */
+        const ano =dataObj.getFullYear(); /**Extrair o ano da data */
+        const mes =String(dataObj.getMonth() + 1).padStart(2,'0'); /**Ober o mês, mês começa de 0, padStart adiciona zeros à esquerda para garantir que o mês tenha dois dígitos */
+        const dia =String(dataObj.getDate()).padStart(2,'0'); /**Obter o dia do mês */
+        const hora =String(dataObj.getHours()).padStart(2,'0'); /**Obter a hora */
+        const minuto =String(dataObj.getMinutes()).padStart(2,'0'); /**Obter os minutos */
+
+        return `${ano}-${mes}-${dia} ${hora}:${minuto}`; /**retorna a data no formato YYY-MM-DD HH:MM */
+    }
+
+    /**Ocultar detalhes do evento e mostra formulário de alteração de evento */
+    document.getElementById("btnViewEditEvento").addEventListener("click", function() { 
+        // Esconder viewEventDetails e detailsModalLabel 
+        document.getElementById("viewEventDetails").style.display = "none"; 
+        document.getElementById("detailsModalLabel").style.display = "none"; 
+        document.getElementById("btnViewEditEvento").style.display = "none"; 
+        // Mostrar viewEditEvent e editModalLabel 
+        document.getElementById("viewEditEvent").style.display = "block"; 
+        document.getElementById("editModalLabel").style.display = "block"; 
+    });
+
+    /**Mostra os detalhes do evento e fecha formulário de alterar evento*/
+    document.getElementById("editEventCancel").addEventListener("click", function() { 
+        // Esconder viewEditEvent e editModalLabel 
+        document.getElementById("viewEditEvent").style.display = "none"; 
+        document.getElementById("editModalLabel").style.display = "none"; 
+        // Mostrar viewEventDetails e detailsModalLabel 
+        document.getElementById("viewEventDetails").style.display = "block"; 
+        document.getElementById("detailsModalLabel").style.display = "block"; 
+        document.getElementById("btnViewEditEvento").style.display = "block"; 
+    });
+
+//editEventCancel
+
+});/**Fim document.addEventListener('DOMContentLoaded' */
 //});
 </script>
 

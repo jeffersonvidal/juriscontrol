@@ -9,6 +9,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExternalOfficeController;
 use App\Http\Controllers\ExternalPetitionController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HearingController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LabelController;
@@ -159,7 +160,9 @@ Route::group(['middleware' => 'auth'], function(){
   Route::post('/store-events', [EventController::class, 'store'])->name('events.store'); //Salva novo registro no BD
   Route::put('/update-events/{event}', [EventController::class, 'update'])->name('events.update'); //Atualiza um registro no BD
   Route::delete('/destroy-events/{event}', [EventController::class, 'destroy'])->name('events.destroy'); //Exclui um registro no BD
-  Route::get('/oauth2callback', [EventController::class, 'handleGoogleCallback'])->name('events.google'); //Listar todos os registros da tabela
+  Route::get('google/auth', [GoogleController::class, 'redirectToGoogle']);
+  Route::get('google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
 
   
 }); //fim da restrição de acesso para quem não está logado no sistema
