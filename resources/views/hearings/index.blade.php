@@ -181,6 +181,7 @@
                     <label for="type" class="form-label">Tipo *</label>
                     <select id="type" name="type" class="form-select">
                         <option value="">Informe o Tipo</option>
+                        <option value="meeting">Reunião</option>
                         <option value="initial">Inicial</option>
                         <option value="conciliation">Conciliação</option>
                         <option value="expert_due_dilivence">Diligência Pericial</option>
@@ -334,6 +335,7 @@
                     <label for="type" class="form-label">Tipo *</label>
                     <select id="edit_type" name="type" class="form-select">
                         <option value="">Informe o Tipo</option>
+                        <option value="meeting">Reunião</option>
                         <option value="initial">Inicial</option>
                         <option value="conciliation">Conciliação</option>
                         <option value="expert_due_dilivence">Diligência Pericial</option>
@@ -507,6 +509,7 @@
                     <label for="type" class="form-label">Tipo *</label>
                     <select disabled id="hearingDetail_type" name="type" class="form-select">
                         <option value="">Informe o Tipo</option>
+                        <option value="meeting">Reunião</option>
                         <option value="initial">Inicial</option>
                         <option value="conciliation">Conciliação</option>
                         <option value="expert_due_dilivence">Diligência Pericial</option>
