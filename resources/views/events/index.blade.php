@@ -70,7 +70,7 @@
     
             </dl>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-danger" id="deleteButton">Excluir Evento <i class="fa-solid fa-trash"></i></button>
+                <button type="button" class="btn btn-danger" id="deleteButton">Excluir Evento <i class="fa-solid fa-trash"></i></button>
                 <button class="btn btn-primary" id="btnViewEditEvento">Alterar Evento &nbsp;<i class="fa-solid fa-pen"></i></button>
             </div><!--fim modal-footer-->
         </div>
@@ -423,6 +423,48 @@
                 }
             });
         });
+
+        /**EXCLUIR EVENTO */
+        $('#deleteButton').on('click', function() { 
+            //var eventId = $(this).data('id'); 
+            var eventId = document.querySelector("#details_id").textContent;
+            // Obtém o ID do evento a partir do atributo data-id 
+            deleteRegistro(eventId); // Chama a função passando o ID do evento
+        });
+
+        /**Exibe pergunta se deseja realmente excluir o registro */ 
+        function deleteRegistro(id) { 
+            Swal.fire({ 
+                title: 'Deseja realmente excluir esse registro?', 
+                text: "Não será possível reverter essa operação posteriormente!", 
+                icon: 'warning', 
+                showCancelButton: true, 
+                confirmButtonColor: '#3085d6', 
+                cancelButtonColor: '#d33', 
+                confirmButtonText: 'Sim! Excluir!' 
+            }).then((result) => { 
+                if (result.isConfirmed) { 
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content'); 
+                    $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': csrfToken } 
+                }); 
+                /**ID que será informado na url */ 
+                let url = '/destroy-events/' + id; // Concatena o ID do evento na URL 
+                $.ajax({ 
+                    url: url, 
+                    method: 'DELETE', 
+                    success: function() { 
+                        Swal.fire('Pronto!', 'Registro excluído.', 'success'); 
+                        setTimeout(function() { 
+                            location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor 
+                            }, 2000); // 3000 milissegundos = 3 segundos 
+                            }, 
+                            error: function() { 
+                                Swal.fire('Erro!', 'ERRO ao excluir registro', 'error'); 
+                            } 
+                        }); 
+                    } 
+                }); 
+            }
         
 
         /**Mostra Modal */
