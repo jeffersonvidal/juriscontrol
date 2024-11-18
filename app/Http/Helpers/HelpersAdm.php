@@ -90,9 +90,14 @@ class HelpersAdm{
     return ($receitasTotal - $despesasTotal);
   }
 
-  /**Deixar tudo bem maiúsculo */
+  /**Deixar tudo em maiúsculo */
   public function setUppercase($text){
     return strtoupper($text);
+  }
+
+  /**Deixar tudo em mminúsculo */
+  public function setLowercase($text){
+    return Str::lower($text);
   }
 
   /**Retorna o cabeçalho de documentos com os dados do clietne */

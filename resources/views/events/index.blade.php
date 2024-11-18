@@ -382,50 +382,45 @@ $(document).ready(function(){
         });
 
         /**Altera informações do evento e salva no banco de dados */
-        
-            /** Altera informações do evento e salva no banco de dados */
-            $('#updateForm').on('submit', function(e) {
-                e.preventDefault();
-                updateCheckboxState();
+        $('#updateForm').on('submit', function(e) {
+            e.preventDefault();
+            updateCheckboxState();
 
-                /** Dados vindos do formulário */
-                let eventData = {
-                    title: $('#edit_title').val(),
-                    description: $('#edit_description').val(),
-                    start: $('#edit_start').val(),
-                    end: $('#edit_end').val(),
-                    author_id: $('#edit_author_id').val(),
-                    responsible_id: $('#edit_responsible_id').val(),
-                    company_id: $('#edit_company_id').val(),
-                    color: $('#edit_color').val(),
-                    is_all_day: $('#edit_is_all_day').val(),
-                    id: $('#edit_id').val(),
-                };
+            /** Dados vindos do formulário */
+            let eventData = {
+                title: $('#edit_title').val(),
+                description: $('#edit_description').val(),
+                start: $('#edit_start').val(),
+                end: $('#edit_end').val(),
+                author_id: $('#edit_author_id').val(),
+                responsible_id: $('#edit_responsible_id').val(),
+                company_id: $('#edit_company_id').val(),
+                color: $('#edit_color').val(),
+                is_all_day: $('#edit_is_all_day').val(),
+                id: $('#edit_id').val(),
+            };
 
-                console.log(eventData);
+            console.log(eventData);
 
-                let url = '/update-events/' + eventData.id;  // Concatena o ID do evento na URL
-                let method = 'POST';
+            let url = '/update-events/' + eventData.id;  // Concatena o ID do evento na URL
 
-                $.ajax({
-                url: url,
-                type: method,
-                data: eventData,
-                success: function(response) {
-                    calendar.refetchEvents();
-                    closeModal();
-                    if(response) {
-                    Swal.fire('Pronto!', response.success, 'success');
-                    }
-                    setTimeout(function() {
-                    location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
-                    }, 1000); // 1000 milissegundos = 1 segundo
-                },
-                error: function(response) {
-                    alert('Erro ao salvar evento');
-                }
-                });
+            $.ajax({ 
+                url: url, 
+                type: 'PUT', 
+                data: formData, 
+                processData: false, 
+                contentType: false, 
+                success: 
+                
+                function(response) { 
+                    console.log('Dados enviados com sucesso:', response); 
+                }, 
+                error: 
+                function(xhr, status, error) { 
+                    console.log('Ocorreu um erro ao enviar os dados:', error); 
+                } 
             });
+        });
         
 
         /**Mostra Modal */

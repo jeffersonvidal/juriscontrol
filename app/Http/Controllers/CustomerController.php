@@ -97,12 +97,12 @@ class CustomerController extends Controller
         try {
             //Model da tabela - campos a serem salvos
             $customer = new Customer();
-            $customer->name = $request->name;
+            $customer->name = $this->helperAdm->setUppercase($request->name);
             $customer->company_id = $request->company_id;
-            $customer->email = $request->email;
+            $customer->email = $this->helperAdm->setLowercase($request->email);
             $customer->phone = $this->helperAdm->limpaCampo($request->phone);
             $customer->rg = $this->helperAdm->limpaCampo($request->rg);
-            $customer->rg_expedidor = $request->rg_expedidor;
+            $customer->rg_expedidor = $this->helperAdm->setUppercase($request->rg_expedidor);
             $customer->cpf = $this->helperAdm->limpaCampo($request->cpf);
             $customer->marital_status = $request->marital_status;
             $customer->nationality = $request->nationality;
@@ -180,12 +180,12 @@ class CustomerController extends Controller
         DB::beginTransaction();
 
         try {
-            $customer->name = $request->name;
+            $customer->name = $this->helperAdm->setUppercase($request->name);
             $customer->company_id = $request->company_id;
-            $customer->email = $request->email;
+            $customer->email = $this->helperAdm->setLowercase($request->email);
             $customer->phone = $this->helperAdm->limpaCampo($request->phone);
             $customer->rg = $this->helperAdm->limpaCampo($request->rg);
-            $customer->rg_expedidor = $request->rg_expedidor;
+            $customer->rg_expedidor = $this->helperAdm->setUppercase($request->rg_expedidor);
             $customer->cpf = $this->helperAdm->limpaCampo($request->cpf);
             $customer->marital_status = $request->marital_status;
             $customer->nationality = $request->nationality;
@@ -265,12 +265,12 @@ class CustomerController extends Controller
         try {
             //Model da tabela - campos a serem salvos
             $customer = new Customer();
-            $customer->name = $request->name;
+            $customer->name = $this->helperAdm->setUppercase($request->name);
             $customer->company_id = $company->id;
-            $customer->email = $request->email;
+            $customer->email = $this->helperAdm->setLowercase($request->email);
             $customer->phone = $this->helperAdm->limpaCampo($request->phone);
             $customer->rg = $this->helperAdm->limpaCampo($request->rg);
-            $customer->rg_expedidor = $request->rg_expedidor;
+            $customer->rg_expedidor = $this->helperAdm->setUppercase($request->rg_expedidor);
             $customer->cpf = $this->helperAdm->limpaCampo($request->cpf);
             $customer->marital_status = $request->marital_status;
             $customer->nationality = $request->nationality;

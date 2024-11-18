@@ -92,7 +92,7 @@
                                         <div class="col-md-6"><strong>Bairro:</strong> {{ $address->neighborhood }}</div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4"><strong>Cidade:</strong> {{ $address->city }} - UF: {{ $address->uf }}.</div> 
+                                        <div class="col-md-4"><strong>Cidade:</strong> {{ $address->city }} - UF: {{ $address->state }}.</div> 
                                         <div class="col-md-4"><strong>CEP:</strong> {{ $address->zipcode }}</div>
                                         <div class="col-md-12">
                                         @php
