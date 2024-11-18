@@ -96,6 +96,9 @@ class Hearing extends Model implements Auditable
         if($hearing->type == 'instruction_closure'){
             return 'Encerramento de Instrução';
         }
+        if($hearing->type == 'meeting'){
+            return 'Reunião';
+        }
     }
 
     /**Retorna o status de pagamento */
