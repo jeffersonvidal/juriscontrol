@@ -244,9 +244,14 @@
 
 </div><!--fim container-fluid-->
 
+<!-- FullCalendar Script -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+
+<!-- FullCalendar Locales Script -->
 <script src="{{ mix('resources/js/core/locales-all.global.min.js') }}"></script>
+
+<!-- FullCalendar Google Calendar Plugin --> 
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.15/index.global.min.js"></script>
 {{-- <script src="{{ mix('resources/js/fullcalendar_script.js') }}"></script> --}}
 <script src="https://momentjs.com/downloads/moment.min.js"></script>
 
@@ -254,11 +259,11 @@
 //$(document).ready(function(){
     /**Executar quando o documento html for completamente carregado */
     document.addEventListener('DOMContentLoaded', function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
     /**Recebe o seletor calendar do atributo id da div onde será exibido o calendário */
     var calendarEl = document.getElementById('calendar');
     /**Instanciar FullCalendar.Calendar e atribuir a variável calendar */
@@ -377,7 +382,7 @@
                     Swal.fire('Pronto!', response.success, 'success');
                 }
                 setTimeout(function() {
-                    //location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
                 }, 1000); // 1000 milissegundos = 1 segundo
             },
             error: function(response) {
