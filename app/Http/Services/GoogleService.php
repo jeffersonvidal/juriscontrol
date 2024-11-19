@@ -15,12 +15,13 @@ class GoogleService
   }
 
   /**Configuração cliente google */
-  private function googleClientConfig(){
-    $redirectURL = "user.integration.authorize_google_calendar";
+  private function googleClientConfig()
+{
+    $redirectURL = route('google.callback');
     $all_scopes = implode(' ', array(
-      \Google_Service_Calendar::CALENDAR,
-      Oauth2::USERINFO_PROFILE,
-      Oauth2::USERINFO_EMAIL
+        \Google_Service_Calendar::CALENDAR,
+        Oauth2::USERINFO_PROFILE,
+        Oauth2::USERINFO_EMAIL
     ));
     $client = new \Google_Client();
     $client->setApplicationName("Events");
@@ -31,7 +32,7 @@ class GoogleService
     $client->setAccessType('offline');
     $client->setApprovalPrompt("force");
     return $client;
-  }
+}
 
   /**url de autenticação */
   public function authUrl(){

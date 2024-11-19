@@ -162,6 +162,8 @@ Route::group(['middleware' => 'auth'], function(){
   Route::delete('/destroy-events/{event}', [EventController::class, 'destroy'])->name('events.destroy'); //Exclui um registro no BD
   Route::get('google/auth', [GoogleController::class, 'redirectToGoogle']);
   Route::get('google/callback', [GoogleController::class, 'handleGoogleCallback']);
+  Route::get('/google-calendar/callback', [EventController::class, 'handleGoogleCallback'])->name('google.callback');
+
 
 
   

@@ -377,7 +377,7 @@
                     Swal.fire('Pronto!', response.success, 'success');
                 }
                 setTimeout(function() {
-                    location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    //location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
                 }, 1000); // 1000 milissegundos = 1 segundo
             },
             error: function(response) {
