@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Http\Controllers\GlobalAdminController;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
-use Illuminate\View\View;
+use View;
 
 class AppServiceProvider extends ServiceProvider
 {
