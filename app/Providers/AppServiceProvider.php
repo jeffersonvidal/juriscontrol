@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 use View;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\HelperAdm;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,9 @@ class AppServiceProvider extends ServiceProvider
 
                 /**Declara o controlador global admin */
                 $globalAdminController = new GlobalAdminController(); 
+                
+                /**Inclui arquivo helper */
+                require_once app_path('Http/Helpers/HelpersAdm.php');
 
                 /**Obtém os lembretes e notificações do GlobalController */
                 $reminders = $globalAdminController->getReminders(); 

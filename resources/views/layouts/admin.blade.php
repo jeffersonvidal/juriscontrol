@@ -51,7 +51,7 @@
                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addLembrete"><i class="fa-solid fa-plus"></i> Novo Lembrete</a></li>
                     <li><hr class="dropdown-divider"></li>
                     @foreach($reminders as $reminder) 
-                        <li><a class="dropdown-item" href="#">{{ $reminder }}</a></li>
+                        <li><a class="dropdown-item" href="#">{{ limitText($reminder->description, 17) }}</a></li>
                     @endforeach
                 </ul>
             </div>
@@ -237,19 +237,19 @@
       </div>
       <div class="modal-body">
 
-      <form id="createAddressForm" class="row g-3">
+      <form id="createReminderForm" class="row g-3">
                 @csrf
 
                 
                 <fieldset>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="alert_time" class="form-label">Data e Hora</label>
-                            <input type="datetime-local" class="form-control" id="alert_time" name="alert_time" value="{{ old('alert_time') }}">
+                            <label for="reminder_date" class="form-label">Data e Hora</label>
+                            <input type="datetime-local" class="form-control" id="reminder_date" name="reminder_date" value="{{ old('reminder_date') }}">
                         </div>
                         <div class="col-md-6">
                             <label for="target_user_id" class="form-label">Para quem?</label>
-                            <select id="target_user_id" name="target_user_id" class="form-select">
+                            <select id="responsible_id" name="responsible_id" class="form-select">
                                 <option value="">Escolha um usuário</option>
                                 
                                 @foreach ($usersByCompany as $userByCompany)
@@ -261,8 +261,8 @@
                     
                     <div class="row">
                         <div class="col-md-12">
-                            <label for="message" class="form-label">Mensagem</label>
-                            <textarea class="form-control" id="edit_message" name="message" rows="3">{{ old('message') }}</textarea>
+                            <label for="description" class="form-label">Mensagem</label>
+                            <textarea class="form-control" id="description" name="description" rows="3">{{ old('description') }}</textarea>
                         </div>
                     </div>
 
@@ -285,6 +285,38 @@
   </div>
 </div><!-- fim addLembrete -->
 
+<!--Scripts -->
+<script>
+$(document).ready(function(){
+    /** Cadastrar lembrete */
+    $('#createReminderForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: '{{ route('reminders.store') }}',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                $('#createModal').modal('hide');
+                if(response){
+                    Swal.fire('Pronto!', response.success, 'success');
+                }
+                setTimeout(function() {
+                    location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                }, 2000); // 3000 milissegundos = 3 segundos
+            },
+            error: function(response) {
+                console.log(response.responseJSON);
+                if(response.responseJSON){
+                    Swal.fire('Erro!', response.responseJSON.message, 'error');
+                }
+            }
+        });
+    });
+
+});
+
+    
+</script>
 
 </body>
 </html>

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('responsible_id');
             $table->longText('description');
             $table->integer('author_id');
+            $table->integer('company_id');
             $table->enum('status', ['read', 'unread'])->default('unread');
             $table->timestamps();
         });

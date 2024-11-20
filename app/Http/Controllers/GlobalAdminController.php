@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Reminder;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,7 @@ class GlobalAdminController extends Controller
      public function getUsersByCompany(){
         // Obtenha o usuário logado 
         $user = Auth::user(); 
-        \Log::info('Usuário logado:', ['user' => $user ]);
+        // \Log::info('Usuário logado:', ['user' => $user ]);
         // Verifique se o usuário está autenticado 
         if ($user) { 
             // Obtenha todos os usuários com o mesmo company_id 
@@ -31,8 +32,10 @@ class GlobalAdminController extends Controller
 
     /**Retorna todos os lembretes programados */
     public function getReminders() { 
-        // Lógica para buscar os lembretes 
-        $reminders = ['Lembrete 1', 'Lembrete 21', 'Lembrete 3']; 
+        $user = Auth::user(); 
+        $reminders = Reminder::where('company_id', $user->company_id)
+        ->where('id', $user->id)
+        ->get();
         return $reminders; 
     } 
 

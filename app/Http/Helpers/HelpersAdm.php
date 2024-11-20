@@ -164,6 +164,11 @@ class HelpersAdm{
     return '<span class="badge rounded-pill" style="background-color:#ccc; color:#000;">Sem etiqueta</span>';
   }
 
+  /**Retorna parte de um texto, definindo a quantidade de caracteres que serão apresentados */
+  // function limitText($text, $charecters) { 
+  //   return Str::limit($text, $charecters); 
+  // }
+
 
   /**DASHBOARD */
   /**RETORNA DADOS DO ESCRITÓRIO NO DASHBOAR */
@@ -335,3 +340,12 @@ class HelpersAdm{
 
 
 } /**Fim classe Helper */
+
+/**Funções para serem utilizadas em no layout adm em qualquer view devem estar fora da classe Helper */
+
+/**Limita quantidade de caracteres que serão exibidos */
+if (!function_exists('limitText')) {
+    function limitText($text, $characters) {
+        return Str::limit($text, $characters);
+    }
+}
