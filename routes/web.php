@@ -17,6 +17,7 @@ use App\Http\Controllers\LegalProcessController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Models\ExternalOffice;
@@ -160,9 +161,14 @@ Route::group(['middleware' => 'auth'], function(){
   Route::post('/store-events', [EventController::class, 'store'])->name('events.store'); //Salva novo registro no BD
   Route::put('/update-events/{event}', [EventController::class, 'update'])->name('events.update'); //Atualiza um registro no BD
   Route::delete('/destroy-events/{event}', [EventController::class, 'destroy'])->name('events.destroy'); //Exclui um registro no BD
-  Route::get('google/auth', [GoogleController::class, 'redirectToGoogle']);
-  Route::get('google/callback', [GoogleController::class, 'handleGoogleCallback']);
-  Route::get('/google-calendar/callback', [EventController::class, 'handleGoogleCallback'])->name('google.callback');
+
+  /**Rotas de Reminders (lembretes) */
+  Route::get('/index-reminders', [ReminderController::class, 'index'])->name('reminders.index'); //Listar todos os registros da tabela
+  Route::get('/fetch-reminders', [ReminderController::class, 'fetchreminders'])->name('fetch.index'); //Listar todos os registros da tabela
+  Route::get('/show-reminders/{reminder}', [ReminderController::class, 'show'])->name('reminders.show'); //Mostra detalhe de um registro
+  Route::post('/store-reminders', [ReminderController::class, 'store'])->name('reminders.store'); //Salva novo registro no BD
+  Route::put('/update-reminders/{reminder}', [ReminderController::class, 'update'])->name('reminders.update'); //Atualiza um registro no BD
+  Route::delete('/destroy-reminders/{reminder}', [ReminderController::class, 'destroy'])->name('reminders.destroy'); //Exclui um registro no BD
 
 
 
