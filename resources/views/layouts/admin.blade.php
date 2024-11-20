@@ -33,9 +33,9 @@
                     </span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Notificação 01</a></li>
-                    <li><a class="dropdown-item" href="#">Notificação 02</a></li>
-                    <li><a class="dropdown-item" href="#">Notificação 03</a></li>
+                    @foreach($notifications as $notification) 
+                        <li><a class="dropdown-item" href="#">{{ $notification }}</a></li>
+                    @endforeach
                 </ul>
             </div>
 
@@ -50,7 +50,9 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addLembrete">Novo Lembrete</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Lembrete 01</a></li>
+                    @foreach($reminders as $reminder) 
+                        <li><a class="dropdown-item" href="#">{{ $reminder }}</a></li>
+                    @endforeach
                 </ul>
             </div>
 
@@ -248,12 +250,15 @@
                         <div class="col-md-6">
                             <label for="target_user_id" class="form-label">Para quem?</label>
                             <select id="target_user_id" name="target_user_id" class="form-select">
-                                <option value="1">Sim</option>
-                                <option value="0">Não</option>
+                                <option value="">Escolha um usuário</option>
+                                
+                                @foreach ($usersByCompany as $userByCompany)
+                                    <option value="{{ $userByCompany->id }}">{{ $userByCompany->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
-
+                    
                     <div class="row">
                         <div class="col-md-12">
                             <label for="message" class="form-label">Mensagem</label>

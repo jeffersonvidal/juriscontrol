@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GlobalAdminController extends Controller
 {
@@ -11,17 +13,33 @@ class GlobalAdminController extends Controller
      * app/Providers/AppServiceProvider.php
      */
 
+     /**Retorna todos os usuários da empresa */
+     public function getUsersByCompany(){
+        // Obtenha o usuário logado 
+        $user = Auth::user(); 
+        \Log::info('Usuário logado:', ['user' => $user ]);
+        // Verifique se o usuário está autenticado 
+        if ($user) { 
+            // Obtenha todos os usuários com o mesmo company_id 
+            $users = User::where('company_id', $user->company_id)->get(); 
+        } else { 
+            // Se não houver usuário logado, retorne uma coleção vazia 
+            $users = collect(); 
+        } 
+        return $users;
+     }
+
     /**Retorna todos os lembretes programados */
     public function getReminders() { 
         // Lógica para buscar os lembretes 
-        $reminders = ['Lembrete 1', 'Lembrete 2', 'Lembrete 3']; 
+        $reminders = ['Lembrete 1', 'Lembrete 21', 'Lembrete 3']; 
         return $reminders; 
     } 
 
     /**Retorna todas as notificações do sistema */
     public function getNotifications() { 
         // Lógica para buscar as notificações 
-        $notifications = ['Notificação 1', 'Notificação 2', 'Notificação 3']; 
+        $notifications = ['Notificação 21', 'Notificação 2', 'Notificação 3']; 
         return $notifications; 
     }
 }/**Fim classe GlobalAdminController */

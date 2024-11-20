@@ -6,6 +6,7 @@ use App\Http\Controllers\GlobalAdminController;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 use View;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,15 +26,25 @@ class AppServiceProvider extends ServiceProvider
         //
         URL::forceRootUrl(config('app.url'));
 
-        /**Declara o controlador global admin */
-        $globalAdminController = new GlobalAdminController(); 
+        View::composer('*', function ($view) { 
+            if (Auth::check()){
 
-        /**Obtém os lembretes e notificações do GlobalController */
-        $reminders = $globalAdminController->getReminders(); 
-        $notifications = $globalAdminController->getNotifications(); 
-        
-        /**Compartilha os dados com todas as views */ 
-        View::share('reminders', $reminders); 
-        View::share('notifications', $notifications);
+                /**Declara o controlador global admin */
+                $globalAdminController = new GlobalAdminController(); 
+
+                /**Obtém os lembretes e notificações do GlobalController */
+                $reminders = $globalAdminController->getReminders(); 
+                $notifications = $globalAdminController->getNotifications(); 
+
+                /**Retorna todos os usuários da empresa logada */
+                $usersByCompany = $globalAdminController->getUsersByCompany();
+                
+                /**Compartilha os dados com todas as views */ 
+                View::share('reminders', $reminders); 
+                View::share('notifications', $notifications);
+                View::share('usersByCompany', $usersByCompany);
+
+            } /**Fim Auth::check */
+        });
     }
 }
