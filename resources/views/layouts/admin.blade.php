@@ -51,7 +51,14 @@
                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addLembrete"><i class="fa-solid fa-plus"></i> Novo Lembrete</a></li>
                     <li><hr class="dropdown-divider"></li>
                     @foreach($reminders as $reminder) 
-                        <li><a class="dropdown-item" href="#">{{ limitText($reminder->description, 17) }}</a></li>
+                        <li>
+                            <span class="d-flex flex-row justify-content-center">
+                                <a class="dropdown-item" href="#">{{ limitText($reminder->description, 17) }}</a>
+                                <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $reminder->id }}"  
+                                    data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
+                                <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $reminder->id }}"  ><i class="fa-solid fa-trash"></i></button>
+                            </span>
+                        </li>
                     @endforeach
                 </ul>
             </div>
