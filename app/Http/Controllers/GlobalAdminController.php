@@ -34,7 +34,7 @@ class GlobalAdminController extends Controller
     public function getReminders() { 
         $user = Auth::user(); 
         $reminders = Reminder::where('company_id', $user->company_id)
-        ->where('id', $user->id)
+        ->where('responsible_id', $user->id)
         ->get();
         return $reminders; 
     } 
