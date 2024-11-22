@@ -24,5 +24,15 @@
         "select2-bootstrap-5-theme": "^1.3.0",
         "sweetalert2": "^11.6.13",
         "vite-plugin-replace": "^0.1.1"
-    }
+    },
+    "name": "juriscontrol",
+    "version": "1.0.0",
+    "description": "<p>Sistema ERP de Gestão e Controle Jurídico para Escritórios Advocatícios.</p>",
+    "main": "vite.config.js",
+    "directories": {
+        "test": "tests"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
 }
