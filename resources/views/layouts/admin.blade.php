@@ -8,6 +8,7 @@
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
 
     <title>JurisControl - Sistema de Controle Jurídico</title>
@@ -47,11 +48,11 @@
                         7
                     </span>
                 </button>
-                <ul class="dropdown-menu">
+                <ul id="reminder-list" class="dropdown-menu">
                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addLembrete"><i class="fa-solid fa-plus"></i> Novo Lembrete</a></li>
                     <li><hr class="dropdown-divider"></li>
                     @foreach($reminders as $reminder) 
-                        <li>
+                        <li data-id="{{ $reminder->id }}" data-status="{{ $reminder->status }}" data-description="{{ $reminder->description }}" data-reminder_date="{{ $reminder->reminder_date }}">
                             <span class="d-flex flex-row justify-content-center">
                                 <a class="dropdown-item" href="#">{{ limitText($reminder->description, 17) }}</a>
                                 <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $reminder->id }}"  
@@ -292,6 +293,10 @@
   </div>
 </div><!-- fim addLembrete -->
 
+
+<!--Toastr -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <!--Scripts -->
 <script>
 $(document).ready(function(){
@@ -320,7 +325,114 @@ $(document).ready(function(){
         });
     });
 
-});
+    /**Função para alarme dos lembretes */
+    function loadReminders() {
+        $.ajax({
+            url: '{{ route('fetch.index') }}',
+            method: 'GET',
+            success: function(data) {
+                var reminderList = $('#reminder-list');
+                reminderList.empty();
+
+                data.forEach(function(reminder) {
+                    var listItem = $('<li>')
+                        .attr('data-id', reminder.id)
+                        .attr('data-status', reminder.status)
+                        .attr('data-description', reminder.description)
+                        .attr('data-reminder_date', reminder.reminder_date)
+                        .text(reminder.description + ' - ' + reminder.reminder_date);
+                    reminderList.append(listItem);
+                });
+            }
+        });
+    }
+
+    /**Verifica novos lembretes */
+    function checkReminders() {
+        console.log('checkReminders function called');
+        var reminders = document.querySelectorAll('#reminder-list li');
+        console.log('Number of reminders found:', reminders.length);
+
+        reminders.forEach(function(reminder) {
+            var description = reminder.dataset.description;
+            var reminderTimeText = reminder.dataset.reminder_date;
+
+            if (!reminderTimeText) {
+                console.log('reminder_time is undefined or invalid');
+                return;
+            }
+
+            var reminderTime = new Date(reminderTimeText);
+            if (isNaN(reminderTime)) {
+                console.log('Invalid date format:', reminderTimeText);
+                return;
+            }
+
+            var now = new Date();
+
+            console.log('Reminder description:', description);
+            console.log('Reminder time text:', reminderTimeText);
+            console.log('Reminder time:', reminderTime, 'Current time:', now);
+
+            if (reminderTime.getFullYear() === now.getFullYear() &&
+                reminderTime.getMonth() === now.getMonth() &&
+                reminderTime.getDate() === now.getDate() &&
+                reminderTime.getHours() === now.getHours() &&
+                reminderTime.getMinutes() === now.getMinutes() &&
+                reminder.dataset.status != 'read') {
+
+                console.log('Condition passed: ', 'reminderTime:', reminderTime, 'now:', now, 'status:', reminder.dataset.status);
+
+                var reminderId = reminder.dataset.id;
+                console.log('Displaying reminder with ID:', reminderId);
+
+                toastr.options = {
+                    "closeButton": true,
+                    "positionClass": "toast-top-right",
+                    "onclick": function() {
+                        markAsRead(reminderId);
+                    }
+                };
+                toastr.info('Lembrete: ' + description);
+
+                var audio = new Audio('{{ asset('AlarmRadiate.mp3') }}');
+                audio.loop = true;
+
+                // Garantir que o áudio está pronto para ser reproduzido
+                audio.addEventListener('canplaythrough', function() {
+                    audio.play().catch(function(error) {
+                        console.log('Audio playback failed:', error);
+                    });
+                });
+
+                toastr.options.onHidden = function() {
+                    audio.pause();
+                    audio.currentTime = 0; // Reseta o som para o início
+                };
+            } else {
+                console.log('Condition not met', 'reminderTime:', reminderTime, 'now:', now, 'status:', reminder.dataset.status);
+            }
+        });
+    }
+
+
+    function markAsRead(reminderId) {
+        $.ajax({
+            url: '/mark-as-read-reminders/' + reminderId,
+            type: 'PUT',
+            data: {_token: '{{ csrf_token() }}'},
+            success: function(response) {
+                console.log(response.success);
+                // Atualiza o status no DOM
+                $('li[data-id="' + reminderId + '"]').attr('data-status', 'read');
+            }
+        });
+    }
+
+    setInterval(checkReminders, 5000); // Verifica a cada minuto 60000
+
+
+}); //Fim document.ready
 
     
 </script>

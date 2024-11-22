@@ -168,6 +168,7 @@ Route::group(['middleware' => 'auth'], function(){
   Route::get('/show-reminders/{reminder}', [ReminderController::class, 'show'])->name('reminders.show'); //Mostra detalhe de um registro
   Route::post('/store-reminders', [ReminderController::class, 'store'])->name('reminders.store'); //Salva novo registro no BD
   Route::put('/update-reminders/{reminder}', [ReminderController::class, 'update'])->name('reminders.update'); //Atualiza um registro no BD
+  Route::put('/mark-as-read-reminders/{reminder}', [ReminderController::class, 'markAsRead'])->name('reminders.markAsRead'); //altera status para lido
   Route::delete('/destroy-reminders/{reminder}', [ReminderController::class, 'destroy'])->name('reminders.destroy'); //Exclui um registro no BD
 
 

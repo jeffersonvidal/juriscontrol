@@ -19,12 +19,10 @@ class ReminderController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    /**Carrega  os lembretes */
+    public function fetch() { 
+        $reminders = Reminder::all(); 
+        return response()->json($reminders); 
     }
 
     /**
@@ -94,4 +92,11 @@ class ReminderController extends Controller
     {
         //
     }
+
+    /**Marcar como lido */
+    public function markAsRead(Reminder $reminder) { 
+        $reminder->update(['status' => 'read']); 
+        return response()->json(['success' => 'Lembrete marcado como lido!']); 
+    }
+
 }
