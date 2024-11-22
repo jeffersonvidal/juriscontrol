@@ -14,8 +14,7 @@
         "owen-it/laravel-auditing": "^13.6",
         "php-flasher/flasher-laravel": "^2.1",
         "php-flasher/flasher-toastr": "^2.1",
-        "php-flasher/flasher-toastr-symfony": "^2.1",
-        "tinymce/tinymce": "^7.4"
+        "php-flasher/flasher-toastr-symfony": "^2.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
