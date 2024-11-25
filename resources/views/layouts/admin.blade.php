@@ -54,8 +54,6 @@
                     @foreach($reminders as $reminder) 
                             <span class="d-flex flex-row justify-content-center">
                                 <a href="#" class="dropdown-item reminderDetails" data-id="{{ $reminder->id }}" data-description="{{ $reminder->description }}" data-responsible_id="{{ $reminder->responsible_id }}" data-author_id="{{ $reminder->author_id }}" data-company_id="{{ $reminder->company_id }}" data-reminder_date="{{ $reminder->reminder_date }}" data-status="{{ $reminder->status }}">{{ limitText($reminder->description, 17) }}</a>
-                                <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $reminder->id }}" data-description="{{ $reminder->description }}" data-responsible_id="{{ $reminder->responsible_id }}" data-author_id="{{ $reminder->author_id }}" data-company_id="{{ $reminder->company_id }}" data-reminder_date="{{ $reminder->reminder_date }}" data-status="{{ $reminder->status }}"
-                                    data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
                                 <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $reminder->id }}"  ><i class="fa-solid fa-trash"></i></button>
                             </span>
                         </li>
