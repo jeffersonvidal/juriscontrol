@@ -52,10 +52,9 @@
                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addLembrete"><i class="fa-solid fa-plus"></i> Novo Lembrete</a></li>
                     <li><hr class="dropdown-divider"></li>
                     @foreach($reminders as $reminder) 
-                        <li data-id="{{ $reminder->id }}" data-status="{{ $reminder->status }}" data-description="{{ $reminder->description }}" data-reminder_date="{{ $reminder->reminder_date }}">
                             <span class="d-flex flex-row justify-content-center">
-                                <a class="dropdown-item" href="#">{{ limitText($reminder->description, 17) }}</a>
-                                <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $reminder->id }}"  
+                                <a href="#" class="dropdown-item reminderDetails" data-id="{{ $reminder->id }}" data-description="{{ $reminder->description }}" data-responsible_id="{{ $reminder->responsible_id }}" data-author_id="{{ $reminder->author_id }}" data-company_id="{{ $reminder->company_id }}" data-reminder_date="{{ $reminder->reminder_date }}" data-status="{{ $reminder->status }}">{{ limitText($reminder->description, 17) }}</a>
+                                <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $reminder->id }}" data-description="{{ $reminder->description }}" data-responsible_id="{{ $reminder->responsible_id }}" data-author_id="{{ $reminder->author_id }}" data-company_id="{{ $reminder->company_id }}" data-reminder_date="{{ $reminder->reminder_date }}" data-status="{{ $reminder->status }}"
                                     data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
                                 <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $reminder->id }}"  ><i class="fa-solid fa-trash"></i></button>
                             </span>
@@ -243,55 +242,148 @@
         <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Lembrete</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="cadReminderView">
+        <div class="modal-body">
 
-      <form id="createReminderForm" class="row g-3">
-                @csrf
+            <form id="createReminderForm" class="row g-3">
+                    @csrf
 
-                
-                <fieldset>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="reminder_date" class="form-label">Data e Hora</label>
-                            <input type="datetime-local" class="form-control" id="reminder_date" name="reminder_date" value="{{ old('reminder_date') }}">
+                    
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="reminder_date" class="form-label">Data e Hora</label>
+                                <input type="datetime-local" class="form-control" id="reminder_date" name="reminder_date" value="{{ old('reminder_date') }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="target_user_id" class="form-label">Para quem?</label>
+                                <select id="responsible_id" name="responsible_id" class="form-select">
+                                    <option value="">Escolha um usuário</option>
+                                    
+                                    @foreach ($usersByCompany as $userByCompany)
+                                        <option value="{{ $userByCompany->id }}">{{ $userByCompany->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="target_user_id" class="form-label">Para quem?</label>
-                            <select id="responsible_id" name="responsible_id" class="form-select">
-                                <option value="">Escolha um usuário</option>
-                                
-                                @foreach ($usersByCompany as $userByCompany)
-                                    <option value="{{ $userByCompany->id }}">{{ $userByCompany->name }}</option>
-                                @endforeach
-                            </select>
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="description" class="form-label">Mensagem</label>
+                                <textarea class="form-control" id="description" name="description" rows="3">{{ old('description') }}</textarea>
+                            </div>
                         </div>
+
+                    </fieldset>
+
+                    
+                    <div class="col-md-12">
+                        <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                        <input type="hidden" class="form-control" id="author_id" name="author_id" value="{{ auth()->user()->id }}">                 
                     </div>
                     
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label for="description" class="form-label">Mensagem</label>
-                            <textarea class="form-control" id="description" name="description" rows="3">{{ old('description') }}</textarea>
-                        </div>
-                    </div>
-
-                </fieldset>
-
-                
-                <div class="col-md-12">
-                    <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
-                    <input type="hidden" class="form-control" id="author_id" name="author_id" value="{{ auth()->user()->id }}">                 
-                </div>
-                
-            
-      </div><!--fim modal-body-->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-        <button type="submit" class="btn btn-primary addButton">Salvar <i class="fa-regular fa-floppy-disk"></i></button>
-      </div><!--fim modal-footer-->
-      </form><!--finalizando form aqui para garantir pegar a ação do botão de salvar-->
+                </form><!--finalizando form aqui para garantir pegar a ação do botão de salvar-->
+        </div><!--fim modal-body-->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="submit" class="btn btn-primary addButton">Salvar <i class="fa-regular fa-floppy-disk"></i></button>
+        </div><!--fim modal-footer-->
+      </div><!--Fim cadReminderView -->
+      
     </div>
   </div>
 </div><!-- fim addLembrete -->
+
+<!-- updateLembrete -->
+<div class="modal fade" id="updateLembrete" tabindex="-1" aria-labelledby="updateLembreteModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="detailsModalLabel">Detalhes do Lembrete</h1>
+        <h1 class="modal-title fs-5" id="updateModalLabel" style="display:none;">Alterar Lembrete</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="detailsReminder" id="detailsReminder">
+        <div class="modal-body">
+        <dl class="row">              
+                <dt class="col-sm-3">ID #:</dt>
+                <dd class="col-sm-9" id="details_id"></dd>
+                
+                <div class="col-md-12">
+                    <dt class="col-sm-3">Data / Hora:</dt>
+                    <dd class="col-sm-9" id="details_reminder_date"></dd>
+                </div>
+
+                <div class="col-md-12">
+                    <dt class="col-sm-3">Lembrete para:</dt>
+                    <dd class="col-sm-9" id="details_end"></dd>
+                </div>
+                
+                <dt class="col-sm-3">Descrição:</dt>
+                <dd class="col-sm-9" id="details_description"></dd>
+    
+            </dl>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary btnViewEditReminder" id="btnViewEditReminder" data-id="{{ $reminder->id }}" data-description="{{ $reminder->description }}" data-responsible_id="{{ $reminder->responsible_id }}" data-author_id="{{ $reminder->author_id }}" data-company_id="{{ $reminder->company_id }}" data-reminder_date="{{ $reminder->reminder_date }}" data-status="{{ $reminder->status }}">Alterar Lembrete <i class="fa-solid fa-pen"></i></button>
+            </div><!--fim modal-footer-->
+        </div><!--Fim modal-body-->
+      </div><!--Fim viewReminder-->
+
+      <!--updateReminderView-->
+      <div class="updateReminderView" id="updateReminderView" style="display:none;">
+        <div class="modal-body">
+
+            <form id="updateReminderForm" class="row g-3">
+                    @csrf
+
+                    
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="reminder_date" class="form-label">Data e Hora</label>
+                                <input type="datetime-local" class="form-control" id="edit_reminder_date" name="reminder_date" value="{{ old('reminder_date') }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="target_user_id" class="form-label">Para quem?</label>
+                                <select id="edit_responsible_id" name="responsible_id" class="form-select">
+                                    <option value="">Escolha um usuário</option>
+                                    
+                                    @foreach ($usersByCompany as $userByCompany)
+                                        <option value="{{ $userByCompany->id }}">{{ $userByCompany->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="description" class="form-label">Mensagem</label>
+                                <textarea class="form-control" id="edit_description" name="description" rows="3">{{ old('description') }}</textarea>
+                            </div>
+                        </div>
+
+                    </fieldset>
+
+                    
+                    <div class="col-md-12">
+                        <input type="hidden" class="form-control" id="edit_company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                        <input type="hidden" class="form-control" id="edit_author_id" name="author_id" value="{{ auth()->user()->id }}">                 
+                        <input type="hidden" class="form-control" id="edit_id" name="id" value="">                 
+                    </div>
+                    
+                </form><!--finalizando form aqui para garantir pegar a ação do botão de salvar-->
+        </div><!--fim modal-body-->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="editReminderCancel">Cancelar</button>
+            <button type="submit" class="btn btn-primary updateReminderBtn" id="updateReminderBtn">Salvar Alterações <i class="fa-regular fa-floppy-disk"></i></button>
+        </div><!--fim modal-footer-->
+      </div><!--Fim updateReminderView -->
+      
+    </div>
+  </div>
+</div><!-- fim updateLembrete -->
 
 
 <!--Toastr -->
@@ -429,8 +521,81 @@ $(document).ready(function(){
         });
     }
 
-    setInterval(checkReminders, 5000); // Verifica a cada minuto 60000
+    setInterval(checkReminders, 60000); // Verifica a cada minuto 60000
 
+
+    /**Popula a modal de detalhes do lembrete com os dados vindos do banco de dados */
+    $('.reminderDetails').on('click', function(event) {
+        //console.log($('.reminderDetails'));
+        
+        var dados = {
+            id: $(this).attr('data-id'),
+            description: $(this).attr('data-description'),
+            responsible_id: $(this).attr('data-responsible_id'),
+            author_id: $(this).attr('data-author_id'),
+            company_id: $(this).attr('data-company_id'),
+            reminder_date: $(this).attr('data-reminder_date'),
+            status: $(this).attr('data-status')
+        };
+
+        // Popula os dados na modal
+        $('#details_id').text(dados.id);
+        $('#details_description').text(dados.description);
+        $('#details_responsible_id').text(dados.responsible_id);
+        $('#details_author_id').text(dados.author_id);
+        $('#details_company_id').text(dados.company_id);
+        $('#details_reminder_date').text(dados.reminder_date);
+        $('#details_status').text(dados.status);
+
+        // Armazena os dados no botão de edição para uso posterior 
+        $('#btnViewEditReminder').data('reminderData', dados);
+        
+        // Abre a modal
+        $('#updateLembrete').modal('show');
+    });
+
+
+    /**Pega os dados do lembrete vindos do banco de dados e salva em um array */
+    $('.btnViewEditReminder').on('click', function(event) {
+        var dados = $(this).data('reminderData'); // Recupera os dados armazenados
+        fillUpdateReminderForm(dados);
+    });
+
+    /**Ocultar detalhes do lembrete e mostra formulário de alteração de lembrete */
+    document.getElementById("btnViewEditReminder").addEventListener("click", function() { 
+        // Esconder viewEventDetails e detailsModalLabel 
+        document.getElementById("detailsReminder").style.display = "none"; 
+        document.getElementById("detailsModalLabel").style.display = "none"; 
+        document.getElementById("btnViewEditReminder").style.display = "none"; 
+        // Mostrar viewEditEvent e editModalLabel 
+        document.getElementById("updateReminderView").style.display = "block"; 
+        document.getElementById("updateModalLabel").style.display = "block"; 
+    });
+
+    /**Mostra os detalhes do lembrete e fecha formulário de alterar lembrete*/
+    document.getElementById("editReminderCancel").addEventListener("click", function() { 
+        // Esconder viewEditEvent e editModalLabel 
+        document.getElementById("updateReminderView").style.display = "none"; 
+        document.getElementById("updateModalLabel").style.display = "none"; 
+        // Mostrar viewEventDetails e detailsModalLabel 
+        document.getElementById("detailsReminder").style.display = "block"; 
+        document.getElementById("detailsModalLabel").style.display = "block"; 
+        document.getElementById("btnViewEditReminder").style.display = "block"; 
+    });
+
+    /**Função para preencher campos do formuláro de update */
+    function fillUpdateReminderForm(dados){
+        //console.log(dados);
+        $('#edit_id').val(dados.id);
+        $('#edit_reminder_date').val(dados.reminder_date);
+        $('#edit_responsible_id').val(dados.responsible_id);
+        $('#edit_company_id').val(dados.company_id);
+        $('#edit_description').val(dados.description);
+        $('#edit_status').val(dados.status);
+        $('#edit_author_id').val(dados.author_id);
+    }
+    
+    
 
 }); //Fim document.ready
 
@@ -439,3 +604,6 @@ $(document).ready(function(){
 
 </body>
 </html>
+
+
+
