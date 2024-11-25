@@ -52,6 +52,7 @@
                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addLembrete"><i class="fa-solid fa-plus"></i> Novo Lembrete</a></li>
                     <li><hr class="dropdown-divider"></li>
                     @foreach($reminders as $reminder) 
+                        <li class="reminder">
                             <span class="d-flex flex-row justify-content-center">
                                 <a href="#" class="dropdown-item reminderDetails" data-id="{{ $reminder->id }}" data-description="{{ $reminder->description }}" data-responsible_id="{{ $reminder->responsible_id }}" data-author_id="{{ $reminder->author_id }}" data-company_id="{{ $reminder->company_id }}" data-reminder_date="{{ $reminder->reminder_date }}" data-status="{{ $reminder->status }}">{{ limitText($reminder->description, 17) }}</a>
                                 <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $reminder->id }}"  ><i class="fa-solid fa-trash"></i></button>
@@ -415,96 +416,171 @@ $(document).ready(function(){
         });
     });
 
-    /**Função para alarme dos lembretes */
-    function loadReminders() {
+    /**Formulário de atualização de registro */
+    $('#updateReminderForm').on('submit', function(e) {
+        e.preventDefault();
+        console.log('clicou para atualizar');
+        var id = $('#edit_id').val();
         $.ajax({
-            url: '{{ route('fetch.index') }}',
-            method: 'GET',
-            success: function(data) {
-                var reminderList = $('#reminder-list');
-                reminderList.empty();
+            url: `/update-reminders/${id}`,
+            method: 'PUT',
+            data: $(this).serialize(),
+            success: function(response) {
+                $('#updateLembrete').modal('hide'); // Certifique-se de que o ID do modal está correto
+                //$('#invoicesTable').DataTable().ajax.reload();
+                //Swal.fire('Success', 'Registro atualizado com sucesso', 'success');
+                //console.log(response);
+                if(response){
+                    Swal.fire('Pronto!', response.success, 'success');
+                }
+                setTimeout(function() {
+                    location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                }, 2000); // 2000 milissegundos = 2 segundos
+            },
+            error: function(response) {
+                //Swal.fire('Error', 'ERRO ao atualizar registro', 'error');
+                console.log(response.responseJSON);
+                if(response.responseJSON){
+                    Swal.fire('Erro!', response.responseJSON.message, 'error');
+                }
+            }
+        });
+    });
 
-                data.forEach(function(reminder) {
-                    var listItem = $('<li>')
-                        .attr('data-id', reminder.id)
-                        .attr('data-status', reminder.status)
-                        .attr('data-description', reminder.description)
-                        .attr('data-reminder_date', reminder.reminder_date)
-                        .text(reminder.description + ' - ' + reminder.reminder_date);
+    // Evento para o botão #updateReminderBtn
+    $('#updateReminderBtn').on('click', function() {
+        $('#updateReminderForm').submit();
+    });
+
+    /** Função para recarregar os dados da lista de lembretes */
+    function reloadReminders() {
+        console.log('reloadReminders function called');
+        
+        $.ajax({
+            url: '/fetch-reminders', // Substitua pelo endpoint real para buscar os lembretes
+            method: 'GET',
+            success: function(reminders) {
+                // Atualizar a ul com os lembretes recebidos
+                var reminderList = $('#reminder-list');
+                reminderList.empty(); // Limpa a lista existente
+
+                // Adicionar lembretes atualizados
+                reminders.forEach(function(reminder) {
+                    var listItem = `
+                        <li class="reminder">
+                            <span class="d-flex flex-row justify-content-center">
+                                <a href="#" class="dropdown-item reminderDetails" data-id="${reminder.id}" data-description="${reminder.description}" data-responsible_id="${reminder.responsible_id}" data-author_id="${reminder.author_id}" data-company_id="${reminder.company_id}" data-reminder_date="${reminder.reminder_date}" data-status="${reminder.status}">${reminder.description}</a>
+                                <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="${reminder.id}"><i class="fa-solid fa-trash"></i></button>
+                            </span>
+                        </li>
+                    `;
                     reminderList.append(listItem);
                 });
-            }
-        });
-    }
 
-    /**Verifica novos lembretes */
-    function checkReminders() {
-        console.log('checkReminders function called');
-        var reminders = document.querySelectorAll('#reminder-list li');
-        console.log('Number of reminders found:', reminders.length);
-
-        reminders.forEach(function(reminder) {
-            var description = reminder.dataset.description;
-            var reminderTimeText = reminder.dataset.reminder_date;
-
-            if (!reminderTimeText) {
-                console.log('reminder_time is undefined or invalid');
-                return;
-            }
-
-            var reminderTime = new Date(reminderTimeText);
-            if (isNaN(reminderTime)) {
-                console.log('Invalid date format:', reminderTimeText);
-                return;
-            }
-
-            var now = new Date();
-
-            console.log('Reminder description:', description);
-            console.log('Reminder time text:', reminderTimeText);
-            console.log('Reminder time:', reminderTime, 'Current time:', now);
-
-            if (reminderTime.getFullYear() === now.getFullYear() &&
-                reminderTime.getMonth() === now.getMonth() &&
-                reminderTime.getDate() === now.getDate() &&
-                reminderTime.getHours() === now.getHours() &&
-                reminderTime.getMinutes() === now.getMinutes() &&
-                reminder.dataset.status != 'read') {
-
-                console.log('Condition passed: ', 'reminderTime:', reminderTime, 'now:', now, 'status:', reminder.dataset.status);
-
-                var reminderId = reminder.dataset.id;
-                console.log('Displaying reminder with ID:', reminderId);
-
-                toastr.options = {
-                    "closeButton": true,
-                    "positionClass": "toast-top-right",
-                    "onclick": function() {
-                        markAsRead(reminderId);
-                    }
-                };
-                toastr.info('Lembrete: ' + description);
-
-                var audio = new Audio('{{ asset('AlarmRadiate.mp3') }}');
-                audio.loop = true;
-
-                // Garantir que o áudio está pronto para ser reproduzido
-                audio.addEventListener('canplaythrough', function() {
-                    audio.play().catch(function(error) {
-                        console.log('Audio playback failed:', error);
-                    });
+                // Reaplicar evento de clique aos novos elementos .reminderDetails
+                $('.reminderDetails').on('click', function(event) {
+                    event.preventDefault();
+                    var dados = {
+                        id: $(this).attr('data-id'),
+                        description: $(this).attr('data-description'),
+                        responsible_id: $(this).attr('data-responsible_id'),
+                        author_id: $(this).attr('data-author_id'),
+                        company_id: $(this).attr('data-company_id'),
+                        reminder_date: $(this).attr('data-reminder_date'),
+                        status: $(this).attr('data-status')
+                    };
+                    console.log(dados);
                 });
 
-                toastr.options.onHidden = function() {
-                    audio.pause();
-                    audio.currentTime = 0; // Reseta o som para o início
-                };
-            } else {
-                console.log('Condition not met', 'reminderTime:', reminderTime, 'now:', now, 'status:', reminder.dataset.status);
+                console.log('Reminders updated successfully');
+            },
+            error: function(error) {
+                console.log('Error fetching reminders:', error);
             }
         });
     }
 
+    /** Verifica novos lembretes */
+function checkReminders() {
+    console.log('checkReminders function called');
+
+    // Recarrega os lembretes antes de checar
+    reloadReminders();
+
+    var reminders = document.querySelectorAll('#reminder-list li.reminder .reminderDetails');
+    console.log('Number of reminders found:', reminders.length);
+
+    reminders.forEach(function(reminder) {
+        var description = reminder.getAttribute('data-description');
+        var reminderTimeText = reminder.getAttribute('data-reminder_date');
+
+        if (!reminderTimeText) {
+            console.log('reminder_time is undefined or invalid');
+            return;
+        }
+
+        var reminderTime = new Date(reminderTimeText);
+        if (isNaN(reminderTime)) {
+            console.log('Invalid date format:', reminderTimeText);
+            return;
+        }
+
+        var now = new Date();
+
+        console.log('Reminder description:', description);
+        console.log('Reminder time text:', reminderTimeText);
+        console.log('Reminder time:', reminderTime, 'Current time:', now);
+
+        if (reminderTime.getFullYear() === now.getFullYear() &&
+            reminderTime.getMonth() === now.getMonth() &&
+            reminderTime.getDate() === now.getDate() &&
+            reminderTime.getHours() === now.getHours() &&
+            reminderTime.getMinutes() === now.getMinutes() &&
+            reminder.getAttribute('data-status') != 'read') {
+
+            console.log('Condition passed: ', 'reminderTime:', reminderTime, 'now:', now, 'status:', reminder.getAttribute('data-status'));
+
+            var reminderId = reminder.getAttribute('data-id');
+            console.log('Displaying reminder with ID:', reminderId);
+
+            var audio = new Audio('{{ asset('AlarmRadiate.mp3') }}');
+            audio.loop = true;
+
+            // Garantir que o áudio está pronto para ser reproduzido
+            audio.addEventListener('canplaythrough', function() {
+                audio.play().catch(function(error) {
+                    console.log('Audio playback failed:', error);
+                });
+            });
+
+            toastr.options = {
+                "closeButton": true,
+                "positionClass": "toast-top-right",
+                "timeOut": 0, // Impede que o toastr desapareça automaticamente
+                "extendedTimeOut": 0, // Impede que o toastr desapareça automaticamente
+                "onclick": function() {
+                    markAsRead(reminderId);
+                    audio.pause();
+                    audio.src = ''; // Remove o áudio
+                    toastr.clear(); // Limpa o toastr quando clicado
+                    checkReminders(); // Chama a função checkReminders novamente
+                },
+                "onHidden": function() {
+                    audio.pause();
+                    audio.src = ''; // Remove o áudio
+                }
+            };
+
+            toastr.info('Lembrete: ' + description);
+        } else {
+            console.log('Condition not met', 'reminderTime:', reminderTime, 'now:', now, 'status:', reminder.getAttribute('data-status'));
+        }
+    });
+}
+
+
+/**Busca por algum lembrete ativo a cada X segundos - 1000 = 1 segundo */
+setInterval(checkReminders, 15000); // Verifica a cada minuto 60000
 
     function markAsRead(reminderId) {
         $.ajax({
@@ -519,7 +595,6 @@ $(document).ready(function(){
         });
     }
 
-    setInterval(checkReminders, 60000); // Verifica a cada minuto 60000
 
 
     /**Popula a modal de detalhes do lembrete com os dados vindos do banco de dados */

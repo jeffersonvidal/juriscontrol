@@ -26,7 +26,8 @@ class LoginController extends Controller
         /**Verifica se o usuário foi autenticado */
         if(!$authenticated){
             /**Redireciona para tela de login novamente e envia mensagem de erro */
-            return back()->withInput()->with('error', 'Email ou senha inválidos');
+            //return back()->withInput()->with('error', 'Email ou senha inválidos');
+            return redirect()->route('login.index')->with('danger', 'Email ou senha inválidos!');
         }
 
         /**Se estiver tudo correto redireciona para dashboard */

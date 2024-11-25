@@ -20,7 +20,7 @@ class ReminderController extends Controller
     }
 
     /**Carrega  os lembretes */
-    public function fetch() { 
+    public function fetchreminders() { 
         $reminders = Reminder::all(); 
         return response()->json($reminders); 
     }
@@ -83,7 +83,7 @@ class ReminderController extends Controller
                 'description' => $request->description,
                 'company_id' => $request->company_id,
                 'author_id' => $request->author_id,
-                'status' => $request->status,
+                'status' => 'unread',
             ]);
 
             //comita depois de tudo ter sido salvo
