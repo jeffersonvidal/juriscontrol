@@ -62,27 +62,42 @@ class ReminderController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Reminder $reminder)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Reminder $reminder)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Reminder $reminder)
+    public function update(ReminderRequest $request, Reminder $reminder)
     {
-        //
+        //Validar o formulário
+        $request->validated();
+        
+
+        //garantir que salve nas duas tabelas do banco de dados
+        DB::beginTransaction();
+
+        try {
+            
+            
+            $editReminder = Reminder::where('id', $reminder->id)
+            ->where('company_id', auth()->user()->company_id)->update([
+                'reminder_date' => $request->reminder_date,
+                'responsible_id' => $request->responsible_id,
+                'description' => $request->description,
+                'company_id' => $request->company_id,
+                'author_id' => $request->author_id,
+                'status' => $request->status,
+            ]);
+
+            //comita depois de tudo ter sido salvo
+            DB::commit();
+
+            //Redireciona para outra página após cadastrar com sucesso
+            return response()->json( ['success' => 'Registro alterado com sucesso!']);
+        } catch (Exception $e) {
+            //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+            DB::rollBack();
+
+            //Redireciona para outra página se der erro
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -90,7 +105,23 @@ class ReminderController extends Controller
      */
     public function destroy(Reminder $reminder)
     {
-        //
+        try {
+            //garantir que salve nas duas tabelas do banco de dados
+            DB::beginTransaction();
+
+            $deleteReminder = Reminder::where('id', $reminder->id)
+            ->where('company_id', auth()->user()->company_id)->delete();
+
+            //comita depois de tudo ter sido salvo
+            DB::commit();
+
+            return response()->json(['success' => 'Registro excluído com sucesso!']);
+        } catch (Exception $e) {
+            //Desfazer a transação caso não consiga cadastrar com sucesso no BD
+            DB::rollBack();
+
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 
     /**Marcar como lido */
