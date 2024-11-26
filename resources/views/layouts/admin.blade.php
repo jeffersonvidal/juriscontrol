@@ -9,6 +9,13 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .toast-top-custom {
+            top: 50% !important; /* Ajuste este valor conforme necessário */
+            right: 12px;
+        }
+    </style>
+    
     
 
     <title>JurisControl - Sistema de Controle Jurídico</title>
@@ -45,7 +52,7 @@
                 <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                     <span class="position-absolute top-0 start-0 translate-bottom badge rounded-pill bg-danger">
-                        7
+                        {{ $totalReminders }}
                     </span>
                 </button>
                 <ul id="reminder-list" class="dropdown-menu">
@@ -285,7 +292,7 @@
         </div><!--fim modal-body-->
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-            <button type="submit" class="btn btn-primary addButton">Salvar <i class="fa-regular fa-floppy-disk"></i></button>
+            <button type="submit" class="btn btn-primary addButton" id="createReminderButton">Salvar <i class="fa-regular fa-floppy-disk"></i></button>
         </div><!--fim modal-footer-->
       </div><!--Fim cadReminderView -->
       
@@ -394,6 +401,7 @@ $(document).ready(function(){
     /** Cadastrar lembrete */
     $('#createReminderForm').on('submit', function(e) {
         e.preventDefault();
+        console.log('clicou cadastrar');
         $.ajax({
             url: '{{ route('reminders.store') }}',
             method: 'POST',
@@ -414,6 +422,11 @@ $(document).ready(function(){
                 }
             }
         });
+    });
+
+    // Evento para o botão #updateReminderBtn
+    $('#createReminderButton').on('click', function() {
+        $('#createReminderForm').submit();
     });
 
     /**Formulário de atualização de registro */
@@ -555,7 +568,8 @@ function checkReminders() {
 
             toastr.options = {
                 "closeButton": true,
-                "positionClass": "toast-top-right",
+                //"positionClass": "toast-top-right",
+                "positionClass": "toast-top-custom",
                 "timeOut": 0, // Impede que o toastr desapareça automaticamente
                 "extendedTimeOut": 0, // Impede que o toastr desapareça automaticamente
                 "onclick": function() {
@@ -571,7 +585,7 @@ function checkReminders() {
                 }
             };
 
-            toastr.info('Lembrete: ' + description);
+            toastr.warning('Lembrete: ' + description);
         } else {
             console.log('Condition not met', 'reminderTime:', reminderTime, 'now:', now, 'status:', reminder.getAttribute('data-status'));
         }
@@ -580,7 +594,7 @@ function checkReminders() {
 
 
 /**Busca por algum lembrete ativo a cada X segundos - 1000 = 1 segundo */
-setInterval(checkReminders, 15000); // Verifica a cada minuto 60000
+setInterval(checkReminders, 60000); // Verifica a cada minuto 60000
 
     function markAsRead(reminderId) {
         $.ajax({

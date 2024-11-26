@@ -30,11 +30,27 @@ class GlobalAdminController extends Controller
         return $users;
      }
 
+    /**Soma todos os lembretes da empresa e do usuário logado */
+    function totalReminders()
+    {
+        $user = Auth::user();
+
+        $totalReminders = Reminder::where(function($query) use ($user) {
+                $query->where('company_id', $user->company_id)
+                    ->orWhere('responsible_id', $user->id);
+            })
+            ->where('status', 'unread') // Adicionando a condição para status = 'unread'
+            ->count();
+
+        return $totalReminders;
+    }
+
     /**Retorna todos os lembretes programados */
     public function getReminders() { 
         $user = Auth::user(); 
         $reminders = Reminder::where('company_id', $user->company_id)
         ->where('responsible_id', $user->id)
+        ->where('status', 'unread')
         ->get();
         return $reminders; 
     } 

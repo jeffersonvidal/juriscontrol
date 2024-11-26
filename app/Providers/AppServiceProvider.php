@@ -42,11 +42,15 @@ class AppServiceProvider extends ServiceProvider
 
                 /**Retorna todos os usuários da empresa logada */
                 $usersByCompany = $globalAdminController->getUsersByCompany();
+
+                /**Retorna quantidade de lembretes da empresa ou usuário logado */
+                $totalReminders = $globalAdminController->totalReminders();
                 
                 /**Compartilha os dados com todas as views */ 
                 View::share('reminders', $reminders); 
                 View::share('notifications', $notifications);
                 View::share('usersByCompany', $usersByCompany);
+                View::share('totalReminders', $totalReminders);
 
             } /**Fim Auth::check */
         });
