@@ -62,7 +62,7 @@
                         <li class="reminder">
                             <span class="d-flex flex-row justify-content-center">
                                 <a href="#" class="dropdown-item reminderDetails" data-id="{{ $reminder->id }}" data-description="{{ $reminder->description }}" data-responsible_id="{{ $reminder->responsible_id }}" data-author_id="{{ $reminder->author_id }}" data-company_id="{{ $reminder->company_id }}" data-reminder_date="{{ $reminder->reminder_date }}" data-status="{{ $reminder->status }}">{{ limitText($reminder->description, 17) }}</a>
-                                <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $reminder->id }}"  ><i class="fa-solid fa-trash"></i></button>
+                                <button class="text-decoration-none btn btn-sm text-danger deleteReminderBtn" id="deleteReminderBtn" title="Apagar Registro" data-id="{{ $reminder->id }}"  ><i class="fa-solid fa-trash"></i></button>
                             </span>
                         </li>
                     @endforeach
@@ -463,6 +463,50 @@ $(document).ready(function(){
     // Evento para o botão #updateReminderBtn
     $('#updateReminderBtn').on('click', function() {
         $('#updateReminderForm').submit();
+    });
+
+    /**Exibe pergunta se deseja realmente excluir o registro */
+    function deleteRegistro(id) {
+        Swal.fire({
+            title: 'Deseja realmente excluir esse registro?',
+            text: "Não será possível reverter essa operação posteriormente!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim! Excluir!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                });
+                $.ajax({
+                    url: `/destroy-reminders/${id}`,
+                    method: 'DELETE',
+                    success: function() {
+                        //$('#invoicesTable').DataTable().ajax.reload();
+                        Swal.fire('Pronto!', 'Registro excluído.', 'success');
+                        setTimeout(function() {
+                            location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                        }, 2000); // 3000 milissegundos = 3 segundos
+                    },
+                    error: function() {
+                        Swal.fire('Erro!', 'ERRO ao excluir registro', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    // Evento para o botão #deleteReminderBtn
+    document.querySelectorAll('.deleteReminderBtn').forEach(button => { 
+        button.addEventListener('click', function() { 
+            var id = this.getAttribute('data-id'); 
+            deleteRegistro(id); 
+        }); 
     });
 
     /** Função para recarregar os dados da lista de lembretes */
