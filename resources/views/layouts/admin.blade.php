@@ -558,83 +558,83 @@ $(document).ready(function(){
     }
 
     /** Verifica novos lembretes */
-function checkReminders() {
-    console.log('checkReminders function called');
+    function checkReminders() {
+        console.log('checkReminders function called');
 
-    // Recarrega os lembretes antes de checar
-    reloadReminders();
+        // Recarrega os lembretes antes de checar
+        reloadReminders();
 
-    var reminders = document.querySelectorAll('#reminder-list li.reminder .reminderDetails');
-    console.log('Number of reminders found:', reminders.length);
+        var reminders = document.querySelectorAll('#reminder-list li.reminder .reminderDetails');
+        console.log('Number of reminders found:', reminders.length);
 
-    reminders.forEach(function(reminder) {
-        var description = reminder.getAttribute('data-description');
-        var reminderTimeText = reminder.getAttribute('data-reminder_date');
+        reminders.forEach(function(reminder) {
+            var description = reminder.getAttribute('data-description');
+            var reminderTimeText = reminder.getAttribute('data-reminder_date');
 
-        if (!reminderTimeText) {
-            console.log('reminder_time is undefined or invalid');
-            return;
-        }
+            if (!reminderTimeText) {
+                console.log('reminder_time is undefined or invalid');
+                return;
+            }
 
-        var reminderTime = new Date(reminderTimeText);
-        if (isNaN(reminderTime)) {
-            console.log('Invalid date format:', reminderTimeText);
-            return;
-        }
+            var reminderTime = new Date(reminderTimeText);
+            if (isNaN(reminderTime)) {
+                console.log('Invalid date format:', reminderTimeText);
+                return;
+            }
 
-        var now = new Date();
+            var now = new Date();
 
-        console.log('Reminder description:', description);
-        console.log('Reminder time text:', reminderTimeText);
-        console.log('Reminder time:', reminderTime, 'Current time:', now);
+            console.log('Reminder description:', description);
+            console.log('Reminder time text:', reminderTimeText);
+            console.log('Reminder time:', reminderTime, 'Current time:', now);
 
-        if (reminderTime.getFullYear() === now.getFullYear() &&
-            reminderTime.getMonth() === now.getMonth() &&
-            reminderTime.getDate() === now.getDate() &&
-            reminderTime.getHours() === now.getHours() &&
-            reminderTime.getMinutes() === now.getMinutes() &&
-            reminder.getAttribute('data-status') != 'read') {
+            if (reminderTime.getFullYear() === now.getFullYear() &&
+                reminderTime.getMonth() === now.getMonth() &&
+                reminderTime.getDate() === now.getDate() &&
+                reminderTime.getHours() === now.getHours() &&
+                reminderTime.getMinutes() === now.getMinutes() &&
+                reminder.getAttribute('data-status') != 'read') {
 
-            console.log('Condition passed: ', 'reminderTime:', reminderTime, 'now:', now, 'status:', reminder.getAttribute('data-status'));
+                console.log('Condition passed: ', 'reminderTime:', reminderTime, 'now:', now, 'status:', reminder.getAttribute('data-status'));
 
-            var reminderId = reminder.getAttribute('data-id');
-            console.log('Displaying reminder with ID:', reminderId);
+                var reminderId = reminder.getAttribute('data-id');
+                console.log('Displaying reminder with ID:', reminderId);
 
-            var audio = new Audio('{{ asset('AlarmRadiate.mp3') }}');
-            audio.loop = true;
+                var audio = new Audio('{{ asset('AlarmRadiate.mp3') }}');
+                audio.loop = true;
 
-            // Garantir que o áudio está pronto para ser reproduzido
-            audio.addEventListener('canplaythrough', function() {
-                audio.play().catch(function(error) {
-                    console.log('Audio playback failed:', error);
+                // Garantir que o áudio está pronto para ser reproduzido
+                audio.addEventListener('canplaythrough', function() {
+                    audio.play().catch(function(error) {
+                        console.log('Audio playback failed:', error);
+                    });
                 });
-            });
 
-            toastr.options = {
-                "closeButton": true,
-                //"positionClass": "toast-top-right",
-                "positionClass": "toast-top-custom",
-                "timeOut": 0, // Impede que o toastr desapareça automaticamente
-                "extendedTimeOut": 0, // Impede que o toastr desapareça automaticamente
-                "onclick": function() {
-                    markAsRead(reminderId);
-                    audio.pause();
-                    audio.src = ''; // Remove o áudio
-                    toastr.clear(); // Limpa o toastr quando clicado
-                    checkReminders(); // Chama a função checkReminders novamente
-                },
-                "onHidden": function() {
-                    audio.pause();
-                    audio.src = ''; // Remove o áudio
-                }
-            };
+                toastr.options = {
+                    "closeButton": true,
+                    //"positionClass": "toast-top-right",
+                    "positionClass": "toast-top-custom",
+                    "timeOut": 0, // Impede que o toastr desapareça automaticamente
+                    "extendedTimeOut": 0, // Impede que o toastr desapareça automaticamente
+                    "onclick": function() {
+                        markAsRead(reminderId);
+                        audio.pause();
+                        audio.src = ''; // Remove o áudio
+                        toastr.clear(); // Limpa o toastr quando clicado
+                        checkReminders(); // Chama a função checkReminders novamente
+                    },
+                    "onHidden": function() {
+                        audio.pause();
+                        audio.src = ''; // Remove o áudio
+                    }
+                };
 
-            toastr.warning('Lembrete: ' + description);
-        } else {
-            console.log('Condition not met', 'reminderTime:', reminderTime, 'now:', now, 'status:', reminder.getAttribute('data-status'));
-        }
-    });
-}
+                toastr.warning('Lembrete: ' + description);
+            } else {
+                console.log('Condition not met', 'reminderTime:', reminderTime, 'now:', now, 'status:', reminder.getAttribute('data-status'));
+            }
+        });
+    }
 
 
 /**Busca por algum lembrete ativo a cada X segundos - 1000 = 1 segundo */
