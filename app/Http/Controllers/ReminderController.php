@@ -8,6 +8,7 @@ use App\Http\Requests\ReminderRequest;
 use Exception;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 class ReminderController extends Controller
 {
@@ -21,7 +22,12 @@ class ReminderController extends Controller
 
     /**Carrega  os lembretes */
     public function fetchreminders() { 
-        $reminders = Reminder::all(); 
+        //$reminders = Reminder::all(); 
+        $user = Auth::user(); 
+        $reminders = Reminder::where('company_id', $user->company_id)
+        ->where('responsible_id', $user->id)
+        ->where('status', 'unread')
+        ->get();
         return response()->json($reminders); 
     }
 

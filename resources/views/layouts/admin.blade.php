@@ -332,7 +332,9 @@
             </dl>
 
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary btnViewEditReminder" id="btnViewEditReminder" data-id="{{ $reminder->id }}" data-description="{{ $reminder->description }}" data-responsible_id="{{ $reminder->responsible_id }}" data-author_id="{{ $reminder->author_id }}" data-company_id="{{ $reminder->company_id }}" data-reminder_date="{{ $reminder->reminder_date }}" data-status="{{ $reminder->status }}">Alterar Lembrete <i class="fa-solid fa-pen"></i></button>
+                @if(isset($reminder))
+                    <button type="submit" class="btn btn-primary btnViewEditReminder" id="btnViewEditReminder" data-id="{{ $reminder->id }}" data-description="{{ $reminder->description }}" data-responsible_id="{{ $reminder->responsible_id }}" data-author_id="{{ $reminder->author_id }}" data-company_id="{{ $reminder->company_id }}" data-reminder_date="{{ $reminder->reminder_date }}" data-status="{{ $reminder->status }}">Alterar Lembrete <i class="fa-solid fa-pen"></i></button>
+                @endif
             </div><!--fim modal-footer-->
         </div><!--Fim modal-body-->
       </div><!--Fim viewReminder-->
@@ -521,13 +523,22 @@ $(document).ready(function(){
                 var reminderList = $('#reminder-list');
                 reminderList.empty(); // Limpa a lista existente
 
+                // Função para truncar o texto 
+                function limitText(text, maxLength) { 
+                    if (text.length > maxLength) { 
+                        return text.substring(0, maxLength) + '...'; 
+                    } else { 
+                        return text; 
+                    } 
+                }
+
                 // Adicionar lembretes atualizados
                 reminders.forEach(function(reminder) {
                     var listItem = `
                         <li class="reminder">
                             <span class="d-flex flex-row justify-content-center">
-                                <a href="#" class="dropdown-item reminderDetails" data-id="${reminder.id}" data-description="${reminder.description}" data-responsible_id="${reminder.responsible_id}" data-author_id="${reminder.author_id}" data-company_id="${reminder.company_id}" data-reminder_date="${reminder.reminder_date}" data-status="${reminder.status}">${reminder.description}</a>
-                                <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="${reminder.id}"><i class="fa-solid fa-trash"></i></button>
+                                <a href="#" class="dropdown-item reminderDetails" data-id="${reminder.id}" data-description="${reminder.description}" data-responsible_id="${reminder.responsible_id}" data-author_id="${reminder.author_id}" data-company_id="${reminder.company_id}" data-reminder_date="${reminder.reminder_date}" data-status="${reminder.status}">${limitText(reminder.description, 17)}</a>
+                                <button class="text-decoration-none btn btn-sm text-danger deleteReminderBtn" title="Apagar Registro" data-id="${reminder.id}"><i class="fa-solid fa-trash"></i></button>
                             </span>
                         </li>
                     `;
