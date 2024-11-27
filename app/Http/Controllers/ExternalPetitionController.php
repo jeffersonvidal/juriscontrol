@@ -30,7 +30,7 @@ class ExternalPetitionController extends Controller
     public function index()
     {
         $externalPetitions = ExternalPetition::where('company_id', auth()->user()->company_id)
-        ->orderBy('delivery_date', 'ASC')->get();
+        ->orderByRaw("FIELD(status, 'completed'), delivery_date ASC")->get();
 
         $externalOffices = ExternalOffice::where('company_id', auth()->user()->company_id)
         ->orderBy('name', 'ASC')->get();
