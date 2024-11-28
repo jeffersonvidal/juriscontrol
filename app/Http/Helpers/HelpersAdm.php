@@ -8,6 +8,7 @@ use App\Models\Invoice;
 use App\Models\Label;
 use App\Models\Task;
 use Carbon\Carbon;
+use Carbon\Month;
 
 class HelpersAdm{
 
@@ -79,11 +80,15 @@ class HelpersAdm{
     /**Somar todas as despesas pagas */
     $despesasTotal = Invoice::where('status', '=', 'paid')
     ->where('company_id', auth()->user()->company_id)
+    ->whereMonth('due_at', now()->month)
+    ->whereYear('due_at', now()->year)
     ->where('type', 'expense')->sum('amount');
 
     /**Somar todas as receitas pagas */
     $receitasTotal = Invoice::where('status', '=', 'paid')
     ->where('company_id', auth()->user()->company_id)
+    ->whereMonth('due_at', now()->month)
+    ->whereYear('due_at', now()->year)
     ->where('type', 'income')->sum('amount');
 
     /**Contabiliza saldo em caixa */
