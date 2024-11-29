@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
 
 <div class="container-fluid px-4">
     <div class="mb-1 hstack gap-2">
@@ -72,6 +72,29 @@
       </div>
       <div class="modal-body">
 
+    <!--Instruções para usar variáveis -->
+    <div class="accordion" id="accordionPanelsStayOpenExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                <i class="fa-solid fa-triangle-exclamation"></i> &nbsp;&nbsp; Instruções Importantes
+            </button>
+            </h2>
+            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+                <p>É <strong>obrigatório seguir esta normalização</strong> para preenchimento automático de algumas informações importantes padrão em documentos.</p>
+                <ul>
+                    <li>Ao redigir o modelo de documento que for necessário conter o cabeçalho com os dados do cliente, no local onde deverá aparecer essas informações, coloque apenas "<strong>[[dadosCliente]]</strong>" sem as aspas.</li>
+                    <li>Para adicionar data atual por extenso faça como no Ex: <strong>Brasília-DF, [[dataExtenso]]</strong>.</li>
+                    <li>Local para assinatura do cliente, coloque abaixo do traço da assinatura "<strong>[[nomeCliente]]</strong>" sem as aspas.</li>
+                    <li>Ao digitar conteúdo que deve ser alterado de acordo cada cliente, coloque o "<span style="background-color: yellow;">marca texto amarelo</span>" em todos os trechos a serem alterados.</li>
+                </ul>
+            </div>
+            </div>
+        </div>
+    </div><!--Fim Instruções para usar variáveis -->
+    <br>
+
       <form id="createForm" class="row g-3">
                 @csrf
 
@@ -135,6 +158,30 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+
+    <!--Instruções para usar variáveis -->
+    <div class="accordion" id="accordionPanelsStayOpenExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                <i class="fa-solid fa-triangle-exclamation"></i> &nbsp;&nbsp; Instruções Importantes
+            </button>
+            </h2>
+            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+                <p>É <strong>obrigatório seguir esta normalização</strong> para preenchimento automático de algumas informações importantes padrão em documentos.</p>
+                <ul>
+                    <li>Ao redigir o modelo de documento que for necessário conter o cabeçalho com os dados do cliente, no local onde deverá aparecer essas informações, coloque apenas "<strong>[[dadosCliente]]</strong>" sem as aspas.</li>
+                    <li>Para adicionar data atual por extenso faça como no Ex: <strong>Brasília-DF, [[dataExtenso]]</strong>.</li>
+                    <li>Local para assinatura do cliente, coloque abaixo do traço da assinatura "<strong>[[nomeCliente]]</strong>" sem as aspas.</li>
+                    <li>Ao digitar conteúdo que deve ser alterado de acordo cada cliente, coloque o "<span style="background-color: yellow;">marca texto amarelo</span>" em todos os trechos a serem alterados.</li>
+                </ul>
+            </div>
+            </div>
+        </div>
+    </div><!--Fim Instruções para usar variáveis -->
+    <br>
+
       <form id="updateForm" class="row g-3">
                 @csrf
                 <!-- @method('POST') -->
@@ -252,46 +299,29 @@
             }
         });
 
-        // Função para inicializar o CKEditor apenas uma vez
-        function initTinyMCEOnce(content) {
-            if (!tinymce.get('edit_content')) {
-                tinymce.init({
-                    selector: '#edit_content',
-                    language: 'pt_BR',
-                    plugins: ['anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-                        'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'mentions', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
-                        ],
-                    toolbar_mode: 'floating',
-                    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                    height: 300,
-                    setup: function (editor) {
-                        editor.on('init', function () {
-                            editor.setContent(content);
-                        });
-                    }
-                });
-            } else {
-                tinymce.get('edit_content').setContent(content);
-            }
-        }
-
-        /**Função que preenche os campos do formulário de atualização */
+        /** Função que preenche os campos do formulário de atualização */
         function editRegistro(dados) {
             let url = "{{ route('document-templates.show', 'id') }}";
             url = url.replace('id', dados[0].id);
 
-            /**Preenche os campos do form de atualização*/
+            /** Preenche os campos do form de atualização */
             $.get(url, function() {
-                // Verificar se dados[0].content existe
-                if (dados[0] && dados[0].content) {
-                    initTinyMCEOnce(dados[0].content);
-                } else {
-                    console.error('O conteúdo não está definido.');
-                }
                 $('#edit_id').val(dados[0].id);
                 $('#edit_title').val(dados[0].title);
+                $('#edit_content').val(dados[0].content);
                 $('#edit_type').val(dados[0].type);
                 $('#edit_area').val(dados[0].area);
+
+                // Inicializa ou atualiza o conteúdo do Summernote
+                $('#edit_content').summernote('destroy'); // Destrói qualquer instância existente
+                $('#edit_content').val(dados[0].content); // Preenche o conteúdo
+                $('#edit_content').summernote({           // Inicializa o Summernote
+                    height: 300,
+                    minHeight: null,
+                    maxHeight: null,
+                    focus: true
+                });
+
                 $('#updateModal').modal('show');
             });
         }
@@ -310,10 +340,6 @@
                 data: $(this).serialize(),
                 success: function(response) {
                     $('#updateModal').modal('hide');
-                    //$('#labelsTable').DataTable().ajax.reload();
-                    //Swal.fire('Success', 'Registro atualizado com sucesso', 'success');
-                    // console.log(data);
-                    // console.log(response);
                     if(response){
                         Swal.fire('Pronto!', response.success, 'success');
                     }
@@ -322,8 +348,6 @@
                     }, 2000); // 3000 milissegundos = 3 segundos
                 },
                 error: function(response) {
-                    //Swal.fire('Error', 'ERRO ao atualizar registro', 'error');
-                    //console.log(response.responseJSON);
                     if(response.responseJSON){
                         Swal.fire('Erro!', response.responseJSON.message, 'error');
                     }
@@ -368,6 +392,25 @@
                 }
             });
         }
+
+        /**Função para instanciar o summernote */
+        if (!window.summernoteInitialized) {
+            $('#content, #edit_content').summernote({
+                height: 300,
+                minHeight: null,
+                maxHeight: null,
+                focus: true
+            });
+            window.summernoteInitialized = true;
+        }
+
+        $('#createForm').on('submit', function () {
+            $('#contentCad').val($('#content').summernote('code'));
+        });
+
+        $('#updateform').on('submit', function () {
+            $('#contentUpdate').val($('#edit_content').summernote('code'));
+        });
 
         
     });

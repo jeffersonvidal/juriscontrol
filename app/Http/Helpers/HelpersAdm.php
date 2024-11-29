@@ -45,6 +45,21 @@ class HelpersAdm{
     return ucfirst($mes);
   }
 
+  /**Retorna data por extenso, para documentos - Ex: 29 de novembro de 2024 */
+  public function getCurrentDate()
+  {
+      // Obter a data corrente
+      $date = Carbon::now();
+
+      // Definir a localidade para português brasileiro
+      setlocale(LC_TIME, 'pt_BR.UTF-8');
+
+      // Formatar a data por extenso
+      $formattedDate = $date->formatLocalized('%d de %B de %Y');
+
+      return $formattedDate;
+  }
+
   /**Retorna total de contas a receber na semana corrente */
   public function getIncomeWeek(){
     // Data de início da semana
