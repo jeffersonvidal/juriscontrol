@@ -242,8 +242,6 @@
 </div><!--fim container-fluid-->
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.tiny.cloud/1/f0hn7yp6hoepuf9q4glhvc0ta67w6ereck2x2gaki1oh5zbr/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-<!-- <script src="https://cdn.tiny.cloud/1/f0hn7yp6hoepuf9q4glhvc0ta67w6ereck2x2gaki1oh5zbr/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script> -->
 <script>
     /**Add in database - store */
     $(document).ready(function(){

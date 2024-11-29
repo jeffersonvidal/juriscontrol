@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
 
 <div class="container-fluid px-4">
     <div class="mb-1 hstack gap-2">
@@ -552,7 +552,6 @@
 <!-- headerDocument -->
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.tiny.cloud/1/f0hn7yp6hoepuf9q4glhvc0ta67w6ereck2x2gaki1oh5zbr/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
     /**Add in database - store */
     $(document).ready(function(){
@@ -654,28 +653,26 @@
             }
         });
 
-        // Função para inicializar o CKEditor apenas uma vez
-        function initTinyMCEOnce(content) {
-            if (!tinymce.get('edit_content')) {
-                tinymce.init({
-                    selector: '#edit_content',
-                    language: 'pt_BR',
-                    plugins: ['anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-                        'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'mentions', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
-                        ],
-                    toolbar_mode: 'floating',
-                    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                    height: 300,
-                    setup: function (editor) {
-                        editor.on('init', function () {
-                            editor.setContent(content);
-                        });
-                    }
-                });
-            } else {
-                tinymce.get('edit_content').setContent(content);
-            }
+        
+
+        /**Função para instanciar o summernote */
+        if (!window.summernoteInitialized) {
+            $('#content, #edit_content').summernote({
+                height: 300,
+                minHeight: null,
+                maxHeight: null,
+                focus: true
+            });
+            window.summernoteInitialized = true;
         }
+
+        $('#createForm').on('submit', function () {
+            $('#contentCad').val($('#content').summernote('code'));
+        });
+
+        $('#updateform').on('submit', function () {
+            $('#contentUpdate').val($('#edit_content').summernote('code'));
+        });
 
         /**Função que preenche os campos do formulário de atualização */
         function showDocumentTemplate(dados) {
@@ -684,18 +681,22 @@
 
             /**Preenche os campos do form de atualização*/
             $.get(url, function() {
-                // Verificar se dados[0].content existe
-                if (dados[0] && dados[0].content) {
-                    initTinyMCEOnce(dados[0].content);
-                } else {
-                    console.error('O conteúdo não está definido.');
-                }
+                
                 $('#edit_id').val(dados[0].id);
                 $('#edit_title').val(dados[0].title);
+                $('#edit_content').val(dados[0].content);
                 $('#edit_type').val(dados[0].type);
                 $('#edit_area').val(dados[0].area);
-                $('#edit_company_id').val(dados[0].company_id);
-                //$('#edit_customer_id').val(dados[0].customer_id);
+
+                // Inicializa ou atualiza o conteúdo do Summernote
+                $('#edit_content').summernote('destroy'); // Destrói qualquer instância existente
+                $('#edit_content').val(dados[0].content); // Preenche o conteúdo
+                $('#edit_content').summernote({           // Inicializa o Summernote
+                    height: 300,
+                    minHeight: null,
+                    maxHeight: null,
+                    focus: true
+                });
                 $('#createDocumentModal').modal('show');
             });
         }
