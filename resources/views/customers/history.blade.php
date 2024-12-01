@@ -104,7 +104,7 @@
                                         @endphp
                                         </div>
                                     </div>
-                                </div>
+                                </div><!--fim endereço-->
                                 
                                 
                                 <span class="d-flex flex-row justify-content-center ms-auto">
@@ -180,7 +180,7 @@
                         <legend>Lista de Processos</legend>
                     </fieldset>
 
-                    <table id="datatablesSimple" class="table table-striped table-hover table-bordered">
+                    <table id="datatablesSimple3" class="table table-striped table-hover table-bordered">
                         <thead>
                             <tr>
                               <th>Parte contrária</th>
@@ -423,7 +423,7 @@
       </div>
       <div class="modal-body">
 
-      <table id="datatablesSimple" class="table table-striped table-hover">
+        <table id="datatablesSimpleDocsTemplate" class="table table-striped table-hover table-bordered">
                 <thead>
                         <tr>
                         <th>Título</th>
@@ -436,6 +436,8 @@
                     {{-- puxando registros do banco de dados --}}
                     @if (count($documentTemplates) > 0)
                         @foreach ($documentTemplates as $document)
+
+                        
                         
                             <tr>
                             <td>{{ $document->title }}</td>
@@ -444,7 +446,8 @@
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
                                         <button class="text-decoration-none btn btn-sm viewDocumentTemplate" title="Ver Modelo de Documento" data-id="{{ $document->id }}" data-title="{{ $document->title }}" 
-                                            data-content="{{ $clientHeaderDocs . $document->content }}" data-type="{{ $document->type }}" data-area="{{ $document->area }}" data-customer_id="{{ $customer->id }}" ><i class="fa-solid fa-eye"></i></button>
+                                            data-content="{{ $helper->mountCustomerDoc($helper->mountClientHeaderDocs($customer, $address), $document->content, $customer) }}" data-type="{{ $document->type }}" data-area="{{ $document->area }}" data-customer_id="{{ $customer->id }}" ><i class="fa-solid fa-eye"></i></button>
+                                            {{-- data-content="{{ $clientHeaderDocs . $document->content }}" data-type="{{ $document->type }}" data-area="{{ $document->area }}" data-customer_id="{{ $customer->id }}" ><i class="fa-solid fa-eye"></i></button> --}}
 
                                     </span>
                                 </td>
@@ -903,6 +906,9 @@
         }
     };//Fim via cep
 
+    /**Instanciar dataTables para buscar modelos de documentos*/
+    //new DataTable('#datatablesSimpleDocsTemplate');
+    $('#datatablesSimpleDocsTemplate').DataTable();
     
 </script>
 

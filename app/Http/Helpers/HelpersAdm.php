@@ -45,7 +45,7 @@ class HelpersAdm{
     return ucfirst($mes);
   }
 
-  /**Retorna data por extenso, para documentos - Ex: 29 de novembro de 2024 */
+  /** Retorna data por extenso, para documentos - Ex: 29 de novembro de 2024 */
   public function getCurrentDate()
   {
       // Obter a data corrente
@@ -55,7 +55,7 @@ class HelpersAdm{
       setlocale(LC_TIME, 'pt_BR.UTF-8');
 
       // Formatar a data por extenso
-      $formattedDate = $date->formatLocalized('%d de %B de %Y');
+      $formattedDate = $date->isoFormat('D [de] MMMM [de] YYYY');
 
       return $formattedDate;
   }
@@ -142,6 +142,20 @@ class HelpersAdm{
     ];
 
     return str_replace($variaveis, $camposDB, $texto);
+  }
+
+  /**Retorna documento preenchido com os dados do cliente */
+  public function mountCustomerDoc($customerHeader, $documentContent, $customerData){ //public function mountCustomerDoc($customerData, $document){
+    /**$customerData = cabeçalho com dados do cliente 
+     * $document = documento que será preenchido com os dados do cliente, copiado de documentTemplates
+     * 
+    */
+
+    //dd($customerData->name);
+    $document = str_replace("[[dadosCliente]]", $customerHeader, $documentContent);
+    $currentDate = str_replace("[[dataExtenso]]", $this->getCurrentDate(), $document);
+    $replaceCustomerName = str_replace("[[nomeCliente]]", $customerData->name, $currentDate);
+    return $replaceCustomerName;
   }
 
   /**Retorna situação se está atrasado ou no prazo */

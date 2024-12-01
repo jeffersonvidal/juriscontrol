@@ -38,6 +38,7 @@ class CustomerController extends Controller
         $customerAddress = CustomerAddress::with('customer')
             ->where('customer_id', $customer->id)
             ->orderBy('main',  'DESC')->get();
+        
         /**Retorna Documentos */
         $documentTemplates = DocumentTemplate::where('company_id', auth()->user()->company_id)
         ->orderBy('id', 'DESC')->get();
@@ -53,6 +54,9 @@ class CustomerController extends Controller
         ->where('company_id', auth()->user()->company_id)
         ->orderBy('id', 'DESC')->get();
 
+        /**Retorna documento preenchido com os dados do cliente */
+        
+
 
             //return view
             return view('customers.history', [
@@ -61,6 +65,7 @@ class CustomerController extends Controller
                 'documentTemplates' => $documentTemplates, 
                 'clientHeaderDocs' => $clientHeaderDocs,
                 'customerDocuments' => $customerDocuments,
+                'helper' => $this->helperAdm,
             ]);
     }
 
