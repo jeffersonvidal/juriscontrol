@@ -180,7 +180,7 @@
                         <legend>Lista de Processos</legend>
                     </fieldset>
 
-                    <table id="datatablesSimple3" class="table table-striped table-hover table-bordered">
+                    <table id="datatablesSimple1" class="table table-striped table-hover table-bordered">
                         <thead>
                             <tr>
                               <th>Parte contrária</th>
@@ -423,7 +423,7 @@
       </div>
       <div class="modal-body">
 
-        <table id="datatablesSimpleDocsTemplate" class="table table-striped table-hover table-bordered">
+        <table id="datatablesSimple3" class="table table-striped table-hover table-bordered">
                 <thead>
                         <tr>
                         <th>Título</th>
@@ -906,9 +906,6 @@
         }
     };//Fim via cep
 
-    /**Instanciar dataTables para buscar modelos de documentos*/
-    //new DataTable('#datatablesSimpleDocsTemplate');
-    $('#datatablesSimpleDocsTemplate').DataTable();
     
 </script>
 
