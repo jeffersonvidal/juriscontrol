@@ -29,6 +29,9 @@ https://github.com/googleapis/google-api-php-client
 * Composer
 * NodeJS
 
+## Medidas para gerar arquivos pdf
+A4 - 210 x 297(mm), 8,3 x 11,7(pol), 2.480 x 3.508(px)
+
 ## Como rodar o projeto baixado
 
 Duplicar o arquivo ".env.example" e renomear para ".env".<br>
