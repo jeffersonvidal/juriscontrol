@@ -92,6 +92,7 @@ Route::group(['middleware' => 'auth'], function(){
   Route::post('/store-customer', [CustomerController::class, 'store'])->name('customers.store'); //Salva novo registro no BD
   Route::put('/update-customer/{customer}', [CustomerController::class, 'update'])->name('customers.update'); //Atualiza um registro no BD
   Route::delete('/destroy-customer/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy'); //Exclui um registro no BD
+  Route::get('/document-customer-generate/{document}', [CustomerController::class, 'createPDF'])->name('customers.create.pdf'); //Listar todos os registros da tabela
 
   /**Rotas de Endereços de Clientes */
   Route::get('/index-customer-address', [CustomerAddressController::class, 'index'])->name('customer-addresses.index'); //Listar todos os registros da tabela

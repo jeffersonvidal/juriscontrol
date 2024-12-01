@@ -16,6 +16,7 @@ use Google\Service\Drive;
 use HelpersAdm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\Exists;
 
 class CustomerController extends Controller
 {
@@ -335,5 +336,28 @@ class CustomerController extends Controller
             //Redireciona para outra página se der erro
             return response()->json(['error' => $e->getMessage()]);
         }
+    }
+
+    /**Gerar PDF de modelos de documentos */
+    public function createPDF($documentId)
+    {
+        // Encontre o contrato do cliente com base no ID do documento
+        $customerContract = CustomerContract::where('id', $documentId)
+            ->where('company_id', auth()->user()->company_id)
+            ->firstOrFail();
+
+        // Encontre o cliente com base no ID do cliente no contrato
+        $customer = Customer::where('id', $customerContract->customer_id)->firstOrFail();
+
+        // Encontre o PDF do documento correspondente ao contrato do cliente
+        $documentPDF = CustomerContract::where('id', $customerContract->id)
+            ->where('company_id', auth()->user()->company_id)
+            ->where('customer_id', $customer->id)
+            ->firstOrFail();
+
+        // Retorne a view com o documento
+        return view('customers.create_pdf', [
+            'documentPDF' => $documentPDF,
+        ]);
     }
 }

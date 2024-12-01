@@ -161,6 +161,7 @@
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $customerDocument->id }}" data-title="{{ $customerDocument->title }}" 
                                             data-content="{{ $customerDocument->content }}" data-type="{{ $customerDocument->type }}" data-area="{{ $customerDocument->area }}" ><i class="fa-solid fa-pencil"></i></button>
                                         <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $customerDocument->id }}" ><i class="fa-solid fa-trash"></i></button>
+                                        <a class="btn btn-sm" href="{{ route('customers.create.pdf', ['document' => $customerDocument->id]) }}" title="Gerar PDF"><i class="fa-solid fa-file-pdf"></i></a>
 
                                     </span>
                                         

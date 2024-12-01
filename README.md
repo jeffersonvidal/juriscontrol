@@ -231,6 +231,11 @@ Instalar Dependência masbug/Flysystem Google Drive Ext
 composer require masbug/flysystem-google-drive-ext
 ```
 
+Instalar Dependência dompdf para gerar PDFs
+```
+composer require barryvdh/laravel-dompdf
+```
+
 Instalar TinyMCE
 ```
 composer require tinymce/tinymce
