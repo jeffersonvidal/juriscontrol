@@ -10,6 +10,9 @@ use App\Http\Controllers\Controller;
 use App\Models\CustomerAddress;
 use App\Models\CustomerContract;
 use App\Models\DocumentTemplate;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Exception;
 use Google\Client as GoogleClient;
 use Google\Service\Drive;
@@ -338,26 +341,46 @@ class CustomerController extends Controller
         }
     }
 
-    /**Gerar PDF de modelos de documentos */
+
+    /**Gerar PDFs */   
     public function createPDF($documentId)
     {
         // Encontre o contrato do cliente com base no ID do documento
         $customerContract = CustomerContract::where('id', $documentId)
             ->where('company_id', auth()->user()->company_id)
             ->firstOrFail();
-
+    
         // Encontre o cliente com base no ID do cliente no contrato
         $customer = Customer::where('id', $customerContract->customer_id)->firstOrFail();
-
+    
         // Encontre o PDF do documento correspondente ao contrato do cliente
         $documentPDF = CustomerContract::where('id', $customerContract->id)
             ->where('company_id', auth()->user()->company_id)
             ->where('customer_id', $customer->id)
             ->firstOrFail();
-
-        // Retorne a view com o documento
-        return view('customers.create_pdf', [
+    
+        // Opções do dompdf
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isPhpEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $options->set('isFontSubsettingEnabled', true);
+    
+        // Renderize a view principal do PDF
+        $pdf = Pdf::loadView('customers.create_pdf', [
             'documentPDF' => $documentPDF,
-        ]);
+            'headerImagePath' => public_path('imgs/headerDocsBV.png')
+        ])->setPaper('a4', 'portrait');
+    
+        return $pdf->stream();
     }
-}
+    
+    
+    
+    
+    
+    
+    
+
+
+}/**fim da classe */
