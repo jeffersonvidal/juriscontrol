@@ -58,7 +58,7 @@
     </style>
   </head>
   <body>
-    @if ($documentPDF->type != 'power_of_attorney')
+    @if ($documentPDF->type != 'hypossufficiency_declaration')
         <header>
             <img src="{{ public_path('imgs/headerDocsBV.png') }}" alt="Header Docs BV" width="100%">
         </header>
@@ -68,7 +68,7 @@
         {!! $documentPDF->content !!}
     </section>
 
-    @if ($documentPDF->type != 'power_of_attorney')
+    @if ($documentPDF->type != 'hypossufficiency_declaration')
         <footer>
             <div class="footerContainer">
                 <table>
