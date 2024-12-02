@@ -24,7 +24,7 @@
             height: 70px;
             text-align: center;
             border-top: 2px solid #50301E;
-            padding-top: 10px;
+            margin: 0 50px;
         }
         body {
             margin-top: 20px;
@@ -43,7 +43,7 @@
         .nomeEscritorio {
             text-align: left;
             color: #50301E;
-            width: 50%;
+            width: 70%;
         }
 
         .dadosEscritorio {
@@ -58,35 +58,41 @@
     </style>
   </head>
   <body>
-    <header>
-        <img src="{{ public_path('imgs/headerDocsBV.png') }}" alt="Header Docs BV" width="100%">
-    </header>
+    @if ($documentPDF->type != 'power_of_attorney')
+        <header>
+            <img src="{{ public_path('imgs/headerDocsBV.png') }}" alt="Header Docs BV" width="100%">
+        </header>
+    @endif
 
     <section class="content">
         {!! $documentPDF->content !!}
     </section>
 
-    <footer>
-        <div class="footerContainer">
-            <table>
-                <tr>
-                    <td>
-                        <div class="nomeEscritorio">
-                            <h2>Brandão Vidal Advogados</h2>
-                        </div>
-                    </td>
+    @if ($documentPDF->type != 'power_of_attorney')
+        <footer>
+            <div class="footerContainer">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="nomeEscritorio">
+                                <h2>Brandão Vidal Advogados</h2>
+                            </div>
+                        </td>
 
-                    <td>
-                        <div class="dadosEscritorio">
-                            <dd><a href="https://brandaovidaladvogados.com.br" target="_blank">brandaovidaladvogados.com.br</a></dd>
-                            <dd><a href="mailto:contato@brandaovidaladvogados.com.br" target="_blank">contato@brandaovidaladvogados.com.br</a></dd>
-                            <dd><a href="https://wa.me/5561981261073?utm_source=Documento+Jur%C3%ADdico&utm_medium=Rodap%C3%A9+de+documento+feito+pelo+escrit%C3%B3rio" target="_blank">(61) 98126-1073</a></dd>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-            
-        </div>
-    </footer>
+                        <td>
+                            <div class="dadosEscritorio">
+                                <dd><a href="https://brandaovidaladvogados.com.br" target="_blank">brandaovidaladvogados.com.br</a></dd>
+                                <dd><a href="mailto:contato@brandaovidaladvogados.com.br" target="_blank">contato@brandaovidaladvogados.com.br</a></dd>
+                                <dd><a href="https://wa.me/5561981261073?utm_source=Documento+Jur%C3%ADdico&utm_medium=Rodap%C3%A9+de+documento+feito+pelo+escrit%C3%B3rio" target="_blank">(61) 98126-1073</a></dd>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                
+            </div>
+        </footer>
+    @endif
+
+    
   </body>
 </html>
