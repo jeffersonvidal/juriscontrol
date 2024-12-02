@@ -86,8 +86,8 @@
                 <ul>
                     <li>Ao redigir o modelo de documento que for necessário conter o cabeçalho com os dados do cliente, no local onde deverá aparecer essas informações, coloque apenas "<strong>[[dadosCliente]]</strong>" sem as aspas.</li>
                     <li>Para adicionar data atual por extenso faça como no Ex: <strong>Brasília-DF, [[dataExtenso]]</strong>.</li>
-                    <li>Local para assinatura do cliente, coloque abaixo do traço da assinatura "<strong>[[nomeCliente]]</strong>" sem as aspas.</li>
                     <li>Ao digitar conteúdo que deve ser alterado de acordo cada cliente, coloque o "<span style="background-color: yellow;">marca texto amarelo</span>" em todos os trechos a serem alterados.</li>
+                    <li>Para adicionar qualquer informação pessoal e específica do cliente no documento criado usar  as expressões a seguir, exatamente como estão escritas: "<strong> [[nomeCliente]], [[nacionalidadeCliente]], [[estadoCivilCliente]], [[profissaoCliente]], [[telefoneCliente]], [[emailCliente]], [[rgCliente]], [[rgExpedidorCliente]], [[cpfCliente]], [[ruaCliente]], [[numeroCliente]], [[complementoCliente]], [[bairroCliente]], [[cidadeCliente]], [[ufCliente]], [[cepCliente]]</strong>". <br>Ex: para assinatura do cliente, coloque abaixo do traço da assinatura "<strong>[[nomeCliente]]</strong>" sem as aspas.</li>
                 </ul>
             </div>
             </div>
@@ -173,8 +173,8 @@
                 <ul>
                     <li>Ao redigir o modelo de documento que for necessário conter o cabeçalho com os dados do cliente, no local onde deverá aparecer essas informações, coloque apenas "<strong>[[dadosCliente]]</strong>" sem as aspas.</li>
                     <li>Para adicionar data atual por extenso faça como no Ex: <strong>Brasília-DF, [[dataExtenso]]</strong>.</li>
-                    <li>Local para assinatura do cliente, coloque abaixo do traço da assinatura "<strong>[[nomeCliente]]</strong>" sem as aspas.</li>
                     <li>Ao digitar conteúdo que deve ser alterado de acordo cada cliente, coloque o "<span style="background-color: yellow;">marca texto amarelo</span>" em todos os trechos a serem alterados.</li>
+                    <li>Para adicionar qualquer informação pessoal e específica do cliente no documento criado usar  as expressões a seguir, exatamente como estão escritas: "<strong> [[nomeCliente]], [[nacionalidadeCliente]], [[estadoCivilCliente]], [[profissaoCliente]], [[telefoneCliente]], [[emailCliente]], [[rgCliente]], [[rgExpedidorCliente]], [[cpfCliente]], [[ruaCliente]], [[numeroCliente]], [[complementoCliente]], [[bairroCliente]], [[cidadeCliente]], [[ufCliente]], [[cepCliente]]</strong>". <br>Ex: para assinatura do cliente, coloque abaixo do traço da assinatura "<strong>[[nomeCliente]]</strong>" sem as aspas.</li>
                 </ul>
             </div>
             </div>

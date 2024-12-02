@@ -145,18 +145,38 @@ class HelpersAdm{
   }
 
   /**Retorna documento preenchido com os dados do cliente */
-  public function mountCustomerDoc($customerHeader, $documentContent, $customerData){ //public function mountCustomerDoc($customerData, $document){
-    /**$customerData = cabeçalho com dados do cliente 
-     * $document = documento que será preenchido com os dados do cliente, copiado de documentTemplates
-     * 
-    */
+  public function mountCustomerDoc($customerHeader, $documentContent, $customerData) {
+    $placeholders = [
+        '[[nomeCliente]]' => $customerData->name ?? '',
+        '[[nacionalidadeCliente]]' => $customerData->nationality ?? '',
+        '[[estadoCivilCliente]]' => $customerData->marital_status ?? '',
+        '[[profissaoCliente]]' => $customerData->profession ?? '',
+        '[[telefoneCliente]]' => $customerData->phone ?? '',
+        '[[emailCliente]]' => $customerData->email ?? '',
+        '[[rgCliente]]' => $customerData->rg ?? '',
+        '[[rgExpedidorCliente]]' => $customerData->rg_expedidor ?? '',
+        '[[cpfCliente]]' => $customerData->cpf ?? '',
+        '[[ruaCliente]]' => $customerData->street ?? '',
+        '[[numeroCliente]]' => $customerData->num ?? '',
+        '[[complementoCliente]]' => $customerData->complement ?? '',
+        '[[bairroCliente]]' => $customerData->neighborhood ?? '',
+        '[[cidadeCliente]]' => $customerData->city ?? '',
+        '[[ufCliente]]' => $customerData->state ?? '',
+        '[[cepCliente]]' => $customerData->zipcode ?? ''
+    ];
 
-    //dd($customerData->name);
     $document = str_replace("[[dadosCliente]]", $customerHeader, $documentContent);
-    $currentDate = str_replace("[[dataExtenso]]", $this->getCurrentDate(), $document);
-    $replaceCustomerName = str_replace("[[nomeCliente]]", $customerData->name, $currentDate);
-    return $replaceCustomerName;
+    $document = str_replace("[[dataExtenso]]", $this->getCurrentDate(), $document);
+
+    foreach ($placeholders as $key => $value) {
+        if (strpos($document, $key) !== false) {
+            $document = str_replace($key, $value, $document);
+        }
+    }
+
+    return $document;
   }
+
 
   /**Retorna situação se está atrasado ou no prazo */
   public function getSituation($dataPrazo, $status = null){
