@@ -143,7 +143,6 @@
                         <thead>
                             <tr>
                               <th>Nome Documento</th>
-                              <th>Tipo</th>
                               <th>Área</th>
                               <th class="text-center">Ações</th>
                             </tr>
@@ -154,7 +153,6 @@
                                 @foreach ($customerDocuments as $customerDocument)
                                 <tr>
                                     <td>{{ $customerDocument->title }}</td>
-                                    <td>{{ $customerDocument->type }}</td>
                                     <td>{{ $customerDocument->area }}</td>
                                     <td>
                                     <span class="d-flex flex-row justify-content-center">
