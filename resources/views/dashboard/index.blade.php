@@ -13,6 +13,104 @@
 
     <!-- Conteúdo -->
     <div class="row">
+        <div class="col-md-12 mb-3 mb-sm-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Links Úteis</h5>
+                    <!--quadros contadores sua agenda hoje -->
+                    <div class="row">
+                        <!--Início do card -->
+                        <div class="col-sm-2 mb-4">
+                            <a href="https://app.zapsign.com.br/acesso/entrar" title="Assinar documentos digitalmente" target="_blank" class="text-decoration-none text-dark">
+                                <div class="card border shadow-sm h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2 text-lg-center">
+                                                <div style="font-size:12px; font-weight:bold;" class="text-uppercase mb-1">
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>ZapSign</h3></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div><!--Fim do card -->
+                        <!--Início do card -->
+                        <div class="col-sm-2 mb-4">
+                            <a href="https://www.tjdft.jus.br/pje" title="Tribunal de Justiça do Distrito Federal e dos Territórios" target="_blank" class="text-decoration-none text-dark">
+                                <div class="card border shadow-sm h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2 text-lg-center">
+                                                <div style="font-size:12px; font-weight:bold;" class="text-uppercase mb-1">
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>TJDFT</h3></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div><!--Fim do card -->
+                        <!--Início do card -->
+                        <div class="col-sm-2 mb-4">
+                            <a href="https://pje.trt10.jus.br/primeirograu/login.seam" title="Tribunal Regional do Trabalho da 10ª Região" target="_blank" class="text-decoration-none text-dark">
+                                <div class="card border shadow-sm h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2 text-lg-center">
+                                                <div style="font-size:12px; font-weight:bold;" class="text-uppercase mb-1">
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>TRT 10</h3></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div><!--Fim do card -->
+                        <!--Início do card -->
+                        <div class="col-sm-2 mb-4">
+                            <a href="https://bva.juriscontrol.com.br/create-customer-self/1" title="Formuário de cadastro de cliente" target="_blank" class="text-decoration-none text-dark">
+                                <div class="card border shadow-sm h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2 text-lg-center">
+                                                <div style="font-size:12px; font-weight:bold;" class="text-uppercase mb-1">
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><h5>Form Cad Cliente</h5></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div><!--Fim do card -->
+                        <!--Início do card -->
+                        <div class="col-sm-2 mb-4">
+                            <a href="{{ route('events.index') }}" title="Agenda do escritório" class="text-decoration-none text-dark">
+                                <div class="card border shadow-sm h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2 text-lg-center">
+                                                <div style="font-size:12px; font-weight:bold;" class="text-uppercase mb-1">
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><h3>Agenda</h3></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div><!--Fim do card -->
+                        
+                    </div>
+                    <!--Fim quadros contadores sua agenda hoje-->
+                    
+                </div>
+            </div>
+        </div>
+        
+    </div><br>
+
+    <!--Agenda pessoal e do escritório -->
+    <div class="row">
         <div class="col-sm-6 mb-3 mb-sm-0">
             <div class="card">
                 <div class="card-body">
