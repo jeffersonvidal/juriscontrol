@@ -31,20 +31,23 @@ class InvoiceController extends Controller
         $wallets = Wallet::where('company_id', auth()->user()->company_id)
         ->orderBy('id', 'DESC')->get();
 
-        /**Pega todos os registros inclusive na busca personalizada */
-        $invoices = Invoice::when($request->has('nome'), function ($whenQuery) use ($request){
-            $whenQuery->where('description', 'like', '%' . $request->nome . '%');
-        })
-        ->when($request->has('data_inicio'), function ($whenQuery) use ($request){
-            $whenQuery->where('due_at', '>=', \Carbon\Carbon::parse($request->data_inicio)->format('Y-m-d'));
-        })
-        ->when($request->has('data_fim'), function ($whenQuery) use ($request){
-            $whenQuery->where('due_at', '<=', \Carbon\Carbon::parse($request->data_fim)->format('Y-m-d'));
-        })
+    /** Pega todos os registros inclusive na busca personalizada */
+    $invoices = Invoice::query()
         ->where('company_id', auth()->user()->company_id)
         ->where('status', '!=', 'paid')
+        ->when($request->nome, function ($query, $nome) {
+            return $query->where('description', 'like', '%' . $nome . '%');
+        })
+        ->when($request->data_inicio, function ($query, $data_inicio) {
+            return $query->where('due_at', '>=', \Carbon\Carbon::parse($data_inicio)->format('Y-m-d'));
+        })
+        ->when($request->data_fim, function ($query, $data_fim) {
+            return $query->where('due_at', '<=', \Carbon\Carbon::parse($data_fim)->format('Y-m-d'));
+        })
         ->orderBy('due_at', 'ASC')
         ->get();
+
+
 
         /**Somar receitas do mês corrente */
         $mes = $this->modelFunctions->getCurrentNumberMonth();

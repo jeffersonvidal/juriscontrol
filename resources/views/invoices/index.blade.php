@@ -130,6 +130,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        
                     {{-- puxando registros do banco de dados --}}
                     @if (count($invoices) > 0)
                         @foreach ($invoices as $invoice)
