@@ -177,6 +177,36 @@ class HelpersAdm{
     return $document;
   }
 
+  /**Contabiliza captação de clientes através do link para formuláro de cadastro de cliente */
+
+  function extractIdsAndCount($url) {
+      // Extrair a parte do URL após a última barra
+      $parts = explode('/', parse_url($url, PHP_URL_PATH));
+      $lastPart = end($parts);
+      
+      // Separar os números antes e depois do "-"
+      list($companyId, $userId) = explode('-', $lastPart);
+      
+      // Contar os registros na tabela "indicacoes" com o campo "id_usuario" igual ao $userId
+      $count = DB::table('indicacoes')->where('id_usuario', $userId)->count();
+      
+      return [
+          'company_id' => $companyId,
+          'user_id' => $userId,
+          'count' => $count,
+      ];
+
+      // Exemplo de uso da função
+      // $url = 'https://bva.juriscontrol.com.br/create-customer-self/1-12';
+      // $result = extractIdsAndCount($url);
+
+      // echo 'ID da Empresa: ' . $result['company_id'] . "\n";
+      // echo 'ID do Usuário: ' . $result['user_id'] . "\n";
+      // echo 'Quantidade de Registros: ' . $result['count'] . "\n";
+  }
+
+  
+
 
   /**Retorna situação se está atrasado ou no prazo */
   public function getSituation($dataPrazo, $status = null){
