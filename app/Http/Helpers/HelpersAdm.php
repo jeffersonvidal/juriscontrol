@@ -126,7 +126,7 @@ class HelpersAdm{
     '[[phone]]','[[email]]','[[rg]]','[[rg_expedidor]]','[[cpf]]','[[street]]','[[num]]',
     '[[complement]]','[[neighborhood]]','[[city]]','[[state]]','[[zipcode]]');
 
-    $texto = "[[name]], [[nationality]], [[nationality]], [[profession]], portador(a) do RG nº [[rg]] [[rg_expedidor]], 
+    $texto = "[[name]], [[nationality]], [[marital_status]], [[profession]], portador(a) do RG nº [[rg]] [[rg_expedidor]], 
     inscrito(a) no CPF sob o nº [[cpf]], residente e domiciliado em [[street]] nº [[num]], 
     [[complement]], [[neighborhood]], [[city]] - [[state]], CEP [[zipcode]], 
     telefone: [[phone]], e-mail: [[email]]";
@@ -414,7 +414,8 @@ class HelpersAdm{
   /**Retorna Aniversariantes do mês corrente */
   public function getBirthdays(){
     $currentMonth = Carbon::now()->month; 
-    $customersWithBirthdaysThisMonth = Customer::whereMonth('birthday', $currentMonth)->get();
+    $customersWithBirthdaysThisMonth = Customer::whereMonth('birthday', $currentMonth)
+    ->orderByRaw('DAY(birthday)')->get();
     return $customersWithBirthdaysThisMonth;
   }
 

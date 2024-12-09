@@ -20,8 +20,8 @@
             <!-- Botões de gestão do cliente -->
             <span class="d-flex float-end">
             <button class="text-decoration-none btn btn-secondary btn-sm me-1 mb-1 mb-sm-0" data-bs-toggle="modal" data-bs-target="#listDocumentModal" title="Novo Documento" ><i class="fa-solid fa-file-signature"></i> Novo Documento</button>
-                <a class="btn btn-icon-split btn-secondary btn-sm me-1 mb-1 mb-sm-0" href="{{ route('customers.index') }}" title="Cadastrar Novo Processo"><i class="fa-regular fa-file-lines"></i> Novo Processo</a>
-                <a href="" class="btn btn-secondary btn-sm me-1 mb-1 mb-sm-0" title="Cadastrar Novo Consultivo"><i class="fa-solid fa-book"></i> Novo Consultivo</a>
+                {{-- <a class="btn btn-icon-split btn-secondary btn-sm me-1 mb-1 mb-sm-0" href="{{ route('customers.index') }}" title="Cadastrar Novo Processo"><i class="fa-regular fa-file-lines"></i> Novo Processo</a>
+                <a href="" class="btn btn-secondary btn-sm me-1 mb-1 mb-sm-0" title="Cadastrar Novo Consultivo"><i class="fa-solid fa-book"></i> Novo Consultivo</a> --}}
                 <button class="btn btn-sm btn-secondary btn-sm me-1 mb-1 mb-sm-0" data-bs-toggle="modal" data-bs-target="#createAddressesModal"><i class="fa-solid fa-earth-americas"></i> Novo Endereço</button>
                 <form action="" method="post">
                     @csrf
@@ -43,12 +43,12 @@
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" id="pills-documentos-tab" data-bs-toggle="pill" data-bs-target="#pills-documentos" type="button" role="tab" aria-controls="pills-documentos" aria-selected="false"><i class="fa-solid fa-file-signature"></i> Documentos</button>
                 </li>
-                <li class="nav-item" role="presentation">
+                {{-- <li class="nav-item" role="presentation">
                   <button class="nav-link" id="pills-processos-tab" data-bs-toggle="pill" data-bs-target="#pills-processos" type="button" role="tab" aria-controls="pills-processos" aria-selected="false"><i class="fa-regular fa-file-lines"></i> Processos</button>
                 </li>
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" id="pills-consultivos-tab" data-bs-toggle="pill" data-bs-target="#pills-consultivos" type="button" role="tab" aria-controls="pills-consultivos" aria-selected="false"><i class="fa-solid fa-book"></i> Casos e Consultivos</button>
-                </li>
+                </li> --}}
             </ul><!-- fim Estrutura de Abas -->
 
 
