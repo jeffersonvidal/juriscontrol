@@ -195,22 +195,7 @@ class HelpersAdm{
     } else {
         return 'Não existem valores que atendam às condições.';
     }
-}
-
-// Exemplo de uso da função
-// $url = 'https://bva.juriscontrol.com.br/create-customer-self/1-12';
-// $result = extractIdsAndCount($url);
-
-// if (is_array($result)) {
-//     echo 'ID da Empresa: ' . $result['company_id'] . "\n";
-//     echo 'ID do Usuário: ' . $result['user_id'] . "\n";
-//     echo 'Quantidade de Registros: ' . $result['count'] . "\n";
-// } else {
-//     echo $result;
-// }
-
-
-  
+}  
 
 
   /**Retorna situação se está atrasado ou no prazo */
