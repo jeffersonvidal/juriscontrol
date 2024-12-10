@@ -102,6 +102,8 @@
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{{ route('users.index') }}" title="Gestão de Usuários do Sistema">Usuários</a>
                                     <a class="nav-link" href="{{ route('external-offices.index') }}" title="Gestão de Escritórios Externos / Parceiros">Escritórios Externos</a>
+                                    <a class="nav-link" href="{{ route('external-offices.index') }}" title="Gestão de Categorias do Sistema">Categorias do Sistema</a>
+                                    <a class="nav-link" href="" title="Gestão de Informações do Assinante">Dados do Assinante</a>
                                     <a class="nav-link" href="" title="Gestão de Gamificação de Usuários do Sistema">Gamificação</a>
                                 </nav>
                             </div>
