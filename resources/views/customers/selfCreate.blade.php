@@ -14,6 +14,7 @@
                                     <div class="card-body">
                                         <!-- componente de mensagens de alerta --> 
                                         <x-alerts />   
+
                                         
 
                                         <form id="createForm" class="row g-3">
@@ -146,6 +147,7 @@
                                                     $id = end($pathSegments);
                                                 @endphp
                                                 <input type="hidden" class="form-control" id="company_id" name="company_id" value="<?php echo $id; ?>">                 
+                                                <input type="hidden" class="form-control" id="referral_url" name="referral_url" value="{{ url()->current() }}">                 
                                             </div>
 
                                             <button type="submit" class="btn btn-primary addButton">Cadastrar <i class="fa-solid fa-paper-plane"></i></button>

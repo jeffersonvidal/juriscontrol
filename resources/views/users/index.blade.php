@@ -41,6 +41,7 @@
                 </thead>
                 <tbody>
                     {{-- puxando registros do banco de dados --}}
+                    
                     @if (count($allUsers) > 0)
                         @foreach ($allUsers as $user)
                             <tr>
@@ -55,7 +56,7 @@
                                         <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $user->id }}" 
                                         data-name="{{ $user->name }}" data-email="{{ $user->email }}" data-user_profile_id="{{ $user->user_profile_id }}" 
                                         data-company_id="{{ $user->company_id }}" data-phone="{{ $user->phone }}" data-cpf="{{ $user->cpf }}" 
-                                        data-birthday="{{ $user->birthday }}" data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
+                                        data-birthday="{{ $user->birthday }}" data-referral_url="{{ $user->referral_url }}" data-bs-toggle="modal" data-bs-target="#updateModal"><i class="fa-solid fa-pencil"></i></button>
                                         
                                         <button class="text-decoration-none btn btn-sm passwordBtn" title="Alterar Senha" data-id="{{ $user->id }}" 
                                         data-name="{{ $user->name }}" data-bs-toggle="modal" data-bs-target="#passwordModal"><i class="fa-solid fa-key"></i></button>
@@ -138,7 +139,7 @@
                 </div>
                 
                 <div class="col-md-12">
-                    <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{ auth()->user()->company_id }}">
                 </div>
                 
             
@@ -206,7 +207,8 @@
                 
                 <div class="col-md-12">
                     <input type="hidden" class="form-control" id="edit_company_id" name="company_id">            
-                    <input type="hidden" class="form-control" id="edit_id" name="id">            
+                    <input type="hidden" class="form-control" id="edit_id" name="id">          
+                    <input type="hidden" class="form-control" id="referral_url" name="referral_url" value="">          
                 </div>
                 
             
@@ -288,6 +290,7 @@
                             birthday: $(this).attr('data-birthday'), 
                             company_id: $(this).attr('data-company_id'), 
                             user_profile_id: $(this).attr('data-user_profile_id'), 
+                            referral_url: $(this).attr('data-referral_url'), 
                         }
                     ];
                     editLabel(dados);
@@ -311,6 +314,7 @@
                 $('#edit_birthday').val(dados[0].birthday);
                 $('#edit_company_id').val(dados[0].company_id);
                 $('#edit_user_profile_id').val(dados[0].user_profile_id);
+                $('#referral_url').val(dados[0].referral_url);
                 $('#updateModal').modal('show');
             });
         }

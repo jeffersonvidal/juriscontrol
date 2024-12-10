@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Customer;
+use App\Models\CustomerAcquisition;
 use App\Models\DocumentTemplate;
 use App\Models\ExternalPetition;
 use App\Models\Hearing;
@@ -179,21 +180,16 @@ class HelpersAdm{
 
   /**Contabiliza captação de clientes através do link para formuláro de cadastro de cliente */
 
-  function counterCustomerAcquisition($url) {
-    // Extrair a parte do URL após a última barra
-    $parts = explode('/', parse_url($url, PHP_URL_PATH));
-    $lastPart = end($parts);
-
-    // Separar os números antes e depois do "-"
-    list($companyId, $userId) = explode('-', $lastPart);
-
+  function counterCustomerAcquisition($userId) {
     // Contar os registros na tabela "indicacoes" com o campo "id_usuario" igual ao $userId
-    $count = DB::table('customer_acquisitions')->where('user_id', $userId)->count();
+    $count = CustomerAcquisition::where('user_id', $userId)
+    ->where('company_id', auth()->user()->company_id)
+    ->count();
 
     if ($count > 0) {
         return $count;
     } else {
-        return 'Não existem valores que atendam às condições.';
+        return 0;
     }
   }  
 

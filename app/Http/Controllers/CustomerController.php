@@ -7,6 +7,7 @@ use App\Http\Requests\SelfCustomerRequest;
 use App\Models\Company;
 use App\Models\Customer;
 use App\Http\Controllers\Controller;
+use App\Models\CustomerAcquisition;
 use App\Models\CustomerAddress;
 use App\Models\CustomerContract;
 use App\Models\DocumentTemplate;
@@ -271,8 +272,10 @@ class CustomerController extends Controller
         //garantir que salve nas duas tabelas do banco de dados
         DB::beginTransaction();
 
+        //dd($request);
+
         try {
-            //Model da tabela - campos a serem salvos
+            /**Salva os dados pessoais do cliente */
             $customer = new Customer();
             $customer->name = $this->helperAdm->setUppercase($request->name);
             $customer->company_id = $company->id;
@@ -288,6 +291,7 @@ class CustomerController extends Controller
             $customer->met_us = $request->met_us;
             $customer->save();
 
+            /**Salva o endereço do cliente */
             $customerAddress = new CustomerAddress();
             $customerAddress->zipcode = $this->helperAdm->limpaCampo($request->zipcode);
             $customerAddress->street = $request->street;
@@ -298,6 +302,33 @@ class CustomerController extends Controller
             $customerAddress->state = $request->state;
             $customerAddress->company_id = $request->company_id;
             $customer->address()->save($customerAddress);
+
+            /**Salva na tabela customer_acquisitions quem foi o usuário que adquiriu o cliente */
+            /**Extrair a parte do URL após a última barra parse_url($url, PHP_URL_PATH) obtém o caminho da URL
+            explode('/', ...) divide o caminho em partes usando '/' como delimitador
+            end($parts) pega a última parte do array resultante */
+
+            $parts = explode('/', parse_url($request->referral_url, PHP_URL_PATH));
+            $lastPart = end($parts);
+        
+            // Verificar se existe o "-" e se existe algo após ele
+            if (strpos($lastPart, '-') !== false && substr($lastPart, strpos($lastPart, '-') + 1) !== '') {
+                // Se existir o "-", separar a última parte em companyId e userId
+                list($companyId, $userId) = explode('-', $lastPart);
+            } else {
+                // Caso contrário, considerar toda a última parte como companyId
+                // e definir userId como 0
+                $companyId = $lastPart;
+                $userId = 0;
+            }
+
+            /**Salva dados de quem enviou o link para cadastro do cliente na tabela customer_aquisitions */
+            $newAcquisition = new CustomerAcquisition;
+            $newAcquisition->user_id = $userId;
+            $newAcquisition->customer_id = $customer->id;
+            $newAcquisition->company_id = $companyId;
+            $newAcquisition->save();
+
 
             /**Configuração no Google Drive */
             $client = new GoogleClient();

@@ -66,6 +66,14 @@ class UserController extends Controller
             $userData->birthday = $request->birthday;
             $userData->save();
 
+            // Pegando o ID do usuário recém-cadastrado
+            $userID = $userData->id;
+
+            // Atualizando a URL de referência
+            $referral_url = config('app.url') . "/create-customer-self/" . auth()->user()->company_id . "-" . $userID;
+            $userData->referral_url = $referral_url;
+            $userData->save();
+
             //dd($userData);
             //comita depois de tudo ter sido salvo
             DB::commit();
@@ -91,16 +99,30 @@ class UserController extends Controller
         DB::beginTransaction();
 
         try {
-            $editUser = User::where('id', $user->id)
-            ->where('company_id', auth()->user()->company_id)->update([
-                'name' => $request->name,
-                'email' => $request->email,
-                'company_id' => $request->company_id,
-                'user_profile_id' => $request->user_profile_id,
-                'phone' => $request->phone,
-                'cpf' => $request->cpf,
-                'birthday' => $request->birthday,
-            ]);
+            $user = User::where('id', $user->id)
+                ->where('company_id', auth()->user()->company_id)
+                ->first();
+
+            if ($user) {
+
+                // Verificar se o campo referral_url está vazio 
+                
+                if (empty($user->referral_url)) { 
+                    $referral_url = config('app.url') . "/create-customer-self/" . auth()->user()->company_id . "-" . $user->id; 
+                    $user->referral_url = $referral_url; 
+                }
+                
+                $editUser = $user->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'company_id' => $request->company_id,
+                    'user_profile_id' => $request->user_profile_id,
+                    'phone' => $request->phone,
+                    'cpf' => $request->cpf,
+                    'birthday' => $request->birthday,
+                    'referral_url' => $referral_url,
+                ]);
+            }
             //comita depois de tudo ter sido salvo
             DB::commit();
 

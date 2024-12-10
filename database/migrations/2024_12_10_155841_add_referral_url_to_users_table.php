@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customer_acquisitions', function (Blueprint $table) {
-            $table->id();
-            $table->integer('user_id');
-            $table->integer('customer_id');
-            $table->integer('company_id');
-            $table->softDeletes();
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('referral_url')->after('password')->nullable();
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customer_acquisitions');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('referral_url');
+        });
     }
 };
