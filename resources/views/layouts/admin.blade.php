@@ -130,7 +130,7 @@
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{{ route('events.index') }}" title="Gestão de Agenda">Agenda</a>
                                     <a class="nav-link" href="{{ route('tasks.index') }}" title="Gestão de Tarefas">Tarefas Diárias</a>
-                                    <a class="nav-link" href="{{ route('external-petitions.index') }}" title="Petições de Parceiros">Petições Parceiros</a>
+                                    <a class="nav-link" href="{{ route('external-petitions.index') }}" title="Petições">Petições</a>
                                     <a class="nav-link" href="{{ route('hearings.index') }}" title="Audiências e Perícias de Parceiros">Audiências/Perícias</a>
                                     <a class="nav-link" href="{{ route('legal-processes.index') }}" title="Gestão de Processos">Processos</a>
                                     <a class="nav-link" href="{{ route('document-templates.index') }}" title="Modelos de Documentos">Modelos de Documentos</a>
