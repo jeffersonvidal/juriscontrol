@@ -67,6 +67,7 @@
                                 </div>
                             </a>
                         </div><!--Fim do card -->
+                        
                         <!--Início do card -->
                         <div class="col-sm-2 mb-4">
                             <a href="https://bva.juriscontrol.com.br/create-customer-self/{{ auth()->user()->company_id }}-{{ auth()->user()->id }}" title="Formuário de cadastro de cliente" target="_blank" class="text-decoration-none text-dark">
