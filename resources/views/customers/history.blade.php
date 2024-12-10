@@ -156,9 +156,9 @@
                                     <td>{{ $customerDocument->area }}</td>
                                     <td>
                                     <span class="d-flex flex-row justify-content-center">
-                                        <button class="text-decoration-none btn btn-sm editBtn" title="Alterar Registro" data-id="{{ $customerDocument->id }}" data-title="{{ $customerDocument->title }}" 
+                                        <button class="text-decoration-none btn btn-sm editDocumentBtn" title="Alterar Registro" data-id="{{ $customerDocument->id }}" data-title="{{ $customerDocument->title }}" 
                                             data-content="{{ $customerDocument->content }}" data-type="{{ $customerDocument->type }}" data-area="{{ $customerDocument->area }}" ><i class="fa-solid fa-pencil"></i></button>
-                                        <button class="text-decoration-none btn btn-sm text-danger deleteBtn" title="Apagar Registro" data-id="{{ $customerDocument->id }}" ><i class="fa-solid fa-trash"></i></button>
+                                        <button class="text-decoration-none btn btn-sm text-danger deleteDocumentBtn" title="Apagar Registro" data-id="{{ $customerDocument->id }}" ><i class="fa-solid fa-trash"></i></button>
                                         <a class="btn btn-sm" href="{{ route('customers.create.pdf', ['document' => $customerDocument->id]) }}" title="Gerar PDF" target="_blank"><i class="fa-solid fa-file-pdf"></i></a>
 
                                     </span>
@@ -462,9 +462,6 @@
 </div><!-- fim listDocumentModal -->
 
 
-
-
-
 <!-- addDocumentModal -->
 <div class="modal fade" id="createDocumentModal" tabindex="-1" aria-labelledby="createDocumentModal" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -531,6 +528,96 @@
 </div><!-- fim addDocumentModal -->
 
 </div><!--fim container-fluid-->
+
+<!-- editDocumentModal -->
+<div class="modal fade" id="updateDocumentModal" tabindex="-1" aria-labelledby="updateDocumentModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Alterar Modelo de Documento</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+    <!--Instruções para usar variáveis -->
+    <div class="accordion" id="accordionPanelsStayOpenExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                <i class="fa-solid fa-triangle-exclamation"></i> &nbsp;&nbsp; Instruções Importantes
+            </button>
+            </h2>
+            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+                <p>É <strong>obrigatório seguir esta normalização</strong> para preenchimento automático de algumas informações importantes padrão em documentos.</p>
+                <ul>
+                    <li>Ao redigir o modelo de documento que for necessário conter o cabeçalho com os dados do cliente, no local onde deverá aparecer essas informações, coloque apenas "<strong>[[dadosCliente]]</strong>" sem as aspas.</li>
+                    <li>Para adicionar data atual por extenso faça como no Ex: <strong>Brasília-DF, [[dataExtenso]]</strong>.</li>
+                    <li>Ao digitar conteúdo que deve ser alterado de acordo cada cliente, coloque o "<span style="background-color: yellow;">marca texto amarelo</span>" em todos os trechos a serem alterados.</li>
+                    <li>Para adicionar qualquer informação pessoal e específica do cliente no documento criado usar  as expressões a seguir, exatamente como estão escritas: "<strong> [[nomeCliente]], [[nacionalidadeCliente]], [[estadoCivilCliente]], [[profissaoCliente]], [[telefoneCliente]], [[emailCliente]], [[rgCliente]], [[rgExpedidorCliente]], [[cpfCliente]], [[ruaCliente]], [[numeroCliente]], [[complementoCliente]], [[bairroCliente]], [[cidadeCliente]], [[ufCliente]], [[cepCliente]]</strong>". <br>Ex: para assinatura do cliente, coloque abaixo do traço da assinatura "<strong>[[nomeCliente]]</strong>" sem as aspas.</li>
+                </ul>
+            </div>
+            </div>
+        </div>
+    </div><!--Fim Instruções para usar variáveis -->
+    <br>
+
+      <form id="updateDocumentForm" class="row g-3">
+                @csrf
+                <!-- @method('POST') -->
+
+                
+                <div class="col-md-12 mb-2">
+                    <label for="title" class="form-label">Título</label>
+                    <input type="text" class="form-control" id="edit_documentTitle" name="title" value="{{ old('title') }}">
+                </div>
+                <div class="col-md-12">
+                    <label for="content" class="form-label">Conteúdo</label>
+                    <textarea class="form-control" id="edit_documentContent" name="content" rows="50">{{ old('content') }}</textarea>
+                </div>
+                <div class="col-md-6">
+                    <label for="type" class="form-label">Tipo</label>
+                    <select id="edit_documentType" name="type" class="form-select">
+                        <option value="">Informe o tipo de documento</option>
+                        <option value="contract">Contrato</option>
+                        <option value="hypossufficiency_declaration">Declaração Hipossuficiência</option>
+                        <option value="power_of_attorney">Procuração</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="area" class="form-label">Área</label>
+                    <select id="edit_documentArea" name="area" class="form-select">
+                    <option value="">Informe a área do direito</option>
+                        <option value="geral">Geral</option>
+                        <option value="ambiental">Ambiental</option>
+                        <option value="civil">Civil</option>
+                        <option value="complience">Complience</option>
+                        <option value="condominio">Condomínio</option>
+                        <option value="digital">Digital</option>
+                        <option value="penal">Penal</option>
+                        <option value="previdenciario">Previdenciário</option>
+                        <option value="trabalhista">Trabalhista</option>
+                        <option value="tributario">Tributário</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-12">
+                    <input type="hidden" class="form-control" id="edit_documentCompany_id" name="company_id" value="{{ auth()->user()->company_id }}">                 
+                    <input type="hidden" class="form-control" id="edit_documentCustomer_id" name="customer_id" value="{{ $customer->id }}">                 
+                    <input type="hidden" class="form-control" id="edit_documentId" name="id" value="">                 
+                </div>
+                
+            
+      </div><!--fim modal-body-->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-primary editButton">Salvar Alterações <i class="fa-solid fa-paper-plane"></i></button>
+      </div><!--fim modal-footer-->
+      </form><!--finalizando form aqui para garantir pegar a ação do botão de salvar-->
+    </div>
+  </div>
+</div>
+<!-- editDocumentModal -->
 
 <!-- headerDocument -->
 <div class="modal fade" id="headerDocument" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -605,6 +692,71 @@
             });
         });
 
+        /** Cadastrar Documento em CustomerContracts */
+        $('#updateDocumentForm').on('submit', function(e) {
+            e.preventDefault();
+            let url = "{{ route('customer-contracts.update', 'id') }}";
+            var id = $('#edit_documentId').val();
+            url = url.replace('id', id);
+            console.log(url);
+            $.ajax({
+                url: url,
+                method: 'PUT',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#createDocumentModal').modal('hide');
+                    if(response){
+                        Swal.fire('Pronto!', response.success, 'success');
+                    }
+                    setTimeout(function() {
+                        location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                    }, 2000); // 3000 milissegundos = 3 segundos
+                },
+                error: function(response) {
+                    console.log(response.responseJSON);
+                    if(response.responseJSON){
+                        Swal.fire('Erro!', response.responseJSON.message, 'error');
+                    }
+                }
+            });
+        });
+
+        /**Exibe pergunta se deseja realmente excluir o registro */
+        function deleteRegistro(dados) {
+            Swal.fire({
+                title: 'Deseja realmente excluir esse registro?',
+                text: "Não será possível reverter essa operação posteriormente!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim! Excluir!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    });
+                    $.ajax({
+                        url: `/destroy-customer-contract/${dados[0].id}`,
+                        method: 'DELETE',
+                        success: function() {
+                            //$('#labelsTable').DataTable().ajax.reload();
+                            Swal.fire('Pronto!', 'Registro excluído.', 'success');
+                            setTimeout(function() {
+                                location.reload(true); // O parâmetro 'true' força o recarregamento a partir do servidor
+                            }, 2000); // 3000 milissegundos = 3 segundos
+                        },
+                        error: function() {
+                            Swal.fire('Erro!', 'ERRO ao excluir registro', 'error');
+                        }
+                    });
+                }
+            });
+        }
+
         /**Atualiza registro no banco de dados*/
         /**Passa valores do registro para o formulário na modal de atualização */
         $('button').on('click', function() {
@@ -650,6 +802,27 @@
                     ];
                     //console.log(dados[0]);
                     showDocumentTemplate(dados);
+            }else if($(this).hasClass('editDocumentBtn')){
+                var dados = [
+                        { 
+                            id: $(this).attr('data-id'),
+                            title: $(this).attr('data-title'),
+                            content: $(this).attr('data-content'),
+                            type: $(this).attr('data-type'),
+                            area: $(this).attr('data-area'),
+                            company_id: $(this).attr('data-company_id'),
+                            customer_id: $(this).attr('data-customer_id'),
+                        }
+                    ];
+                    //console.log(dados[0]);
+                    showDocumentEdit(dados);
+            }else if($(this).hasClass('deleteDocumentBtn')){
+                var dados = [
+                        { 
+                            id: $(this).attr('data-id'), 
+                        }
+                    ];
+                    deleteRegistro(dados);
             }
         });
 
@@ -672,6 +845,10 @@
 
         $('#updateform').on('submit', function () {
             $('#contentUpdate').val($('#edit_content').summernote('code'));
+        });
+
+        $('#updateDocumentForm').on('submit', function () {
+            $('#contentUpdate').val($('#edit_documentContent').summernote('code'));
         });
 
         /**Função que preenche os campos do formulário de atualização */
@@ -698,6 +875,32 @@
                     focus: true
                 });
                 $('#createDocumentModal').modal('show');
+            });
+        }
+
+        function showDocumentEdit(dados) {
+            let url = "{{ route('customer-contracts.show', 'id') }}";
+            url = url.replace('id', dados[0].id);
+
+            /**Preenche os campos do form de atualização*/
+            $.get(url, function() {
+                
+                $('#edit_documentId').val(dados[0].id);
+                $('#edit_documentTitle').val(dados[0].title);
+                $('#edit_documentContent').val(dados[0].content);
+                $('#edit_documentType').val(dados[0].type);
+                $('#edit_documentArea').val(dados[0].area);
+
+                // Inicializa ou atualiza o conteúdo do Summernote
+                $('#edit_documentContent').summernote('destroy'); // Destrói qualquer instância existente
+                $('#edit_documentContent').val(dados[0].content); // Preenche o conteúdo
+                $('#edit_documentContent').summernote({           // Inicializa o Summernote
+                    height: 300,
+                    minHeight: null,
+                    maxHeight: null,
+                    focus: true
+                });
+                $('#updateDocumentModal').modal('show');
             });
         }
             
