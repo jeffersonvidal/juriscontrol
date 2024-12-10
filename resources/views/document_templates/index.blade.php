@@ -31,7 +31,6 @@
                 <thead>
                         <tr>
                         <th>Título</th>
-                        <th>Tipo</th>
                         <th>Área</th>
                         <th class="text-center">Ações</th>
                         </tr>
@@ -42,7 +41,6 @@
                         @foreach ($documents as $document)
                             <tr>
                             <td>{{ $document->title }}</td>
-                            <td>{{ $document->type }}</td>
                             <td>{{ $document->area }}</td>
                                 <td>
                                     <span class="d-flex flex-row justify-content-center">
