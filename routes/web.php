@@ -16,6 +16,7 @@ use App\Http\Controllers\LabelController;
 use App\Http\Controllers\LegalProcessController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\TaskController;
@@ -171,6 +172,14 @@ Route::group(['middleware' => 'auth'], function(){
   Route::put('/update-reminders/{reminder}', [ReminderController::class, 'update'])->name('reminders.update'); //Atualiza um registro no BD
   Route::put('/mark-as-read-reminders/{reminder}', [ReminderController::class, 'markAsRead'])->name('reminders.markAsRead'); //altera status para lido
   Route::delete('/destroy-reminders/{reminder}', [ReminderController::class, 'destroy'])->name('reminders.destroy'); //Exclui um registro no BD
+
+  /**Rotas para controle de permissões de acesso do sistema */
+  Route::get('/index-permissions', [PermissionController::class, 'index'])->name('permissions.index'); //Listar todos os registros da tabela
+  Route::get('/fetch-permissions', [PermissionController::class, 'fetchPermissions'])->name('fetch.index'); //Listar todos os registros da tabela
+  Route::get('/show-permissions/{permission}', [PermissionController::class, 'show'])->name('permissions.show'); //Mostra detalhe de um registro
+  Route::post('/store-permissions', [PermissionController::class, 'store'])->name('permissions.store'); //Salva novo registro no BD
+  Route::put('/update-permissions/{permission}', [PermissionController::class, 'update'])->name('permissions.update'); //Atualiza um registro no BD
+  Route::delete('/destroy-permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy'); //Exclui um registro n
 
 
 
