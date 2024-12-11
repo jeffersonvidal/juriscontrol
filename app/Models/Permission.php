@@ -8,10 +8,11 @@ use \OwenIt\Auditing\Auditable as AuditingAuditable;
 use OwenIt\Auditing\Contracts\Auditable;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Traits\HasRoles;
 
 class Permission extends Model implements Auditable
 {
-    use HasFactory, AuditingAuditable;
+    use HasFactory, AuditingAuditable, HasRoles;
 
     //Table name
     protected $table = 'permissions';

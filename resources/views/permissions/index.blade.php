@@ -47,32 +47,22 @@
                     <fieldset>
                         <legend>Níveis de Acesso</legend>
                     </fieldset>
-                    <div class="float-end mt-0">
-                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="fa-solid fa-plus"></i> Cadastrar</button>
+                    <div class="float-end" style="margin-top: -45px;">
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"><i class="fa-solid fa-plus"></i> Cadastrar</button>
                     </div>
 
                     <table id="datatablesSimple1" class="table table-striped table-hover table-bordered">
                         <thead>
                             <tr>
-                              <th>Parte contrária</th>
-                              <th>Processo</th>
-                              <th>Data</th>
-                              <th>Resultado</th>
-                              <th>Vlr. Causa</th>
-                              <th>Vlr. Sentença</th>
-                              <th>Honorários</th>
+                              <th>Título</th>
+                              <th>URL</th>
                               <th class="text-center">Ações</th>
                             </tr>
                           </thead>
                           <tbody>
                                 <tr>
-                                    <td>Nome da parte contrária</td>
-                                    <td>5407448-13.2024.8.09.0160</td>
-                                    <td>05/2024</td>
-                                    <td>Ganhou</td>
-                                    <td>R$50.325,42</td>
-                                    <td>R$50.325,42</td>
-                                    <td>R$15.235,69</td>
+                                    <td></td>
+                                    <td></td>
                                     <td>
                                         <span class="d-flex flex-row justify-content-center">
                                             <a href="" class="btn btn-info btn-sm me-1 mb-1 mb-sm-0" title="Ver Registro"><i class="fa-solid fa-eye"></i></a>
