@@ -73,6 +73,10 @@ Acessar conteúdo padrão do Laravel
 ```
 http://localhost:8000
 ```
+Instalar biblioteca para permissões de acesso
+```
+composer require spatie/laravel-permission
+```
 
 ## Estrutura e criação de arquivos
 

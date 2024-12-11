@@ -67,7 +67,7 @@
                                 </div>
                             </a>
                         </div><!--Fim do card -->
-                        {{ $helper->counterCustomerAcquisition(auth()->user()->id) }}
+                        
                         <!--Início do card -->
                         <div class="col-sm-2 mb-4">
                             <a href="{{ auth()->user()->referral_url }}" title="Formuário de cadastro de cliente" target="_blank" class="text-decoration-none text-dark">
