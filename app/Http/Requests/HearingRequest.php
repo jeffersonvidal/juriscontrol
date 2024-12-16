@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Carbon\Carbon;
 
 class HearingRequest extends FormRequest
 {
@@ -22,7 +23,16 @@ class HearingRequest extends FormRequest
             'object' => 'required',
             'responsible' => 'required',
             'status' => 'required',
-            'date_happen' => 'required',
+            //'date_happen' => 'required',
+            'date_happen' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $date = Carbon::parse($value);
+                    if ($date->isWeekend()) {
+                        $fail('A data de acontecimento não pode ser em um final de semana.');
+                    }
+                }
+            ],
             'time_happen' => 'required',
             'external_office_id' => 'required',
             'client' => 'required',
@@ -41,7 +51,7 @@ class HearingRequest extends FormRequest
             'object' => 'O campo Objeto é de preenchimento obrigatório!',
             'responsible' => 'O campo Responsável é de preenchimento obrigatório!',
             'status' => 'O campo Status é de preenchimento obrigatório!',
-            'date_happen' => 'Informe quando acontecerá o Objeto!',
+            //'date_happen' => 'Informe quando acontecerá o Objeto!',
             'external_office_id' => 'Informe de qual escritório é o objeto!',
             'time_happen' => 'Informe o horário de acontecimento do objeto!',
             'client' => 'Informe o nome do cliente',

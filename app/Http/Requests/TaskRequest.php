@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Carbon\Carbon;
 
 
 class TaskRequest extends FormRequest
@@ -23,12 +23,18 @@ class TaskRequest extends FormRequest
      */
     public function rules()
     {
-        //$userId = $this->route('user');
-        /**required|unique:posts|max:255 */
         return [
             'title' => 'required',
             'description' => 'required',
-            'delivery_date' => 'required',
+            'delivery_date' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $date = Carbon::parse($value);
+                    if ($date->isWeekend()) {
+                        $fail('A data de entrega não pode ser em um final de semana.');
+                    }
+                }
+            ],
             'end_date' => 'required',
             'responsible_id' => 'required',
             'author_id' => 'required',
@@ -40,11 +46,12 @@ class TaskRequest extends FormRequest
     }
 
 
+
     public function messages(): array{
         return [
             'title' => 'O campo Título é de preenchimento obrigatório!',
             'description' => 'O campo Descrição é de preenchimento obrigatório!',
-            'delivery_date' => 'O campo Responsável (eis) é de preenchimento obrigatório!',
+            //'delivery_date' => 'O campo Data de Entrega é de preenchimento obrigatório!',
             'end_date' => 'O campo Data Fatal é de preenchimento obrigatório!',
             'responsible_id' => 'O campo Responsável é de preenchimento obrigatório!',
             'author_id' => 'Informe quem está cadastrando essa tarefa!',

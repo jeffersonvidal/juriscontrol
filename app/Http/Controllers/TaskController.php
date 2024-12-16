@@ -71,6 +71,7 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
+        //dd($request);
         //Validar o formulário
         $request->validated();
 
